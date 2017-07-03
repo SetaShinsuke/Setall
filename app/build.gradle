@@ -32,5 +32,32 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$support_lib_version"
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //design
+    implementation "com.android.support:design:$support_lib_version"
+    //recyclerView
+    compile "com.android.support:recyclerview-v7:$support_lib_version"
+    //滑动返回
     implementation project(':swipebackutility')
+    //anko
+    compile "org.jetbrains.anko:anko-common:$anko_version"
+    //网络log
+    compile 'com.squareup.okhttp3:logging-interceptor:3.7.0'
+    //网络库
+    compile 'com.squareup.okhttp3:okhttp:3.7.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.zhy:okhttputils:2.5.2'
+    //rxandroid
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'io.reactivex:rxjava:1.2.4'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    //图片加载
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    //EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+    //log
+    compile 'log4j:log4j:1.2.17'
+    compile 'de.mindpipe.android:android-logging-log4j:1.0.2'
+
 }
