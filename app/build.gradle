@@ -41,9 +41,9 @@ dependencies {
     //anko
     compile "org.jetbrains.anko:anko-common:$anko_version"
     //网络log
-    compile 'com.squareup.okhttp3:logging-interceptor:3.7.0'
+    compile "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     //网络库
-    compile 'com.squareup.okhttp3:okhttp:3.7.0'
+    compile "com.squareup.okhttp3:okhttp:$okhttp_version"
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.zhy:okhttputils:2.5.2'
