@@ -59,9 +59,13 @@ class Preference<T>(spfFileName: String, val context: Context, val name: String,
         res as T
     }
 
+    /**
+     * 赋值 null 时表示，移除
+     */
     @SuppressLint("CommitPrefEdits")
     private fun putPreference(name: String, value: T) = with(prefs.edit()) {
         when (value) {
+            null -> remove(name)
             is Long -> putLong(name, value)
             is String -> putString(name, value)
             is Int -> putInt(name, value)

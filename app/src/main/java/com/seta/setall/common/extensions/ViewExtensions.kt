@@ -14,7 +14,8 @@ fun Activity.logD(content: String) {
 }
 
 fun Context.toast(textResource: Int, vararg extraString: String) {
-    val content = getString(textResource) + extraString
+    var content = getString(textResource)
+    extraString.forEach { content+=it }
     Toast.makeText(this, content, Toast.LENGTH_SHORT).show()
 }
 

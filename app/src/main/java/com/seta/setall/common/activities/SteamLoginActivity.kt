@@ -21,8 +21,9 @@ import kotlin.properties.Delegates
 class SteamLoginActivity : AppCompatActivity(), SteamLoginView {
 
     var steamUserId: String by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
-    val mSteamLoginPresenter: SteamLoginPresenter = SteamLoginPresenter()
     var loadingDialog by Delegates.notNull<ProgressDialog>()
+
+    val mSteamLoginPresenter: SteamLoginPresenter = SteamLoginPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
