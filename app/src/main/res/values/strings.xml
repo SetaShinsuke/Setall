@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Setall</string>
+
+    <string name="vanity_url_name">Vanity Url Name:</string>
+    <string name="login_success">登录成功!</string>
+    <string name="login_fail">登录失败:</string>
+    <string name="login">登录</string>
+    <string name="login_loading">登录中</string>
 </resources>

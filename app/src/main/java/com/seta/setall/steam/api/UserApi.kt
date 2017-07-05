@@ -1,6 +1,6 @@
 package com.seta.setall.steam.api
 
-import com.seta.setall.steam.models.SteamLoginPojo
+import com.seta.setall.steam.api.models.SteamLoginPojo
 import retrofit2.http.GET
 import retrofit2.http.Query
 import rx.Observable

@@ -3,9 +3,9 @@ package com.seta.setall.steam.presenters
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.http.Network
 import com.seta.setall.common.mvp.BasePresenter
-import com.seta.setall.steam.SteamLoginView
 import com.seta.setall.steam.api.SteamServer
-import com.seta.setall.steam.models.SteamLoginBean
+import com.seta.setall.steam.api.models.SteamLoginBean
+import com.seta.setall.steam.mvpViews.SteamLoginView
 import com.seta.setall.steam.utils.SteamException
 import rx.Subscriber
 
@@ -20,7 +20,11 @@ class SteamLoginPresenter : BasePresenter<SteamLoginView>() {
                 .doSubscribe(object : Subscriber<SteamLoginBean>() {
                     override fun onNext(t: SteamLoginBean) {
                         logD("onNext : $t")
-                        mvpView?.onLoginSuccess(t) ?: onError(SteamException(t.message))
+                        if (t.success != 1) {
+                            mvpView?.onLoginFail(SteamException(t.message))
+                            return
+                        }
+                        mvpView?.onLoginSuccess(t)
                     }
 
                     override fun onCompleted() {
