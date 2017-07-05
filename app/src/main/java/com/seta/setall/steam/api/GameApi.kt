@@ -10,5 +10,5 @@ import rx.Observable
 interface SteamGameApi {
 
     @GET("/api/appdetails")
-    fun getGameDetail(@Query("appids") appids: Long): Observable<Any>
+    fun getGameDetail(@Query("appids") appids: List<Long>): Observable<Any>
 }
