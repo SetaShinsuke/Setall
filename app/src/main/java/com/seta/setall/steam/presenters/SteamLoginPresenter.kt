@@ -3,7 +3,7 @@ package com.seta.setall.steam.presenters
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.http.Network
 import com.seta.setall.common.mvp.BasePresenter
-import com.seta.setall.steam.api.SteamServer
+import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.SteamLoginBean
 import com.seta.setall.steam.mvpViews.SteamLoginView
 import com.seta.setall.steam.utils.SteamException
@@ -15,7 +15,7 @@ import rx.Subscriber
 class SteamLoginPresenter : BasePresenter<SteamLoginView>() {
 
     fun loginWithUrlName(urlName: String) {
-        Network.steamUserApi.getIdByVanityUrl(SteamServer.STEAM_API_KEY, urlName)
+        Network.steamUserApi.getIdByVanityUrl(SteamConstants.STEAM_API_KEY, urlName)
                 .map { it.response }
                 .doSubscribe(object : Subscriber<SteamLoginBean>() {
                     override fun onNext(t: SteamLoginBean) {

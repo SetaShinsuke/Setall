@@ -3,14 +3,14 @@ package com.seta.setall.common.extensions
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
-import org.apache.log4j.Logger
 
 /**
  * Created by SETA_WORK on 2017/7/3.
  */
-fun Activity.log(content: String) {
-    Logger.getLogger(javaClass.simpleName).debug(content)
+fun Activity.logD(content: String) {
+    Log.d(javaClass.simpleName, content)
 }
 
 fun Context.toast(textResource: Int, vararg extraString: String) {

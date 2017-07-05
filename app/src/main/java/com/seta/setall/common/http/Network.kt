@@ -3,7 +3,7 @@ package com.seta.setall.common.http
 import android.util.Log
 import com.seta.setall.common.logs.LogX
 import com.seta.setall.steam.api.SteamGameApi
-import com.seta.setall.steam.api.SteamServer
+import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.SteamUserApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,7 +31,7 @@ object Network {
     private val steamRetrofit: Retrofit by lazy {
         Retrofit.Builder()
                 .client(client)
-                .baseUrl(SteamServer.STEAM_API_HOST)
+                .baseUrl(SteamConstants.STEAM_API_HOST)
                 .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(rxJavaCallAdapterFactory)
                 .build()
@@ -39,7 +39,7 @@ object Network {
     private val steamStoreRetrofit: Retrofit by lazy {
         Retrofit.Builder()
                 .client(client)
-                .baseUrl(SteamServer.STEAM_STORE_API_HOST)
+                .baseUrl(SteamConstants.STEAM_STORE_API_HOST)
                 .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(rxJavaCallAdapterFactory)
                 .build()

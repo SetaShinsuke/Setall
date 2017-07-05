@@ -12,4 +12,10 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="AppTheme.Steam">
+        <item name="colorPrimary">@color/steam_theme_color</item>
+        <item name="colorPrimaryDark">@color/steam_theme_color</item>
+        <item name="colorAccent">@color/steam_theme_color_light</item>
+    </style>
+
 </resources>

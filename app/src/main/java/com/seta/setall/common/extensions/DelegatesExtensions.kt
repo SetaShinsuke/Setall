@@ -33,8 +33,10 @@ class NotNullSingleValueVar<T> : ReadWriteProperty<Any?, T> {
     }
 }
 
-class Preference<T>(val context: Context, val name: String, val default: T) {
-    val prefs: SharedPreferences by lazy { context.getSharedPreferences("default", Context.MODE_PRIVATE) }
+class Preference<T>(spfFileName: String, val context: Context, val name: String, val default: T) {
+    val prefs: SharedPreferences by lazy { context.getSharedPreferences(spfFileName, Context.MODE_PRIVATE) }
+
+    constructor(context: Context, name: String, default: T) : this("default", context, name, default)
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return findPreference(name, default)
@@ -52,7 +54,7 @@ class Preference<T>(val context: Context, val name: String, val default: T) {
             is Int -> getInt(name, default)
             is Boolean -> getBoolean(name, default)
             is Float -> getFloat(name, default)
-            else -> throw IllegalArgumentException("This type can't be saved into Preferences.")
+            else -> throw IllegalArgumentException("This type can't be saved into Preferences : $default }")
         }
         res as T
     }
@@ -65,7 +67,7 @@ class Preference<T>(val context: Context, val name: String, val default: T) {
             is Int -> putInt(name, value)
             is Boolean -> putBoolean(name, value)
             is Float -> putFloat(name, value)
-            else -> throw IllegalArgumentException("This type can't be saved into Preferences.")
+            else -> throw IllegalArgumentException("This type can't be got from Preferences : $value")
         }.apply()
     }
 }

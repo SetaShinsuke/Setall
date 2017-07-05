@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="steam_theme_color">#091b40</color>
+    <color name="steam_theme_color_light">#138cbe</color>
+    <color name="steam_theme_color_accent">#4d9869</color>
 </resources>
