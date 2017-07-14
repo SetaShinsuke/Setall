@@ -9,7 +9,4 @@ import com.seta.setall.steam.api.SteamConstants
  */
 object DelegateSteam {
     fun <T> steamPreference(context: Context, name: String, default: T) = Preference(SteamConstants.STEAM_PRF_NAME, context, name, default)
-//    fun removePreference(context: Context, name: String) {
-//
-//    }
 }

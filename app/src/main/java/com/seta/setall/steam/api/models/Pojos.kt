@@ -10,8 +10,23 @@ data class SteamLoginPojo(val response: SteamLoginBean)
 data class SteamLoginBean(val steamid: String, val success: Int, val message: String)
 
 data class OwnedGamePojo(val response: OwnedGameBean)
-data class OwnedGameBean(val game_count: Int, val games: List<GameBean>)
-data class GameBean(val appid: Int, val playtime_forever: Long)
+data class OwnedGameBean(val game_count: Int
+                         , val games: List<GameBean>)
+
+data class GameBean(val appid: Int
+                    , val name: String
+                    , val playtime_forever: Long
+                    , val img_icon_url: String
+                    , val img_logo_url: String) : Comparable<GameBean> {
+    override fun compareTo(other: GameBean): Int {
+        val char1 = name.toCharArray()[0]
+        val char2 = other.name.toCharArray()[0]
+        val result = char1.compareTo(char2)
+        return result
+    }
+
+}
+
 data class GameDetailPojo(val games: List<GameDetailBean>)
 data class GameDetailBean(val steam_appid: Long, val name: String, val type: String)
 

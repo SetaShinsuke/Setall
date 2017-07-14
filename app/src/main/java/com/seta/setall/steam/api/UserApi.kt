@@ -16,6 +16,10 @@ interface SteamUserApi {
     @GET("/ISteamUser/ResolveVanityURL/v0001")
     fun getIdByVanityUrl(@Query("key") key: String, @Query("vanityurl") vanityUrlName: String): Observable<SteamLoginPojo>
 
-    @GET("/IPlayerService/GetOwnedGames/v0001")
+    /**
+     *  withInfo 是否拉取详情信息
+     *  include_played_free_games 是否包含免费游戏
+     */
+    @GET("/IPlayerService/GetOwnedGames/v0001?include_appinfo=1&include_played_free_games=1")
     fun getOwnedGames(@Query("key") key: String, @Query("steamid") steamId: String?): Observable<OwnedGamePojo>
 }
