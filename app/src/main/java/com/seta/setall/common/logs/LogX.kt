@@ -28,8 +28,12 @@ object LogX {
         }
     }
 
-    private fun trace2File(tag: String, msg: String) {
-        logger.trace(tag + " " + msg)
+    private fun trace2File(tag: String, msg: String, throwable: Throwable? = null) {
+        if (throwable == null) {
+            logger.trace(tag + " " + msg)
+        } else {
+            logger.trace(tag + " " + msg, throwable)
+        }
     }
 
     fun fastLog(msg: String) {
@@ -40,71 +44,67 @@ object LogX {
         e("有调试代码未删除!!!")
     }
 
-    fun v(s: String) {
-        v(logTag, s)
+    fun v(s: String, throwable: Throwable? = null) {
+        v(logTag, s, throwable)
     }
 
-    fun v(tag: String = logTag, s: String) {
+    fun v(tag: String = logTag, s: String, throwable: Throwable? = null) {
         if (logLevel <= Log.VERBOSE) {
-            Log.v(tag, s)
+            Log.v(tag, s, throwable)
             if (logFileLevel <= Log.VERBOSE) {
-                trace2File(tag, s)
+                trace2File(tag, s, throwable)
             }
         }
     }
 
-    fun d(s: String) {
-        d(logTag, s)
+    fun d(s: String, throwable: Throwable? = null) {
+        d(logTag, s, throwable)
     }
 
-    fun d(tag: String = logTag, s: String) {
+    fun d(tag: String = logTag, s: String, throwable: Throwable? = null) {
         if (logLevel <= Log.DEBUG) {
-            Log.d(tag, s)
+            Log.d(tag, s, throwable)
             if (logFileLevel <= Log.DEBUG) {
-                trace2File(tag, s)
+                trace2File(tag, s, throwable)
             }
         }
     }
 
-    fun i(s: String) {
-        i(logTag, s)
+    fun i(s: String, throwable: Throwable? = null) {
+        i(logTag, s, throwable)
     }
 
-    fun i(tag: String = logTag, s: String) {
+    fun i(tag: String = logTag, s: String, throwable: Throwable? = null) {
         if (logLevel <= Log.INFO) {
-            Log.i(tag, s)
+            Log.i(tag, s, throwable)
             if (logFileLevel <= Log.INFO) {
-                trace2File(tag, s)
+                trace2File(tag, s, throwable)
             }
         }
     }
 
-    fun w(s: String) {
-        w(logTag, s)
+    fun w(s: String, throwable: Throwable? = null) {
+        w(logTag, s, throwable)
     }
 
-    fun w(tag: String = logTag, s: String) {
+    fun w(tag: String = logTag, s: String, throwable: Throwable? = null) {
         if (logLevel <= Log.WARN) {
-            Log.w(tag, s)
+            Log.w(tag, s, throwable)
             if (logFileLevel <= Log.WARN) {
-                trace2File(tag, s)
+                trace2File(tag, s, throwable)
             }
         }
     }
 
-    fun e(s: String) {
-        e(logTag, s)
+    fun e(s: String, throwable: Throwable? = null) {
+        e(logTag, s, throwable)
     }
 
     fun e(tag: String = logTag, s: String, throwable: Throwable? = null) {
         if (logLevel <= Log.ERROR) {
-            if (throwable != null) {
-                Log.e(tag, s, throwable)
-            } else {
-                Log.e(tag, s)
-            }
+            Log.e(tag, s, throwable)
             if (logFileLevel <= Log.ERROR) {
-                trace2File(tag, s)
+                trace2File(tag, s, throwable)
             }
         }
     }

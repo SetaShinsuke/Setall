@@ -3,6 +3,7 @@ package com.seta.setall.steam.db
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.seta.setall.common.framework.BaseApplication
+import com.seta.setall.common.logs.LogX
 import org.jetbrains.anko.db.*
 
 /**
@@ -17,6 +18,7 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
     }
 
     override fun onCreate(db: SQLiteDatabase) {
+        LogX.d("Database onCreate().")
         db.createTable(TransActionTable.TABLE_NAME, true,
                 TransActionTable.TRANS_ID to INTEGER + PRIMARY_KEY,
                 TransActionTable.DATE to INTEGER,
@@ -32,12 +34,15 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
                 SteamAppTable.TYPE to INTEGER
         )
         db.createTable(TransAppRelation.TABLE_NAME, true,
+                TransAppRelation.TRANS_ID to INTEGER,
+                TransAppRelation.APP_ID to INTEGER,
                 FOREIGN_KEY(TransAppRelation.TRANS_ID, TransActionTable.TABLE_NAME, TransActionTable.TRANS_ID),
                 FOREIGN_KEY(TransAppRelation.APP_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID)
         )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        LogX.d("Database onUpgrade, from $oldVersion to $newVersion.")
     }
 
 

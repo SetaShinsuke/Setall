@@ -21,7 +21,7 @@ object Network {
 
     private val clientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
     private val client: OkHttpClient by lazy {
-        val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Log.d(Constants.LOG_TAG_S, it) })
+        val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Log.d(Constants.LOG_TAG_NETWORT, it) })
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         clientBuilder
                 .addInterceptor(interceptor)

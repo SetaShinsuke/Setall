@@ -9,5 +9,8 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance) {
 
     fun testDb() {
         LogX.d("TestDb, name : ${dbHelper.databaseName}")
+        dbHelper.use {
+            LogX.d("User dbHelper.")
+        }
     }
 }

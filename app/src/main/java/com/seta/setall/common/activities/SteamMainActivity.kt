@@ -5,10 +5,12 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.seta.setall.R
 import com.seta.setall.common.extensions.logD
+import com.seta.setall.common.utils.UtilMethods
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameBean
 import com.seta.setall.steam.api.models.OwnedGameBean
 import com.seta.setall.steam.db.SteamDb
+import com.seta.setall.steam.db.SteamDbHelper
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.OwnedGamesView
 import com.seta.setall.steam.presenters.OwnedGamesPresenter
@@ -33,6 +35,8 @@ class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
         ownedGamePresenter.loadOwnedGames(userId)
         val db = SteamDb()
         db.testDb()
+        logD("导出数据库")
+        UtilMethods.exportDb(this, SteamDbHelper.STEAM_DB_NAME)
     }
 
     fun onClick(view: View) {

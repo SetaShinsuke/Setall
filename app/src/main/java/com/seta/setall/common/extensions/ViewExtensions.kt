@@ -4,14 +4,14 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ApplicationInfo
-import android.util.Log
 import android.widget.Toast
+import com.seta.setall.common.logs.LogX
 
 /**
  * Created by SETA_WORK on 2017/7/3.
  */
-fun Activity.logD(content: String) {
-    Log.d(javaClass.simpleName, content)
+fun Activity.logD(content: String, throwable: Throwable? = null) {
+    LogX.d(javaClass.simpleName, content, throwable)
 }
 
 fun Context.toast(textResource: Int, vararg extraString: String) {

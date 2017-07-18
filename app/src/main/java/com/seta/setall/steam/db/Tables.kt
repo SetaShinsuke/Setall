@@ -1,7 +1,7 @@
 package com.seta.setall.steam.db
 
 object TransActionTable {
-    val TABLE_NAME = "Transaction"
+    val TABLE_NAME = "Transactions"
 //    val ID = "_id"
     val TRANS_ID = "transId"
     val DATE = "date"
