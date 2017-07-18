@@ -40,4 +40,5 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
     }
 
+
 }

@@ -8,6 +8,7 @@ import com.seta.setall.common.extensions.logD
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameBean
 import com.seta.setall.steam.api.models.OwnedGameBean
+import com.seta.setall.steam.db.SteamDb
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.OwnedGamesView
 import com.seta.setall.steam.presenters.OwnedGamesPresenter
@@ -30,6 +31,8 @@ class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
         mTvUserInfo.text = "User id : $userId"
         ownedGamePresenter.attachView(this)
         ownedGamePresenter.loadOwnedGames(userId)
+        val db = SteamDb()
+        db.testDb()
     }
 
     fun onClick(view: View) {

@@ -1,9 +1,9 @@
 package com.seta.setall.common.http
 
 import android.util.Log
-import com.seta.setall.common.logs.LogX
-import com.seta.setall.steam.api.SteamGameApi
+import com.seta.setall.common.utils.Constants
 import com.seta.setall.steam.api.SteamConstants
+import com.seta.setall.steam.api.SteamGameApi
 import com.seta.setall.steam.api.SteamUserApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -21,7 +21,7 @@ object Network {
 
     private val clientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
     private val client: OkHttpClient by lazy {
-        val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Log.d(LogX.LOG_TAG_S, it) })
+        val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Log.d(Constants.LOG_TAG_S, it) })
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         clientBuilder
                 .addInterceptor(interceptor)
