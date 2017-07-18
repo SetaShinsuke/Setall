@@ -11,12 +11,14 @@ import com.seta.setall.steam.api.models.GameBean
 import com.seta.setall.steam.api.models.OwnedGameBean
 import com.seta.setall.steam.db.SteamDb
 import com.seta.setall.steam.db.SteamDbHelper
+import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.OwnedGamesView
 import com.seta.setall.steam.presenters.OwnedGamesPresenter
 import kotlinx.android.synthetic.main.activity_steam_main.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import java.util.*
 
 class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
     var userId: String? by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
@@ -33,10 +35,6 @@ class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
         mTvUserInfo.text = "User id : $userId"
         ownedGamePresenter.attachView(this)
         ownedGamePresenter.loadOwnedGames(userId)
-        val db = SteamDb()
-        db.testDb()
-        logD("导出数据库")
-        UtilMethods.exportDb(this, SteamDbHelper.STEAM_DB_NAME)
     }
 
     fun onClick(view: View) {
@@ -55,6 +53,34 @@ class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
         var content: String = "Total : ${ownedGameBean.game_count}\nAll steamApps : "
         games.forEachIndexed { index, gameBean -> content += "\n$index ${gameBean.name}" }
         mTvUserInfo.text = content
+
+        val steamApps = ArrayList<SteamApp>()
+        games.forEachIndexed { i, (appid, name) ->
+            steamApps.add(SteamApp(appid.toLong(), name, "CNY", 100 * i, 10 * i, Date(), 0, null))
+        }
+        val steamDb = SteamDb.instance
+        steamDb.saveSteamApps(steamApps)
+        UtilMethods.exportDb(this, SteamDbHelper.STEAM_DB_NAME)
+
+        //伪造数据
+//        LogX.mark()
+//        LogX.fastLog("开始保存 记录!!")
+//        val transList = ArrayList<Transaction>()
+//        for (i in 0..5) {
+//            val trans = Transaction(i.toLong(), Date(), "buyer_$i", "owner_$i", ArrayList<SteamApp>())
+//            if (2 * i < games.size) {
+//                with(games[i]) {
+//                    (trans.steamApps as ArrayList).add(SteamApp(appId.toLong(), name, "CNY", 100 * i, 10 * i, Date(), 0, null))
+//                }
+//                with(games[2 * i]) {
+//                    (trans.steamApps as ArrayList).add(SteamApp(appId.toLong(), name, "CNY", 200 * i, 20 * i, Date(), 0, null))
+//                }
+//            }
+//            transList.add(trans)
+//        }
+//        val steamDb = SteamDb()
+//        steamDb.saveTransactions(transList)
+//        UtilMethods.exportDb(this, SteamDbHelper.STEAM_DB_NAME)
     }
 
     override fun onGamesLoadFail(t: Throwable) {

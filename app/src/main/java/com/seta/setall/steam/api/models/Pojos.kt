@@ -19,9 +19,7 @@ data class GameBean(val appid: Int
                     , val img_icon_url: String
                     , val img_logo_url: String) : Comparable<GameBean> {
     override fun compareTo(other: GameBean): Int {
-        val char1 = name.toCharArray()[0]
-        val char2 = other.name.toCharArray()[0]
-        val result = char1.compareTo(char2)
+        val result = name.compareTo(other.name)
         return result
     }
 

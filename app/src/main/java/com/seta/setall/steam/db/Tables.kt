@@ -12,7 +12,7 @@ object TransActionTable {
 object SteamAppTable {
     val TABLE_NAME = "SteamApp"
 //    val ID = "_id"
-    val APP_ID = "appid"
+    val APP_ID = "appId"
     val NAME = "name"
     val CURRENCY = "currency"
     val INIT_PRICE = "initPrice"
@@ -21,10 +21,10 @@ object SteamAppTable {
     val TYPE = "type"
 }
 
-object TransAppRelation {
-    val TABLE_NAME = "TransAppRelation"
+object TransAppRelationTable {
+    val TABLE_NAME = "TransAppRelationTable"
 //    val ID = "_id"
     val TRANS_ID = "transId"
-    val APP_ID = "appid"
+    val APP_ID = "appId"
 }
 

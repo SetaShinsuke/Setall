@@ -33,11 +33,11 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
                 SteamAppTable.PURCHASED_DATE to INTEGER,
                 SteamAppTable.TYPE to INTEGER
         )
-        db.createTable(TransAppRelation.TABLE_NAME, true,
-                TransAppRelation.TRANS_ID to INTEGER,
-                TransAppRelation.APP_ID to INTEGER,
-                FOREIGN_KEY(TransAppRelation.TRANS_ID, TransActionTable.TABLE_NAME, TransActionTable.TRANS_ID),
-                FOREIGN_KEY(TransAppRelation.APP_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID)
+        db.createTable(TransAppRelationTable.TABLE_NAME, true,
+                TransAppRelationTable.TRANS_ID to INTEGER,
+                TransAppRelationTable.APP_ID to INTEGER,
+                FOREIGN_KEY(TransAppRelationTable.TRANS_ID, TransActionTable.TABLE_NAME, TransActionTable.TRANS_ID),
+                FOREIGN_KEY(TransAppRelationTable.APP_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID)
         )
     }
 

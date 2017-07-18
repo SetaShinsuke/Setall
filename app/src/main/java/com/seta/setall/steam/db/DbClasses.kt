@@ -2,6 +2,9 @@ package com.seta.setall.steam.db
 
 /**
  * 持久化保存已库中游戏的信息
+ * 与 Domain 层的区别:
+ *      1.包含一个map, 便于存储到数据库;
+ *      2.不是 data 类;
  */
 class Transaction(val map: MutableMap<String, Any?>, val steamApps: List<SteamApp>) {
     var transId: Long by map
@@ -19,9 +22,10 @@ class Transaction(val map: MutableMap<String, Any?>, val steamApps: List<SteamAp
 
 /**
  * game 与 bundlePack 统一为 SteamApp
+ * @param games bundle 中包含的所有游戏，可为空(type 不是 bundlePack 时)
  */
 class SteamApp(val map: MutableMap<String, Any?>, val games: List<SteamApp>?) {
-    var appid: Long by map
+    var appId: Long by map
     var name: String by map
     var currency: String by map //币种
     var initPrice: Int by map //原价
@@ -35,12 +39,22 @@ class SteamApp(val map: MutableMap<String, Any?>, val games: List<SteamApp>?) {
 
     constructor(appId: Long, name: String, currency: String, initPrice: Int, purchasedPrice: Int, purchasedDate: Long, type: Int, games: List<SteamApp>?)
             : this(HashMap(), games) {
-        this.appid = appid
+        this.appId = appId
         this.name = name
         this.currency = currency
         this.initPrice = initPrice
         this.purchasedPrice = purchasedPrice
         this.purchasedDate = purchasedDate
         this.type = type
+    }
+}
+
+class TransAppRelation(val map: MutableMap<String, Any?>) {
+    var transId by map
+    var appId by map
+
+    constructor(transId: Long, appId: Long) : this(HashMap()) {
+        this.transId = transId
+        this.appId = appId
     }
 }
