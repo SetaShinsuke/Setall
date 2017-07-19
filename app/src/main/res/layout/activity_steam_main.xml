@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,33 +8,36 @@
     tools:context="com.seta.setall.common.activities.SteamMainActivity"
     >
 
-    <ScrollView
+    <TextView
+        android:id="@+id/mTvMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/transListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/mTvUserInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:scrollbars="vertical"
-            android:text="UserInfo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        />
 
     <Button
         android:id="@+id/mBtnLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="8dp"
         android:onClick="onClick"
         android:text="注销"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         />
-</android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/mBtnAddTrans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="8dp"
+        android:onClick="onClick"
+        android:text="添加交易记录"
+        />
+</FrameLayout>

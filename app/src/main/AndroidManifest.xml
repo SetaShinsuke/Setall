@@ -84,15 +84,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="@string/steam"
             android:name=".common.activities.SteamLoginActivity"
-            android:theme="@style/AppTheme.Steam"
-            >
+            android:label="@string/steam"
+            android:theme="@style/AppTheme.Steam">
         </activity>
         <activity
-            android:label="@string/steam"
             android:name=".common.activities.SteamMainActivity"
+            android:label="@string/steam"
             android:theme="@style/AppTheme.Steam">
+        </activity>
+        <activity android:name=".common.activities.OwnedGamesActivity">
+        </activity>
+        <activity android:name=".common.activities.CreateTransActivity">
         </activity>
     </application>
 

@@ -15,17 +15,15 @@ import com.seta.setall.steam.db.SteamDbHelper
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
 import com.seta.setall.steam.extensions.DelegateSteam
-import com.seta.setall.steam.mvpViews.OwnedGamesView
-import com.seta.setall.steam.presenters.OwnedGamesPresenter
 import kotlinx.android.synthetic.main.activity_steam_main.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
+class SteamMainActivity : AppCompatActivity() {
     var userId: String? by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
-    val ownedGamePresenter: OwnedGamesPresenter = OwnedGamesPresenter()
+//    val ownedGamePresenter: OwnedGamesPresenter = OwnedGamesPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +33,10 @@ class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
             startActivity<SteamLoginActivity>()
             finish()
         }
-        mTvUserInfo.text = "User id : $userId"
-        ownedGamePresenter.attachView(this)
-        ownedGamePresenter.loadOwnedGames(userId)
+        mTvMsg.text = "User id : $userId\nTransActions : loading..."
+//        mTvUserInfo.text = "User id : $userId"
+//        ownedGamePresenter.attachView(this)
+//        ownedGamePresenter.loadOwnedGames(userId)
     }
 
     fun onClick(view: View) {
@@ -48,14 +47,18 @@ class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
                 toast("已注销！")
                 startActivity<SteamLoginActivity>()
             }
+            R.id.mBtnAddTrans -> {
+                startActivity<CreateTransActivity>()
+            }
         }
     }
 
-    override fun onGamesLoad(ownedGameBean: OwnedGameBean) {
+    fun onGamesLoad(ownedGameBean: OwnedGameBean) {
         val games: List<GameBean> = ownedGameBean.games.sortedWith(compareBy({ it.name }, { it.appid }))
         var content: String = "Total : ${ownedGameBean.game_count}\nAll steamAppDbs : "
         games.forEachIndexed { index, gameBean -> content += "\n$index ${gameBean.name}" }
-        mTvUserInfo.text = content
+//        mTvUserInfo.text = content
+        logD("OnGamesLoad : $content")
 
         val steamApps = ArrayList<SteamApp>()
         games.forEachIndexed { i, (appid, name) ->
@@ -88,7 +91,8 @@ class SteamMainActivity : AppCompatActivity(), OwnedGamesView {
         UtilMethods.exportDb(this, SteamDbHelper.STEAM_DB_NAME)
     }
 
-    override fun onGamesLoadFail(t: Throwable) {
-        mTvUserInfo.text = ""
+    fun onGamesLoadFail(t: Throwable) {
+//        mTvUserInfo.text = ""
+        toast("OnGamesLoadFail : ${t.message}")
     }
 }
