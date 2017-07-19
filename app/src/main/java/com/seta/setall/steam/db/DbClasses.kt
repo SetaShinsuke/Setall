@@ -6,13 +6,13 @@ package com.seta.setall.steam.db
  *      1.包含一个map, 便于存储到数据库;
  *      2.不是 data 类;
  */
-class Transaction(val map: MutableMap<String, Any?>, val steamApps: List<SteamApp>) {
-    var transId: Long by map
+class TransactionDb(val map: MutableMap<String, Any?>, val steamAppDbs: List<SteamAppDb>) {
+    var transId: Int by map
     var date: Long by map
     var buyerId: String by map
     var ownerId: String by map
 
-    constructor(transId: Long, date: Long, buyerId: String, ownerId: String, steamApps: List<SteamApp>) : this(HashMap(), steamApps) {
+    constructor(transId: Int, date: Long, buyerId: String, ownerId: String, steamAppDbs: List<SteamAppDb>) : this(HashMap(), steamAppDbs) {
         this.transId = transId
         this.date = date
         this.buyerId = buyerId
@@ -21,11 +21,11 @@ class Transaction(val map: MutableMap<String, Any?>, val steamApps: List<SteamAp
 }
 
 /**
- * game 与 bundlePack 统一为 SteamApp
+ * game 与 bundlePack 统一为 SteamAppDb
  * @param games bundle 中包含的所有游戏，可为空(type 不是 bundlePack 时)
  */
-class SteamApp(val map: MutableMap<String, Any?>, val games: List<SteamApp>?) {
-    var appId: Long by map
+class SteamAppDb(val map: MutableMap<String, Any?>, val games: List<SteamAppDb>?) {
+    var appId: Int by map
     var name: String by map
     var currency: String by map //币种
     var initPrice: Int by map //原价
@@ -37,7 +37,7 @@ class SteamApp(val map: MutableMap<String, Any?>, val games: List<SteamApp>?) {
 //    var iconImgId by map
 //    var logoImgId by map
 
-    constructor(appId: Long, name: String, currency: String, initPrice: Int, purchasedPrice: Int, purchasedDate: Long, type: Int, games: List<SteamApp>?)
+    constructor(appId: Int, name: String, currency: String, initPrice: Int, purchasedPrice: Int, purchasedDate: Long, type: Int, games: List<SteamAppDb>?)
             : this(HashMap(), games) {
         this.appId = appId
         this.name = name
@@ -50,11 +50,21 @@ class SteamApp(val map: MutableMap<String, Any?>, val games: List<SteamApp>?) {
 }
 
 class TransAppRelation(val map: MutableMap<String, Any?>) {
-    var transId by map
-    var appId by map
+    var transId: Int by map
+    var appId: Int by map
 
-    constructor(transId: Long, appId: Long) : this(HashMap()) {
+    constructor(transId: Int, appId: Int) : this(HashMap()) {
         this.transId = transId
         this.appId = appId
+    }
+}
+
+class BundleAppRelation(val map: MutableMap<String, Any?>) {
+    var packId: Int by map
+    var gameId: Int by map
+
+    constructor(packId: Int, gameId: Int) : this(HashMap()) {
+        this.packId = packId
+        this.gameId = gameId
     }
 }

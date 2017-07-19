@@ -22,18 +22,32 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
         allTransactions.forEach {
             //保存订单条目
             with(steamDbMapper.convertTransFromDomain(it)) {
+                //保存交易记录
                 insert(TransActionTable.TABLE_NAME, *map.toVarargArray())
-                steamApps.forEach {
-                    insert(SteamAppTable.TABLE_NAME, *map.toVarargArray())
-                    //保存关系
-                    val relation = TransAppRelation(transId, it.appId)
-                    insert(TransAppRelationTable.TABLE_NAME, *relation.map.toVarargArray())
+                //保存每个游戏
+                steamAppDbs.forEach {
+                    saveApp(transId, it)
                 }
             }
         }
     }
 
-    fun saveSteamApps(games: List<SteamApp>) = dbHelper.use {
+    //    private fun saveApp(transId: Int?, steamAppDb: SteamAppDb): Unit = dbHelper.writableDatabase.transaction {
+    private fun saveApp(transId: Int?, steamAppDb: SteamAppDb): Unit = dbHelper.use {
+        with(steamAppDb) {
+            insert(SteamAppTable.TABLE_NAME, *map.toVarargArray())
+            //保存关系
+            if (transId != null) {
+                insert(TransAppRelationTable.TABLE_NAME, *TransAppRelation(transId, appId).map.toVarargArray())
+            }
+            games?.forEach {
+                insert(BundleAppRelationTable.TABLE_NAME, *BundleAppRelation(appId, it.appId).map.toVarargArray())
+                saveApp(null, it)
+            }
+        }
+    }
+
+    fun saveAllGames(games: List<SteamApp>) = dbHelper.use {
         clear(SteamAppTable.TABLE_NAME)
         games.forEach {
             with(steamDbMapper.convertAppFromDomain(it)) {

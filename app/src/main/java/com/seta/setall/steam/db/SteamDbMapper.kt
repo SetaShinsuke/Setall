@@ -3,8 +3,6 @@ package com.seta.setall.steam.db
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
 import java.util.*
-import com.seta.setall.steam.db.SteamApp as SteamAppDb
-import com.seta.setall.steam.db.Transaction as TransactionDb
 
 /**
  * Created by SETA_WORK on 2017/7/18.
@@ -29,7 +27,7 @@ class SteamDbMapper {
 
     //region Db -> Domain
     fun convertTransToDomain(transactionDb: TransactionDb) = with(transactionDb) {
-        val gamesOfTrans = steamApps.map {
+        val gamesOfTrans = steamAppDbs.map {
             convertAppsToDomain(it)
         }
         Transaction(transId, Date(date), buyerId, ownerId, gamesOfTrans)

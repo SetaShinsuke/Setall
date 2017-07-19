@@ -5,7 +5,7 @@ import java.util.*
 /**
  * Created by SETA_WORK on 2017/7/18.
  */
-data class SteamApp(val appId: Long,
+data class SteamApp(val appId: Int,
                     val name: String,
                     val currency: String,
                     val initPrice: Int,
@@ -14,7 +14,7 @@ data class SteamApp(val appId: Long,
                     val type: Int,
                     val games: List<SteamApp>?)
 
-data class Transaction(val transId: Long,
+data class Transaction(val transId: Int,
                        val date: Date,
                        val buyerId: String,
                        val ownerId: String,

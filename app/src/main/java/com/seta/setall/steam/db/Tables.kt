@@ -2,7 +2,7 @@ package com.seta.setall.steam.db
 
 object TransActionTable {
     val TABLE_NAME = "Transactions"
-//    val ID = "_id"
+    //    val ID = "_id"
     val TRANS_ID = "transId"
     val DATE = "date"
     val BUYER_ID = "buyerId"
@@ -10,8 +10,8 @@ object TransActionTable {
 }
 
 object SteamAppTable {
-    val TABLE_NAME = "SteamApp"
-//    val ID = "_id"
+    val TABLE_NAME = "SteamAppDb"
+    //    val ID = "_id"
     val APP_ID = "appId"
     val NAME = "name"
     val CURRENCY = "currency"
@@ -23,8 +23,13 @@ object SteamAppTable {
 
 object TransAppRelationTable {
     val TABLE_NAME = "TransAppRelationTable"
-//    val ID = "_id"
+    //    val ID = "_id"
     val TRANS_ID = "transId"
     val APP_ID = "appId"
 }
 
+object BundleAppRelationTable {
+    val TABLE_NAME = "BundleAppRelationTable"
+    val PACK_APP_ID = "packId"
+    val GAME_ID = "gameId"
+}
