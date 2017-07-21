@@ -95,7 +95,10 @@
         </activity>
         <activity android:name=".common.activities.OwnedGamesActivity">
         </activity>
-        <activity android:name=".common.activities.CreateTransActivity">
+        <activity
+            android:name=".common.activities.CreateTransActivity"
+            android:label="@string/create_trans"
+            >
         </activity>
     </application>
 

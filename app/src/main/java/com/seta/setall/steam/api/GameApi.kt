@@ -11,4 +11,7 @@ interface SteamGameApi {
 
     @GET("/api/appdetails")
     fun getGameDetail(@Query("appids") appids: List<Long>): Observable<Any>
+
+    @GET("/api/packagedetails")
+    fun getBundlePackDetail(@Query("packageids") bundlePackId: Int): Observable<Any>
 }

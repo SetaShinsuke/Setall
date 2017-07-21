@@ -23,7 +23,8 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
                 TransActionTable.TRANS_ID to INTEGER + PRIMARY_KEY,
                 TransActionTable.DATE to INTEGER,
                 TransActionTable.BUYER_ID to TEXT,
-                TransActionTable.OWNER_ID to TEXT)
+                TransActionTable.OWNER_ID to TEXT,
+                TransActionTable.EXTRA_MSG to TEXT)
         db.createTable(SteamAppTable.TABLE_NAME, true,
                 SteamAppTable.APP_ID to INTEGER + PRIMARY_KEY,
                 SteamAppTable.NAME to TEXT,
@@ -39,12 +40,12 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
                 FOREIGN_KEY(TransAppRelationTable.TRANS_ID, TransActionTable.TABLE_NAME, TransActionTable.TRANS_ID),
                 FOREIGN_KEY(TransAppRelationTable.APP_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID)
         )
-        db.createTable(BundleAppRelationTable.TABLE_NAME,true,
+        db.createTable(BundleAppRelationTable.TABLE_NAME, true,
                 BundleAppRelationTable.PACK_APP_ID to INTEGER,
                 BundleAppRelationTable.GAME_ID to INTEGER,
-                FOREIGN_KEY(BundleAppRelationTable.PACK_APP_ID,SteamAppTable.TABLE_NAME,SteamAppTable.APP_ID),
-                FOREIGN_KEY(BundleAppRelationTable.GAME_ID,SteamAppTable.TABLE_NAME,SteamAppTable.APP_ID)
-                )
+                FOREIGN_KEY(BundleAppRelationTable.PACK_APP_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID),
+                FOREIGN_KEY(BundleAppRelationTable.GAME_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID)
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

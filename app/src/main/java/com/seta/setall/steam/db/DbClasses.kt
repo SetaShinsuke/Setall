@@ -11,12 +11,14 @@ class TransactionDb(val map: MutableMap<String, Any?>, val steamAppDbs: List<Ste
     var date: Long by map
     var buyerId: String by map
     var ownerId: String by map
+    var extraMsg: String? by map
 
-    constructor(transId: Int, date: Long, buyerId: String, ownerId: String, steamAppDbs: List<SteamAppDb>) : this(HashMap(), steamAppDbs) {
+    constructor(transId: Int, date: Long, buyerId: String, ownerId: String, extraMsg: String?, steamAppDbs: List<SteamAppDb>) : this(HashMap(), steamAppDbs) {
         this.transId = transId
         this.date = date
         this.buyerId = buyerId
         this.ownerId = ownerId
+        this.extraMsg = extraMsg
     }
 }
 

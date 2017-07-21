@@ -9,6 +9,22 @@ data class SteamLoginPojo(val response: SteamLoginBean)
 //success = 1 表示成功
 data class SteamLoginBean(val steamid: String, val success: Int, val message: String)
 
+/**
+ * @param profilestate: 资料公开状态
+ * @param personastate: 在线状态 0 - Offline, 1 - Online, 2 - Busy, 3 - Away, 4 - Snooze, 5 - looking to trade, 6 - looking to play
+ */
+data class PlayerInfoBean(val steamid: String,
+                          val profilestate: Int,
+                          val communityvisibilitystate: Int,
+                          val personaname: String,
+                          val profileurl: String,
+                          val avatarfull: String,
+                          val personastate: Int,
+                          val timecreated: Long = 0)
+
+data class PlayerPojo(val response: PlayerBean)
+data class PlayerBean(val players: List<PlayerInfoBean>)
+
 data class OwnedGamePojo(val response: OwnedGameBean)
 data class OwnedGameBean(val game_count: Int
                          , val games: List<GameBean>)

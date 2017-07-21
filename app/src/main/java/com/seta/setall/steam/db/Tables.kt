@@ -7,6 +7,7 @@ object TransActionTable {
     val DATE = "date"
     val BUYER_ID = "buyerId"
     val OWNER_ID = "ownerId"
+    val EXTRA_MSG = "extraMsg"
 }
 
 object SteamAppTable {

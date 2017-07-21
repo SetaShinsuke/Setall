@@ -14,7 +14,7 @@ class SteamDbMapper {
         val allGames = steamApps.map {
             convertAppFromDomain(it)
         }
-        TransactionDb(transId, date.time, buyerId, ownerId, allGames)
+        TransactionDb(transId, date.time, buyerId, ownerId, extraMsg, allGames)
     }
 
     fun convertAppFromDomain(steamApp: SteamApp): SteamAppDb = with(steamApp) {
@@ -30,7 +30,7 @@ class SteamDbMapper {
         val gamesOfTrans = steamAppDbs.map {
             convertAppsToDomain(it)
         }
-        Transaction(transId, Date(date), buyerId, ownerId, gamesOfTrans)
+        Transaction(transId, Date(date), buyerId, ownerId, extraMsg, gamesOfTrans)
     }
 
     fun convertAppsToDomain(steamApp: SteamAppDb): SteamApp = with(steamApp) {
