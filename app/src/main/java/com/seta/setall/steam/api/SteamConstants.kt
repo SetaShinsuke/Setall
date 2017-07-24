@@ -11,5 +11,12 @@ class SteamConstants {
         val STEAM_API_KEY = "40A665497280D522561D5DA4F8E14C0D"
         val STEAM_PRF_NAME = "steam"
         val STEAM_USER_ID = "steam_user_id"
+
+        //Steam App 类型
+        val TYPE_GAME = 0
+        val TYPE_DLC = 1
+        val TYPE_BUNDLEPACK = 2
+
+        val CODE_SELECT_GAMES = 100 //给订单添加游戏
     }
 }

@@ -23,7 +23,7 @@ data class PlayerInfoBean(val steamid: String,
                           val timecreated: Long = 0)
 
 data class PlayerPojo(val response: PlayerBean)
-data class PlayerBean(val players: List<PlayerInfoBean>)
+data class PlayerBean(val players: List<PlayerInfoBean> = ArrayList())
 
 data class OwnedGamePojo(val response: OwnedGameBean)
 data class OwnedGameBean(val game_count: Int

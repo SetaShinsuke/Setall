@@ -5,8 +5,8 @@ object TransActionTable {
     //    val ID = "_id"
     val TRANS_ID = "transId"
     val DATE = "date"
-    val BUYER_ID = "buyerId"
-    val OWNER_ID = "ownerId"
+    val BUYER_NAME = "buyerName"
+    val OWNER_NAME = "ownerName"
     val EXTRA_MSG = "extraMsg"
 }
 

@@ -22,8 +22,8 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
         db.createTable(TransActionTable.TABLE_NAME, true,
                 TransActionTable.TRANS_ID to INTEGER + PRIMARY_KEY,
                 TransActionTable.DATE to INTEGER,
-                TransActionTable.BUYER_ID to TEXT,
-                TransActionTable.OWNER_ID to TEXT,
+                TransActionTable.BUYER_NAME to TEXT,
+                TransActionTable.OWNER_NAME to TEXT,
                 TransActionTable.EXTRA_MSG to TEXT)
         db.createTable(SteamAppTable.TABLE_NAME, true,
                 SteamAppTable.APP_ID to INTEGER + PRIMARY_KEY,

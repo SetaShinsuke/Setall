@@ -13,7 +13,6 @@ import com.seta.setall.steam.api.models.OwnedGameBean
 import com.seta.setall.steam.db.SteamDb
 import com.seta.setall.steam.db.SteamDbHelper
 import com.seta.setall.steam.domain.models.SteamApp
-import com.seta.setall.steam.domain.models.Transaction
 import com.seta.setall.steam.extensions.DelegateSteam
 import kotlinx.android.synthetic.main.activity_steam_main.*
 import org.jetbrains.anko.startActivity
@@ -70,24 +69,24 @@ class SteamMainActivity : AppCompatActivity() {
         LogX.fastLog("开始保存 记录!!")
         val steamDb = SteamDb.instance
 
-        val transList = ArrayList<Transaction>()
-        for (i in 0..5) {
-            val trans = Transaction(i, Date(), "buyer_$i", "owner_$i", ArrayList<SteamApp>())
-            if (i < games.size && 3 * i < games.size) {
-                with(games[i]) {
-                    val containedGame = ArrayList<SteamApp>()
-                    containedGame.add(SteamApp(games[3 * i].appid, games[3 * i].name, "CNY", 10 * i, i, Date(), 0, null))
-                    (trans.steamApps as ArrayList).add(SteamApp(appid, name, "CNY", 100 * i, 10 * i, Date(), 0, containedGame))
-                }
-                with(games[2 * i]) {
-                    (trans.steamApps as ArrayList).add(SteamApp(appid, name, "CNY", 200 * i, 20 * i, Date(), 0, null))
-                }
-            }
-            transList.add(trans)
-            LogX.fastLog("===========\nItem NO. $i: \n$trans\n==================")
-        }
-        steamDb.saveTransactions(transList)
-//        steamDb.saveSteamApps(steamAppDbs)
+//        val transList = ArrayList<Transaction>()
+//        for (i in 0..5) {
+//            val trans = Transaction(i, Date(), "buyer_$i", "owner_$i", ArrayList<SteamApp>())
+//            if (i < games.size && 3 * i < games.size) {
+//                with(games[i]) {
+//                    val containedGame = ArrayList<SteamApp>()
+//                    containedGame.add(SteamApp(games[3 * i].appid, games[3 * i].name, "CNY", 10 * i, i, Date(), 0, null))
+//                    (trans.steamApps as ArrayList).add(SteamApp(appid, name, "CNY", 100 * i, 10 * i, Date(), 0, containedGame))
+//                }
+//                with(games[2 * i]) {
+//                    (trans.steamApps as ArrayList).add(SteamApp(appid, name, "CNY", 200 * i, 20 * i, Date(), 0, null))
+//                }
+//            }
+//            transList.add(trans)
+//            LogX.fastLog("===========\nItem NO. $i: \n$trans\n==================")
+//        }
+//        steamDb.saveTransactions(transList)
+        steamDb.saveAllGames(steamApps)
         UtilMethods.exportDb(this, SteamDbHelper.STEAM_DB_NAME)
     }
 

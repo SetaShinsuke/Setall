@@ -9,15 +9,15 @@ package com.seta.setall.steam.db
 class TransactionDb(val map: MutableMap<String, Any?>, val steamAppDbs: List<SteamAppDb>) {
     var transId: Int by map
     var date: Long by map
-    var buyerId: String by map
-    var ownerId: String by map
+    var buyerName: String by map
+    var ownerName: String by map
     var extraMsg: String? by map
 
     constructor(transId: Int, date: Long, buyerId: String, ownerId: String, extraMsg: String?, steamAppDbs: List<SteamAppDb>) : this(HashMap(), steamAppDbs) {
         this.transId = transId
         this.date = date
-        this.buyerId = buyerId
-        this.ownerId = ownerId
+        this.buyerName = buyerId
+        this.ownerName = ownerId
         this.extraMsg = extraMsg
     }
 }
