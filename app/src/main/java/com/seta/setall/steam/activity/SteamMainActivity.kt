@@ -1,4 +1,4 @@
-package com.seta.setall.common.activities
+package com.seta.setall.steam.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

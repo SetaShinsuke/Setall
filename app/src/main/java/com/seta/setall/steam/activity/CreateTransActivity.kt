@@ -1,9 +1,8 @@
-package com.seta.setall.common.activities
+package com.seta.setall.steam.activity
 
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.LinearLayout
@@ -11,6 +10,7 @@ import com.seta.setall.R
 import com.seta.setall.common.extensions.DateUtils
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.extensions.toast
+import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.InputDialog
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.PlayerInfoBean
@@ -18,10 +18,10 @@ import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.PlayerInfoMvpView
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import java.util.*
 
-class CreateTransActivity : AppCompatActivity(), PlayerInfoMvpView {
+class CreateTransActivity : BaseActivity(), PlayerInfoMvpView {
 
     val playerInfoPresenter: PlayerInfoPresenter = PlayerInfoPresenter()
     var steamUserId: String by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
@@ -34,13 +34,12 @@ class CreateTransActivity : AppCompatActivity(), PlayerInfoMvpView {
             playerInfoPresenter.loadPlayerInfo(steamUserId)
         }
         mRvApps.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        enableHomeAsBack(true)
     }
 
     fun onClick(view: View) {
         when (view.id) {
-            R.id.mBtnAddApp -> startActivity<OwnedGamesActivity>()
+            R.id.mBtnAddApp -> startActivityForResult<OwnedGamesActivity>(SteamConstants.CODE_SELECT_GAMES)
             R.id.mBtnDate -> {
                 val calendar = Calendar.getInstance()
                 val datePickDialog = DatePickerDialog(this,

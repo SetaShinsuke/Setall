@@ -10,7 +10,7 @@ import kotlin.properties.Delegates
 /**
  * Created by SETA_WORK on 2017/7/24.
  */
-class BaseActivity : AppCompatActivity(), SwipeBackActivityBase {
+open class BaseActivity : AppCompatActivity(), SwipeBackActivityBase {
 
     var homeAsBackEnabled = false
     var mHelper: SwipeBackActivityHelper by Delegates.notNull<SwipeBackActivityHelper>()
