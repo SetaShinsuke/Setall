@@ -1,10 +1,10 @@
-package com.seta.setall.steam.activity
+package com.seta.setall.steam.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.seta.setall.R
 import com.seta.setall.common.extensions.logD
+import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.logs.LogX
 import com.seta.setall.common.utils.UtilMethods
 import com.seta.setall.steam.api.SteamConstants
@@ -20,7 +20,7 @@ import org.jetbrains.anko.toast
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SteamMainActivity : AppCompatActivity() {
+class SteamMainActivity : BaseActivity() {
     var userId: String? by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
 //    val ownedGamePresenter: OwnedGamesPresenter = OwnedGamesPresenter()
 
@@ -33,9 +33,7 @@ class SteamMainActivity : AppCompatActivity() {
             finish()
         }
         mTvMsg.text = "User id : $userId\nTransActions : loading..."
-//        mTvUserInfo.text = "User id : $userId"
-//        ownedGamePresenter.attachView(this)
-//        ownedGamePresenter.loadOwnedGames(userId)
+//        enableHomeAsBack(true)
     }
 
     fun onClick(view: View) {

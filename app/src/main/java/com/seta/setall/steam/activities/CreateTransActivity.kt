@@ -1,4 +1,4 @@
-package com.seta.setall.steam.activity
+package com.seta.setall.steam.activities
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -34,7 +34,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView {
             playerInfoPresenter.loadPlayerInfo(steamUserId)
         }
         mRvApps.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-        enableHomeAsBack(true)
+//        enableHomeAsBack(true)
     }
 
     fun onClick(view: View) {
@@ -97,7 +97,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             SteamConstants.CODE_SELECT_GAMES -> {
-//                val adapter = BaseAdapter<SteamApp>(R.layout.item_steam_app,)
+//                val adapter = BasicAdapter<SteamApp>(R.layout.item_steam_app,)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

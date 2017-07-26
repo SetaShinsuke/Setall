@@ -1,13 +1,13 @@
-package com.seta.setall.steam.activity
+package com.seta.setall.steam.activities
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.seta.setall.R
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.extensions.setMessage
 import com.seta.setall.common.extensions.toast
+import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.SteamLoginBean
 import com.seta.setall.steam.extensions.DelegateSteam
@@ -18,7 +18,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
-class SteamLoginActivity : AppCompatActivity(), SteamLoginView {
+class SteamLoginActivity : BaseActivity(), SteamLoginView {
 
     var steamUserId: String by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
     var loadingDialog by Delegates.notNull<ProgressDialog>()
@@ -32,6 +32,7 @@ class SteamLoginActivity : AppCompatActivity(), SteamLoginView {
         loadingDialog = ProgressDialog(this)
         mEtVanityUrlName.setText(steamUserId)
         mSteamLoginPresenter.attachView(this)
+//        enableHomeAsBack(false)
     }
 
     override fun onDestroy() {

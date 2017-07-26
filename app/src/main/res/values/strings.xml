@@ -21,4 +21,5 @@
     <string name="owner_name">拥有者</string>
     <string name="add_game">添加游戏</string>
     <string name="name_null_warn">名字不能为空!</string>
+    <string name="games_load_fail">加载失败,请重试!</string>
 </resources>

@@ -1,46 +1,53 @@
 package com.seta.setall.common.framework
 
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.MenuItem
+import android.view.View
 import com.seta.swipebackutility.SwipeBackLayout
+import com.seta.swipebackutility.Utils
 import com.seta.swipebackutility.app.SwipeBackActivityBase
 import com.seta.swipebackutility.app.SwipeBackActivityHelper
 import kotlin.properties.Delegates
 
 /**
- * Created by SETA_WORK on 2017/7/24.
+ * Created by Seta.Driver on 2017/7/26.
  */
 open class BaseActivity : AppCompatActivity(), SwipeBackActivityBase {
+    private var mHelper by Delegates.notNull<SwipeBackActivityHelper>()
+    private var homeAsBackEnabled = true
 
-    var homeAsBackEnabled = false
-    var mHelper: SwipeBackActivityHelper by Delegates.notNull<SwipeBackActivityHelper>()
-
-    
-
-    fun enableHomeAsBack(enabled: Boolean) {
-        homeAsBackEnabled = enabled
-        if (homeAsBackEnabled) {
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mHelper = SwipeBackActivityHelper(this)
+        mHelper.onActivityCreate()
+        setHomeAsBackEnabled(homeAsBackEnabled)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            android.R.id.home -> super.onBackPressed()
-        }
-        return super.onOptionsItemSelected(item)
+    fun setHomeAsBackEnabled(enabled: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(enabled)
+        supportActionBar?.setDisplayShowHomeEnabled(enabled)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        mHelper.onPostCreate()
+    }
+
+    override fun findViewById(id: Int): View {
+        val v = super.findViewById(id) ?: return mHelper.findViewById(id)
+        return v
     }
 
     override fun getSwipeBackLayout(): SwipeBackLayout {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mHelper.swipeBackLayout
     }
 
     override fun setSwipeBackEnable(enable: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        swipeBackLayout.setEnableGesture(enable)
     }
 
     override fun scrollToFinishActivity() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Utils.convertActivityToTranslucent(this)
+        swipeBackLayout.scrollToFinishActivity()
     }
 }

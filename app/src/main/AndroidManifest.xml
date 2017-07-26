@@ -84,20 +84,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".steam.activity.SteamLoginActivity"
+            android:name=".steam.activities.SteamLoginActivity"
             android:label="@string/steam"
-            android:theme="@style/AppTheme.Steam">
+            android:theme="@style/SteamTheme.Swipable">
         </activity>
         <activity
-            android:name=".steam.activity.SteamMainActivity"
+            android:name=".steam.activities.SteamMainActivity"
             android:label="@string/steam"
-            android:theme="@style/AppTheme.Steam">
+            android:theme="@style/SteamTheme.Swipable">
         </activity>
-        <activity android:name=".steam.activity.OwnedGamesActivity">
+        <activity android:name=".steam.activities.OwnedGamesActivity">
         </activity>
         <activity
-            android:name=".steam.activity.CreateTransActivity"
+            android:name=".steam.activities.CreateTransActivity"
             android:label="@string/create_trans"
+            android:theme="@style/SteamTheme.Swipable"
             >
         </activity>
     </application>
