@@ -14,6 +14,7 @@ import com.seta.setall.steam.mvpViews.OwnedGamesView
 import com.seta.setall.steam.presenters.OwnedGamesPresenter
 import kotlinx.android.synthetic.main.activity_owned_games.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
@@ -31,7 +32,15 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView {
     }
 
     override fun onGamesLoad(ownedGameBean: OwnedGameBean) {
-        adapter = BasicAdapter(R.layout.item_owned_games, ownedGameBean.games) { view, data -> view.mTvGameName.text = data.name }
+        adapter = BasicAdapter(R.layout.item_owned_games, ownedGameBean.games) { view, data ->
+            view.mTvGameName.text = data.name
+//            view.mainView.onClick {
+//                toast("点击${data.name}")
+//            }
+            view.onClick {
+                toast("点击${data.name}")
+            }
+        }
         mRvOwnedGames.adapter = adapter
     }
 

@@ -39,9 +39,10 @@ dependencies {
     //滑动返回
     implementation project(':swipebackutility')
     //anko
-    compile "org.jetbrains.anko:anko-common:$anko_version"
-    compile "org.jetbrains.anko:anko-sqlite:$anko_version"
-    compile "org.jetbrains.anko:anko-coroutines:$anko_version"
+    compile "org.jetbrains.anko:anko:$anko_version"
+//    compile "org.jetbrains.anko:anko-common:$anko_version"
+//    compile "org.jetbrains.anko:anko-sqlite:$anko_version"
+//    compile "org.jetbrains.anko:anko-coroutines:$anko_version"
     //网络log
     compile "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     //网络库
