@@ -2,6 +2,7 @@ package com.seta.setall.common.framework
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.view.View
 import com.seta.swipebackutility.SwipeBackLayout
 import com.seta.swipebackutility.Utils
@@ -26,6 +27,13 @@ open class BaseActivity : AppCompatActivity(), SwipeBackActivityBase {
     fun setHomeAsBackEnabled(enabled: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(enabled)
         supportActionBar?.setDisplayShowHomeEnabled(enabled)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (homeAsBackEnabled && item?.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

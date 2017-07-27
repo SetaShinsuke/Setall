@@ -6,5 +6,8 @@ package com.seta.setall.common.utils;
  */
 
 public class KotlinConverter {
-
+//    private void test(Activity activity){
+//        Bundle bundle = new Bundle();
+//        bundle.putIntegerArrayList();
+//    }
 }

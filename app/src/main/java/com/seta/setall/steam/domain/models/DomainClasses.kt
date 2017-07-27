@@ -20,4 +20,5 @@ data class SteamApp(val appId: Int,
                     val purchasedPrice: Int,
                     val purchasedDate: Date,
                     val type: Int,
-                    val games: List<SteamApp>?)
+                    val games: List<SteamApp>?) {
+}

@@ -14,17 +14,20 @@ import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.InputDialog
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.PlayerInfoBean
+import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.PlayerInfoMvpView
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
 import org.jetbrains.anko.startActivityForResult
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CreateTransActivity : BaseActivity(), PlayerInfoMvpView {
 
     val playerInfoPresenter: PlayerInfoPresenter = PlayerInfoPresenter()
     var steamUserId: String by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
+    val games: List<SteamApp> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,10 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView {
 
     fun onClick(view: View) {
         when (view.id) {
-            R.id.mBtnAddApp -> startActivityForResult<OwnedGamesActivity>(SteamConstants.CODE_SELECT_GAMES)
+            R.id.mBtnAddApp -> {
+                val gameIds: List<Int> = games.map { it.appId }
+                startActivityForResult<OwnedGamesActivity>(SteamConstants.CODE_SELECT_GAMES, SteamConstants.SELECTED_IDS to gameIds)
+            }
             R.id.mBtnDate -> {
                 val calendar = Calendar.getInstance()
                 val datePickDialog = DatePickerDialog(this,

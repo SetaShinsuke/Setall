@@ -2,18 +2,23 @@ package com.seta.setall.steam.activities
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.LinearLayout
 import com.seta.setall.R
+import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameBean
 import com.seta.setall.steam.api.models.OwnedGameBean
 import com.seta.setall.steam.extensions.DelegateSteam
+import com.seta.setall.steam.extensions.loadImg
 import com.seta.setall.steam.mvpViews.OwnedGamesView
 import com.seta.setall.steam.presenters.OwnedGamesPresenter
 import kotlinx.android.synthetic.main.activity_owned_games.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
@@ -22,26 +27,57 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView {
     val ownedGamesPresenter: OwnedGamesPresenter = OwnedGamesPresenter()
     var userId: String by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
     var adapter by Delegates.notNull<BasicAdapter<GameBean>>()
+    val selectedIds = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_owned_games)
+        setSwipeBackEnable(false)
         mRvOwnedGames.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         ownedGamesPresenter.attachView(this)
         ownedGamesPresenter.loadOwnedGames(userId)
-    }
-
-    override fun onGamesLoad(ownedGameBean: OwnedGameBean) {
-        adapter = BasicAdapter(R.layout.item_owned_games, ownedGameBean.games) { view, data ->
-            view.mTvGameName.text = data.name
-//            view.mainView.onClick {
-//                toast("点击${data.name}")
-//            }
-            view.onClick {
-                toast("点击${data.name}")
+        selectedIds.addAll(intent.getIntegerArrayListExtra(SteamConstants.SELECTED_IDS))
+        adapter = BasicAdapter(R.layout.item_owned_games) { view, data ->
+            with(view) {
+                mTvGameName.text = data.name
+                logD("Cover url : ${data.coverUrl()}")
+                mIvCover.loadImg(data.coverUrl())
+                mIvSelected.visibility = GONE
+                if (selectedIds.contains(data.appid)) {
+                    mIvSelected.visibility = VISIBLE
+                }
+                onClick {
+                    if (selectedIds.contains(data.appid)) {
+                        selectedIds.remove(data.appid)
+                    } else {
+                        selectedIds.add(data.appid)
+                    }
+                    adapter.notifyDataSetChanged()
+                }
             }
         }
         mRvOwnedGames.adapter = adapter
+    }
+
+    override fun onBackPressed() {
+        if (selectedIds.isNotEmpty()) {
+            alert {
+                titleResource = R.string.hint
+                message = String.format(getString(R.string.cancel_game_select_hint), selectedIds.size)
+                positiveButton(R.string.confirm) { dialog ->
+                    dialog.dismiss()
+                    super.onBackPressed()
+                }
+                negativeButton(R.string.cancel) { dialog -> dialog.dismiss() }
+                show()
+            }
+            return
+        }
+        super.onBackPressed()
+    }
+
+    override fun onGamesLoad(ownedGameBean: OwnedGameBean) {
+        adapter.refreshData(ownedGameBean.games)
     }
 
     override fun onGamesLoadFail(t: Throwable) {
