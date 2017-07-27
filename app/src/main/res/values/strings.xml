@@ -7,6 +7,7 @@
     <string name="cancel">取消</string>
     <string name="detail">详情</string>
     <string name="hint">提示</string>
+    <string name="commit">提交</string>
 
     <string name="vanity_url_name">Vanity Url Name:</string>
     <string name="login_success">登录成功!</string>

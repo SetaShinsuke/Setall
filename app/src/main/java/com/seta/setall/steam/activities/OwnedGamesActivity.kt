@@ -1,7 +1,10 @@
 package com.seta.setall.steam.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.LinearLayout
@@ -37,6 +40,7 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView {
         ownedGamesPresenter.attachView(this)
         ownedGamesPresenter.loadOwnedGames(userId)
         selectedIds.addAll(intent.getIntegerArrayListExtra(SteamConstants.SELECTED_IDS))
+        logD("Selected Ids : $selectedIds")
         adapter = BasicAdapter(R.layout.item_owned_games) { view, data ->
             with(view) {
                 mTvGameName.text = data.name
@@ -82,5 +86,23 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView {
 
     override fun onGamesLoadFail(t: Throwable) {
         toast(R.string.games_load_fail)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.select_games_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val id = item?.itemId
+        when (id) {
+            R.id.menu_commit -> {
+                val intent = Intent()
+                intent.putIntegerArrayListExtra(SteamConstants.SELECTED_IDS, selectedIds)
+                setResult(SteamConstants.CODE_SELECT_GAMES, intent)
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

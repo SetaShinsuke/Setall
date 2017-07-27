@@ -12,6 +12,7 @@ import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.extensions.toast
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.InputDialog
+import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.PlayerInfoBean
 import com.seta.setall.steam.domain.models.SteamApp
@@ -19,6 +20,7 @@ import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.PlayerInfoMvpView
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
+import kotlinx.android.synthetic.main.item_owned_games.view.*
 import org.jetbrains.anko.startActivityForResult
 import java.util.*
 import kotlin.collections.ArrayList
@@ -103,7 +105,10 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             SteamConstants.CODE_SELECT_GAMES -> {
-//                val adapter = BasicAdapter<SteamApp>(R.layout.item_steam_app,)
+                val selectedIds = data?.extras?.get(SteamConstants.SELECTED_IDS)
+                if (selectedIds != null) {
+                    mRvApps.adapter = BasicAdapter(R.layout.item_owned_games, selectedIds as List<*>) { view, i -> view.mTvGameName.text = i.toString() }
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
