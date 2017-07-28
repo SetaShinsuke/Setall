@@ -4,13 +4,15 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import com.seta.setall.R
 import com.seta.setall.common.extensions.DateUtils
 import com.seta.setall.common.extensions.logD
-import com.seta.setall.common.extensions.toast
 import com.seta.setall.common.framework.BaseActivity
+import com.seta.setall.common.http.Network
 import com.seta.setall.common.views.InputDialog
 import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
@@ -22,6 +24,8 @@ import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
 import org.jetbrains.anko.startActivityForResult
+import org.jetbrains.anko.toast
+import rx.Observable
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -102,12 +106,37 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView {
         logD("Load player info fail : ${t.message}")
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_save, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val itemId = item?.itemId
+        when (itemId) {
+            R.id.menu_save -> {
+                //TODO:保存条目
+                toast("保存")
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             SteamConstants.CODE_SELECT_GAMES -> {
                 val selectedIds = data?.extras?.get(SteamConstants.SELECTED_IDS)
                 if (selectedIds != null) {
-                    mRvApps.adapter = BasicAdapter(R.layout.item_owned_games, selectedIds as List<*>) { view, position, i -> view.mTvGameName.text = i.toString() }
+                    mRvApps.adapter = BasicAdapter(R.layout.item_owned_games, selectedIds as List<*>) {
+                        view, position, i ->
+                        view.mTvGameName.text = i.toString()
+                        val reqArray = ArrayList<Observable<*>>()
+                        val ids = selectedIds as List<Int>
+                        ids.forEach { reqArray.add(Network.steamGameApi.getGameDetail(it)) }
+                        Observable.zip(reqArray){
+                            args: Array<out Any>? ->
+                        }
+                    }
                 }
             }
         }

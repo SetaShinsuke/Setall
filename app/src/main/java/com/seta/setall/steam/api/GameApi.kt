@@ -10,7 +10,7 @@ import rx.Observable
 interface SteamGameApi {
 
     @GET("/api/appdetails")
-    fun getGameDetail(@Query("appids") appids: List<Long>): Observable<Any>
+    fun getGameDetail(@Query("appids") appid: Int): Observable<Any>
 
     @GET("/api/packagedetails")
     fun getBundlePackDetail(@Query("packageids") bundlePackId: Int): Observable<Any>
