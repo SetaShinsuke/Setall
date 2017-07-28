@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.LinearLayout
 import com.seta.setall.R
 import com.seta.setall.common.extensions.logD
@@ -41,14 +39,17 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView {
         ownedGamesPresenter.loadOwnedGames(userId)
         selectedIds.addAll(intent.getIntegerArrayListExtra(SteamConstants.SELECTED_IDS))
         logD("Selected Ids : $selectedIds")
-        adapter = BasicAdapter(R.layout.item_owned_games) { view, data ->
+        adapter = BasicAdapter(R.layout.item_owned_games) { view, position, data ->
             with(view) {
                 mTvGameName.text = data.name
                 logD("Cover url : ${data.coverUrl()}")
-                mIvCover.loadImg(data.coverUrl())
-                mIvSelected.visibility = GONE
                 if (selectedIds.contains(data.appid)) {
-                    mIvSelected.visibility = VISIBLE
+                    mIvCover.loadImg(R.mipmap.ic_check)
+                    view.isSelected = true
+                } else {
+                    mIvCover.loadImg(data.coverUrl())
+//                    mTvGameName.isSelected = false
+                    view.isSelected = false
                 }
                 onClick {
                     if (selectedIds.contains(data.appid)) {
@@ -56,7 +57,7 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView {
                     } else {
                         selectedIds.add(data.appid)
                     }
-                    adapter.notifyDataSetChanged()
+                    adapter.notifyItemChanged(position)
                 }
             }
         }

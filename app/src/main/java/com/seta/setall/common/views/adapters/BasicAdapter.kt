@@ -15,7 +15,7 @@ import android.view.ViewGroup
  * @param data: 需要设置的数据
  * @param bindFunc: ViewHolder 绑定数据
  */
-class BasicAdapter<D>(val layoutResId: Int, var data: List<D> = ArrayList<D>(), val bindFunc: (View, D) -> Unit)
+class BasicAdapter<D>(val layoutResId: Int, var data: List<D> = ArrayList<D>(), val bindFunc: (View, Int, D) -> Unit)
     : RecyclerView.Adapter<BasicAdapter.BaseHolder<D>>() {
 
 
@@ -26,7 +26,7 @@ class BasicAdapter<D>(val layoutResId: Int, var data: List<D> = ArrayList<D>(), 
 
     override fun getItemCount(): Int = data.size
 
-    override fun onBindViewHolder(holder: BaseHolder<D>, position: Int) = holder.bindData(data[position])
+    override fun onBindViewHolder(holder: BaseHolder<D>, position: Int) = holder.bindData(position, data[position])
 
     fun refreshData(data: List<D>) {
         this.data = data
@@ -36,12 +36,12 @@ class BasicAdapter<D>(val layoutResId: Int, var data: List<D> = ArrayList<D>(), 
     /**
      * ViewHolder 类
      */
-    class BaseHolder<in T>(view: View, val bindFunc: (View, T) -> Unit)
+    class BaseHolder<in T>(view: View, val bindFunc: (View, Int, T) -> Unit)
         : RecyclerView.ViewHolder(view) {
         //绑定数据
-        fun bindData(item: T) {
+        fun bindData(position: Int, item: T) {
             with(item) {
-                bindFunc(itemView, item)
+                bindFunc(itemView, position, item)
             }
         }
     }

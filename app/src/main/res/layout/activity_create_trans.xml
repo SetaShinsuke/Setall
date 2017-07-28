@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/main_padding"
+        android:layout_marginTop="@dimen/main_padding"
         android:padding="@dimen/main_padding"
         android:text="@string/detail"
         />
@@ -23,7 +24,10 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:onClick="onClick"
-        android:padding="@dimen/main_margin"
+        android:paddingBottom="@dimen/main_padding"
+        android:paddingLeft="@dimen/main_margin"
+        android:paddingRight="@dimen/main_margin"
+        android:paddingTop="@dimen/main_padding"
         >
 
         <TextView
@@ -52,7 +56,10 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:onClick="onClick"
-        android:padding="@dimen/main_margin"
+        android:paddingBottom="@dimen/main_padding"
+        android:paddingLeft="@dimen/main_margin"
+        android:paddingRight="@dimen/main_margin"
+        android:paddingTop="@dimen/main_padding"
         >
 
         <TextView
@@ -78,7 +85,10 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:onClick="onClick"
-        android:padding="@dimen/main_margin"
+        android:paddingBottom="@dimen/main_padding"
+        android:paddingLeft="@dimen/main_margin"
+        android:paddingRight="@dimen/main_margin"
+        android:paddingTop="@dimen/main_padding"
         >
 
         <TextView
@@ -101,8 +111,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:layout_marginBottom="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_padding"
         android:background="@color/divider_color"/>
 
     <android.support.v7.widget.RecyclerView
@@ -111,7 +120,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:padding="@dimen/main_margin"
+        android:padding="@dimen/main_padding"
         />
 
     <Button

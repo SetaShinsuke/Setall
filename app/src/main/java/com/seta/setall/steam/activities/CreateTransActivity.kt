@@ -107,7 +107,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView {
             SteamConstants.CODE_SELECT_GAMES -> {
                 val selectedIds = data?.extras?.get(SteamConstants.SELECTED_IDS)
                 if (selectedIds != null) {
-                    mRvApps.adapter = BasicAdapter(R.layout.item_owned_games, selectedIds as List<*>) { view, i -> view.mTvGameName.text = i.toString() }
+                    mRvApps.adapter = BasicAdapter(R.layout.item_owned_games, selectedIds as List<*>) { view, position, i -> view.mTvGameName.text = i.toString() }
                 }
             }
         }

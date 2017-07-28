@@ -21,3 +21,11 @@ fun ImageView.loadImg(imgPath: String) {
             .error(R.mipmap.img_fail)
             .into(this)
 }
+
+fun ImageView.loadImg(imgResId: Int) {
+    Glide.with(context)
+            .load(imgResId)
+            .placeholder(R.mipmap.img_loading)
+            .error(R.mipmap.img_fail)
+            .into(this)
+}
