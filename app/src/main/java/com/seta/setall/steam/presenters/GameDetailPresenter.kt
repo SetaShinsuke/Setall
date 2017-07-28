@@ -4,8 +4,9 @@ import com.google.gson.Gson
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.http.Network
 import com.seta.setall.common.mvp.BasePresenter
-import com.seta.setall.steam.api.models.GameDetailPojo
+import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
+import com.seta.setall.steam.utils.SteamException
 import rx.Observable
 import rx.Subscriber
 
@@ -15,28 +16,47 @@ import rx.Subscriber
 class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
 
     fun loadGameDetails(gameIds: List<*>) {
-        val reqArray = ArrayList<Observable<*>>()
+        val reqArray = ArrayList<Observable<Any>>()
         val ids = gameIds.filterIsInstance<Int>()
-        ids.forEach { reqArray.add(Network.steamGameApi.getGameDetail(it)) }
-        val observable: Observable<Any> = Observable.zip(reqArray) {
-            args: Array<out Any>? ->
-            {
-                args?.forEachIndexed { index, any ->
-                    logD("$index : $any")
-                }
-            }
+        ids.forEach {
+            val req = Network.steamGameApi.getGameDetail(it)
+//                    .map {
+//                        val gson = Gson()
+//                        val json = gson.toJsonTree(it).asJsonObject
+//                        val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
+//                        val gameDetailBean = gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
+//                        return@map gameDetailBean
+//                    }
+            reqArray.add(req)
         }
-        observable.doSubscribe(object : Subscriber<Any>() {
+        val observable: Observable<List<GameDetailBean>> = Observable.zip(reqArray) {
+            val gameDetails = ArrayList<GameDetailBean>()
+            it.forEach {
+                val gson = Gson()
+                val json = gson.toJsonTree(it).asJsonObject
+                val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
+                val gameDetailBean = gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
+                gameDetails.add(gameDetailBean)
+            }
+            return@zip gameDetails
+        }
+
+        observable.doSubscribe(object : Subscriber<List<GameDetailBean>>() {
             override fun onCompleted() {
                 logD("onCompleted")
             }
 
-            override fun onNext(t: Any?) {
+            override fun onNext(t: List<GameDetailBean>?) {
                 logD("onNext : $t")
+                if (t == null) {
+                    return onError(SteamException(t))
+                }
+                mvpView?.onGameDetailLoad(t)
             }
 
-            override fun onError(e: Throwable?) {
-                logD("onError : ${e?.message}")
+            override fun onError(e: Throwable) {
+                logD("onError : ${e.message}")
+                mvpView?.onGameDetailLoadFail(e)
             }
 
         })
@@ -44,7 +64,15 @@ class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
 
     fun loadGameDetail(gameId: Int) {
         Network.steamGameApi.getGameDetail(gameId)
-                .doSubscribe(object : Subscriber<Any>() {
+                .map {
+                    val gson = Gson()
+                    val json = gson.toJsonTree(it).asJsonObject
+                    val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
+                    val gameDetailBean = gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
+                    logD("Game name : ${gameDetailBean.name}")
+                    return@map gameDetailBean
+                }
+                .doSubscribe(object : Subscriber<GameDetailBean>() {
                     override fun onCompleted() {
                         logD("onCompleted")
                     }
@@ -53,12 +81,8 @@ class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
                         logD("onError : ${e?.message}")
                     }
 
-                    override fun onNext(t: Any?) {
+                    override fun onNext(t: GameDetailBean?) {
                         logD("onNext : $t")
-                        val gson = Gson()
-                        val json = gson.toJsonTree(t).asJsonObject
-                        val key = json.entrySet().iterator().next().toPair().first
-                        val gameDetailPojo = gson.fromJson<GameDetailPojo>(json, GameDetailPojo::class.java)
                     }
 
                 })

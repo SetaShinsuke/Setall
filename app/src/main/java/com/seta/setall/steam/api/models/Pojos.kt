@@ -44,6 +44,10 @@ data class GameBean(val appid: Int
 }
 
 data class GameDetailPojo(val games: List<GameDetailBean>)
-data class GameDetailBean(val steam_appid: Long, val name: String, val type: String)
+data class GameDetailBean(val steam_appid: Long,
+                          val name: String,
+                          val type: String,
+                          val dlc: List<Int>
+)
 
 

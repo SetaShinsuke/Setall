@@ -15,7 +15,7 @@ import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.InputDialog
 import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
-import com.seta.setall.steam.api.models.GameDetailPojo
+import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.api.models.PlayerInfoBean
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.DelegateSteam
@@ -110,12 +110,14 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
     }
 
 
-    override fun onGameDetailLoad(gameDetailPojo: GameDetailPojo) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onGameDetailLoad(gameDetails: List<GameDetailBean>) {
+        gameDetails.forEach {
+            logD("Game dlc : ${it.dlc}")
+        }
     }
 
     override fun onGameDetailLoadFail(t: Throwable) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        toast(R.string.games_load_fail)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -143,7 +145,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
                         view, position, i ->
                         view.mTvGameName.text = i.toString()
                     }
-                    gameDetailPresenter.loadGameDetail(selectedIds[0] as Int)
+                    gameDetailPresenter.loadGameDetails(selectedIds)
                 }
             }
         }

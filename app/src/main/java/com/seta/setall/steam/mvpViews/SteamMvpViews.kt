@@ -1,7 +1,7 @@
 package com.seta.setall.steam.mvpViews
 
 import com.seta.setall.common.mvp.MvpView
-import com.seta.setall.steam.api.models.GameDetailPojo
+import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.api.models.OwnedGameBean
 import com.seta.setall.steam.api.models.PlayerInfoBean
 import com.seta.setall.steam.api.models.SteamLoginBean
@@ -25,6 +25,6 @@ interface PlayerInfoMvpView : MvpView {
 }
 
 interface GameDetailMvpView : MvpView {
-    fun onGameDetailLoad(gameDetailPojo: GameDetailPojo)
+    fun onGameDetailLoad(gameDetails: List<GameDetailBean>)
     fun onGameDetailLoadFail(t: Throwable)
 }
