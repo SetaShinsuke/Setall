@@ -1,10 +1,7 @@
 package com.seta.setall.steam.mvpViews
 
 import com.seta.setall.common.mvp.MvpView
-import com.seta.setall.steam.api.models.GameDetailBean
-import com.seta.setall.steam.api.models.OwnedGameBean
-import com.seta.setall.steam.api.models.PlayerInfoBean
-import com.seta.setall.steam.api.models.SteamLoginBean
+import com.seta.setall.steam.api.models.*
 
 /**
  * Created by SETA_WORK on 2017/7/4.
@@ -27,4 +24,9 @@ interface PlayerInfoMvpView : MvpView {
 interface GameDetailMvpView : MvpView {
     fun onGameDetailLoad(gameDetails: List<GameDetailBean>)
     fun onGameDetailLoadFail(t: Throwable)
+}
+
+interface GameDlcPackMvpView : MvpView {
+    fun onGameLoad(gameDlcPackBean: GameDlcPackBean)
+    fun onGameLoadFail(t: Throwable)
 }

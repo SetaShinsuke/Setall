@@ -18,6 +18,8 @@ class SteamConstants {
         val TYPE_BUNDLEPACK = 2
 
         val CODE_SELECT_GAMES = 100 //给订单添加游戏
+        val CODE_SELECT_DLCS = 101 //给订单添加DLC
+        val CODE_SELECT_PACKS = 102 //给订单添加package
         val SELECTED_IDS = "SELECTED_IDS"
     }
 }

@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menu_commit"
         android:orderInCategory="100"
-        android:title="@string/commit"
+        android:title="@string/go_next"
         app:showAsAction="always"/>
 
 </menu>

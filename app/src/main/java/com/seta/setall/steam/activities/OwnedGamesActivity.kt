@@ -90,7 +90,7 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.select_games_menu, menu)
+        menuInflater.inflate(R.menu.go_next, menu)
         return true
     }
 
@@ -102,6 +102,7 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView {
                 intent.putIntegerArrayListExtra(SteamConstants.SELECTED_IDS, selectedIds)
                 setResult(SteamConstants.CODE_SELECT_GAMES, intent)
                 finish()
+//                startActivity<OwnedGamesActivity>(SteamConstants.SELECTED_IDS to selectedIds)
             }
         }
         return super.onOptionsItemSelected(item)

@@ -1,13 +1,13 @@
 package com.seta.setall.steam.presenters
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.http.Network
 import com.seta.setall.common.mvp.BasePresenter
 import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
 import com.seta.setall.steam.utils.SteamException
+import com.seta.setall.steam.utils.SteamUtilMethods
 import rx.Observable
 import rx.Subscriber
 
@@ -22,11 +22,12 @@ class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
         val observable: Observable<List<GameDetailBean>> = Observable.zip(reqArray) {
             val gameDetails = ArrayList<GameDetailBean>()
             it.forEach {
-                val gson = GsonBuilder().create()
-                val json = gson.toJsonTree(it).asJsonObject
-                val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
-                val gameDetailBean = gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
-                gameDetails.add(gameDetailBean)
+                //                val gson = GsonBuilder().create()
+//                val json = gson.toJsonTree(it).asJsonObject
+//                val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
+//                val gameDetailBean = gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
+//                gameDetails.add(gameDetailBean)
+                gameDetails.add(SteamUtilMethods.createGameDetailBean(it))
             }
             return@zip gameDetails
         }

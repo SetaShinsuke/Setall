@@ -57,10 +57,12 @@ data class GameDetailBean(val steam_appid: Long,
                           val header_image: String,
                           val website: String,
                           val developers: List<String> = ArrayList(),
-                          val publishers: List<String> = ArrayList()
+                          val publishers: List<String> = ArrayList(),
+                          val release_date: ReleaseDateBean
 
 )
 
+data class FullGameBean(val appid: String, val name: String)
 data class PriceBean(val currency: String, val initial: Int, val final: Int)
 data class PackageGroupPojo(val name: String, val title: String, val description: String, val subs: List<PackageGroupBean> = ArrayList())
 data class PackageGroupBean(val packageid: Int,
@@ -71,5 +73,15 @@ data class PackageGroupBean(val packageid: Int,
     val price: Int
         get() = price_in_cents_with_discount * 100
 }
+
+data class PackAppBean(val id: Int, val name: String)
+data class ReleaseDateBean(val date: String)
+data class PackageDetailBean(val name: String, val page_image: String, val small_logo: String, val apps: List<PackAppBean>,
+                             val price: PriceBean, val release_date: ReleaseDateBean)
+
+data class GameDlcPackBean(val fullGame: GameDetailBean,
+                           val dlc: List<GameDetailBean>,
+                           val bundlePacks: List<PackageDetailBean>
+)
 
 
