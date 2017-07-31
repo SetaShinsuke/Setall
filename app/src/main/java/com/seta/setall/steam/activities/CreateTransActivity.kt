@@ -1,6 +1,7 @@
 package com.seta.setall.steam.activities
 
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import android.widget.LinearLayout
 import com.seta.setall.R
 import com.seta.setall.common.extensions.DateUtils
 import com.seta.setall.common.extensions.logD
+import com.seta.setall.common.extensions.toast
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.InputDialog
 import com.seta.setall.common.views.adapters.BasicAdapter
@@ -25,6 +27,7 @@ import com.seta.setall.steam.presenters.GameDetailPresenter
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import java.util.*
@@ -36,6 +39,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
     val games: List<SteamApp> = ArrayList()
     val playerInfoPresenter: PlayerInfoPresenter = PlayerInfoPresenter()
     val gameDetailPresenter: GameDetailPresenter = GameDetailPresenter()
+    var loadingDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,13 +115,38 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
 
 
     override fun onGameDetailLoad(gameDetails: List<GameDetailBean>) {
+        loadingDialog?.dismiss()
+        var dlcWarn: String = ""
         gameDetails.forEach {
             logD("Game dlc : ${it.dlc}")
+            if (it.dlc != null && it.dlc.isNotEmpty()) {
+                dlcWarn += "${it.name} has DLC : ${it.dlc}\n"
+            }
+        }
+        if (dlcWarn != "") {
+            alert {
+                titleResource = R.string.hint
+                message = dlcWarn
+                positiveButton(R.string.confirm) {
+                    dialog ->
+                    dialog.dismiss()
+                }
+                negativeButton(R.string.cancel) {
+                    dialog ->
+                    dialog.dismiss()
+                }
+                show()
+            }
+        }
+        mRvApps.adapter = BasicAdapter(R.layout.item_owned_games, gameDetails) {
+            view, position, game ->
+            view.mTvGameName.text = game.name
         }
     }
 
     override fun onGameDetailLoadFail(t: Throwable) {
-        toast(R.string.games_load_fail)
+        toast(R.string.games_load_fail, t.message)
+        loadingDialog?.dismiss()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -145,6 +174,12 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
                         view, position, i ->
                         view.mTvGameName.text = i.toString()
                     }
+                    loadingDialog = ProgressDialog(this)
+                            .apply {
+                                setMessage(getString(R.string.loading))
+                                setCancelable(false)
+                                show()
+                            }
                     gameDetailPresenter.loadGameDetails(selectedIds)
                 }
             }

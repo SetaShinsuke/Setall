@@ -27,7 +27,7 @@ data class PlayerBean(val players: List<PlayerInfoBean> = ArrayList())
 
 data class OwnedGamePojo(val response: OwnedGameBean)
 data class OwnedGameBean(val game_count: Int
-                         , val games: List<GameBean>)
+                         , val games: List<GameBean> = ArrayList())
 
 data class GameBean(val appid: Int
                     , val name: String
@@ -43,11 +43,33 @@ data class GameBean(val appid: Int
     fun logoUrl() = "http://media.steampowered.com/steamcommunity/public/images/apps/$appid/$img_logo_url.jpg"
 }
 
-data class GameDetailPojo(val games: List<GameDetailBean>)
+data class GameDetailPojo(val games: List<GameDetailBean> = ArrayList())
 data class GameDetailBean(val steam_appid: Long,
                           val name: String,
                           val type: String,
-                          val dlc: List<Int>
+                          val dlc: List<Int>? = ArrayList(),
+                          val packages: List<Int> = ArrayList(),
+                          val package_groups: List<PackageGroupPojo> = ArrayList(),
+                          val price_overview: PriceBean,
+                          val required_age: Int,
+                          val is_free: Boolean = false,
+                          val short_description: String,
+                          val header_image: String,
+                          val website: String,
+                          val developers: List<String> = ArrayList(),
+                          val publishers: List<String> = ArrayList()
+
 )
+
+data class PriceBean(val currency: String, val initial: Int, val final: Int)
+data class PackageGroupPojo(val name: String, val title: String, val description: String, val subs: List<PackageGroupBean> = ArrayList())
+data class PackageGroupBean(val packageid: Int,
+                            val percent_saving: Int,
+                            val option_text: String,
+                            val option_description: String,
+                            val price_in_cents_with_discount: Int) {
+    val price: Int
+        get() = price_in_cents_with_discount * 100
+}
 
 

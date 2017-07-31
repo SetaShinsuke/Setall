@@ -14,7 +14,7 @@ fun Activity.logD(content: String, throwable: Throwable? = null) {
     LogX.d(javaClass.simpleName, content, throwable)
 }
 
-fun Context.toast(textResource: Int, vararg extraString: String) {
+fun Context.toast(textResource: Int, vararg extraString: String?) {
     var content = getString(textResource)
     extraString.forEach { content += it }
     Toast.makeText(this, content, Toast.LENGTH_SHORT).show()

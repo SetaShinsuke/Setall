@@ -1,6 +1,7 @@
 package com.seta.setall.steam.presenters
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.http.Network
 import com.seta.setall.common.mvp.BasePresenter
@@ -16,23 +17,12 @@ import rx.Subscriber
 class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
 
     fun loadGameDetails(gameIds: List<*>) {
-        val reqArray = ArrayList<Observable<Any>>()
         val ids = gameIds.filterIsInstance<Int>()
-        ids.forEach {
-            val req = Network.steamGameApi.getGameDetail(it)
-//                    .map {
-//                        val gson = Gson()
-//                        val json = gson.toJsonTree(it).asJsonObject
-//                        val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
-//                        val gameDetailBean = gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
-//                        return@map gameDetailBean
-//                    }
-            reqArray.add(req)
-        }
+        val reqArray = ids.map { Network.steamGameApi.getGameDetail(it) }
         val observable: Observable<List<GameDetailBean>> = Observable.zip(reqArray) {
             val gameDetails = ArrayList<GameDetailBean>()
             it.forEach {
-                val gson = Gson()
+                val gson = GsonBuilder().create()
                 val json = gson.toJsonTree(it).asJsonObject
                 val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
                 val gameDetailBean = gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
@@ -55,7 +45,7 @@ class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
             }
 
             override fun onError(e: Throwable) {
-                logD("onError : ${e.message}")
+                logD("loadGameDetails onError : ${e.message}")
                 mvpView?.onGameDetailLoadFail(e)
             }
 
