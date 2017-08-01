@@ -18,27 +18,32 @@ import com.seta.setall.common.views.InputDialog
 import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameDetailBean
+import com.seta.setall.steam.api.models.GameDlcPackBean
 import com.seta.setall.steam.api.models.PlayerInfoBean
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
+import com.seta.setall.steam.mvpViews.GameDlcPackMvpView
 import com.seta.setall.steam.mvpViews.PlayerInfoMvpView
 import com.seta.setall.steam.presenters.GameDetailPresenter
+import com.seta.setall.steam.presenters.GameDlcPackPresenter
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView {
+class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpView, GameDetailMvpView {
 
     var steamUserId: String by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
     val games: List<SteamApp> = ArrayList()
     val playerInfoPresenter: PlayerInfoPresenter = PlayerInfoPresenter()
     val gameDetailPresenter: GameDetailPresenter = GameDetailPresenter()
+    val gameDlcPackPresenter: GameDlcPackPresenter = GameDlcPackPresenter()
     var loadingDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +54,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
             playerInfoPresenter.loadPlayerInfo(steamUserId)
         }
         gameDetailPresenter.attachView(this)
+        gameDlcPackPresenter.attachView(this)
         mRvApps.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 //        enableHomeAsBack(true)
     }
@@ -129,6 +135,14 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
                 message = dlcWarn
                 positiveButton(R.string.confirm) {
                     dialog ->
+                    val ids = ArrayList<Int>()
+                    gameDetails.forEach {
+                        ids.add(it.steam_appid)
+                        if (it.dlc != null) {
+                            ids.addAll(it.dlc.toList())
+                        }
+                    }
+                    startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids)
                     dialog.dismiss()
                 }
                 negativeButton(R.string.cancel) {
@@ -146,6 +160,22 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
 
     override fun onGameDetailLoadFail(t: Throwable) {
         toast(R.string.games_load_fail, t.message)
+        loadingDialog?.dismiss()
+    }
+
+
+    override fun onGameLoad(gameDlcPackBean: GameDlcPackBean) {
+        toast("onGameLoad")
+        loadingDialog?.dismiss()
+    }
+
+    override fun onGamesLoad(games: List<GameDlcPackBean>) {
+        toast("onGamesLoad")
+        loadingDialog?.dismiss()
+    }
+
+    override fun onGameLoadFail(t: Throwable) {
+        toast("onGameLoadFail")
         loadingDialog?.dismiss()
     }
 
@@ -181,6 +211,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDetailMvpView
                                 show()
                             }
                     gameDetailPresenter.loadGameDetails(selectedIds)
+//                    gameDlcPackPresenter.loadGames(selectedIds)
                 }
             }
         }

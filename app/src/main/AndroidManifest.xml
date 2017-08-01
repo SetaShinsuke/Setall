@@ -96,14 +96,14 @@
         <activity
             android:name=".steam.activities.OwnedGamesActivity"
             android:label="@string/select_games"
-            android:theme="@style/SteamTheme"
-            >
+            android:theme="@style/SteamTheme">
         </activity>
         <activity
             android:name=".steam.activities.CreateTransActivity"
             android:label="@string/create_trans"
-            android:theme="@style/SteamTheme.Swipable"
-            >
+            android:theme="@style/SteamTheme.Swipable">
+        </activity>
+        <activity android:name=".steam.activities.GameListActivity">
         </activity>
     </application>
 

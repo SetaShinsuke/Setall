@@ -44,11 +44,11 @@ data class GameBean(val appid: Int
 }
 
 data class GameDetailPojo(val games: List<GameDetailBean> = ArrayList())
-data class GameDetailBean(val steam_appid: Long,
+data class GameDetailBean(val steam_appid: Int,
                           val name: String,
                           val type: String,
                           val dlc: List<Int>? = ArrayList(),
-                          val packages: List<Int> = ArrayList(),
+                          val packages: List<Int>? = ArrayList(),
                           val package_groups: List<PackageGroupPojo> = ArrayList(),
                           val price_overview: PriceBean,
                           val required_age: Int,

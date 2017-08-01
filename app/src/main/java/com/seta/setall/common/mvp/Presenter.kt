@@ -37,12 +37,13 @@ open class BasePresenter<T : MvpView?> : Presenter<T> {
 
     fun callCancel() = callList.forEach { it.cancel() }
 
-    fun <R> Observable<R>.doSubscribe(subscriber: Subscriber<R>) {
+    fun <R> Observable<R>.doSubscribe(subscriber: Subscriber<R>): Observable<R> {
         mCompositeSubscription.add(this
                 .observeOn(AndroidSchedulers.mainThread())
                 .unsubscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.computation())
                 .subscribe(subscriber))
+        return this
     }
 
 //    fun addSubscription(observable: Observable<Any>, subscriber: Subscriber<Any>) {

@@ -32,7 +32,9 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
                 SteamAppTable.INIT_PRICE to INTEGER,
                 SteamAppTable.PURCHASED_PRICE to INTEGER,
                 SteamAppTable.PURCHASED_DATE to INTEGER,
-                SteamAppTable.TYPE to INTEGER
+                SteamAppTable.TYPE to INTEGER,
+                SteamAppTable.ICON_ID to TEXT,
+                SteamAppTable.LOGO_ID to TEXT
         )
         db.createTable(TransAppRelationTable.TABLE_NAME, true,
                 TransAppRelationTable.TRANS_ID to INTEGER,

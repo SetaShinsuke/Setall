@@ -33,6 +33,10 @@ class BasicAdapter<D>(val layoutResId: Int, var data: List<D> = ArrayList<D>(), 
         notifyDataSetChanged()
     }
 
+    fun notifyItemChanged(item: D) {
+        notifyItemChanged(data.indexOf(item))
+    }
+
     /**
      * ViewHolder 类
      */

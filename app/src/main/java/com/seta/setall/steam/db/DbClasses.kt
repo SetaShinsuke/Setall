@@ -34,12 +34,12 @@ class SteamAppDb(val map: MutableMap<String, Any?>, val games: List<SteamAppDb>?
     var purchasedPrice: Int by map //购入价格
     var purchasedDate: Long by map //购买日期 inMills
     var type: Int by map //0:game, 1:dlc, 2:bundlePack
+    var iconImgId: String by map
+    var logoImgId: String by map
 
-    //todo:保存封面图
-//    var iconImgId by map
-//    var logoImgId by map
-
-    constructor(appId: Int, name: String, currency: String, initPrice: Int, purchasedPrice: Int, purchasedDate: Long, type: Int, games: List<SteamAppDb>?)
+    constructor(appId: Int, name: String, currency: String, initPrice: Int, purchasedPrice: Int, purchasedDate: Long, type: Int,
+                iconImgId: String, logoImgId: String,
+                games: List<SteamAppDb>?)
             : this(HashMap(), games) {
         this.appId = appId
         this.name = name
@@ -48,6 +48,8 @@ class SteamAppDb(val map: MutableMap<String, Any?>, val games: List<SteamAppDb>?
         this.purchasedPrice = purchasedPrice
         this.purchasedDate = purchasedDate
         this.type = type
+        this.iconImgId = iconImgId
+        this.logoImgId = logoImgId
     }
 }
 

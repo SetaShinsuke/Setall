@@ -22,11 +22,6 @@ class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
         val observable: Observable<List<GameDetailBean>> = Observable.zip(reqArray) {
             val gameDetails = ArrayList<GameDetailBean>()
             it.forEach {
-                //                val gson = GsonBuilder().create()
-//                val json = gson.toJsonTree(it).asJsonObject
-//                val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
-//                val gameDetailBean = gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
-//                gameDetails.add(gameDetailBean)
                 gameDetails.add(SteamUtilMethods.createGameDetailBean(it))
             }
             return@zip gameDetails

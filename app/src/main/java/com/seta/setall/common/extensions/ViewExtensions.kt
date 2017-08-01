@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.view.View
 import android.widget.Toast
 import com.seta.setall.common.logs.LogX
 
@@ -18,6 +19,14 @@ fun Context.toast(textResource: Int, vararg extraString: String?) {
     var content = getString(textResource)
     extraString.forEach { content += it }
     Toast.makeText(this, content, Toast.LENGTH_SHORT).show()
+}
+
+fun View.setVisible(boolean: Boolean) {
+    if (boolean) {
+        visibility = View.VISIBLE
+    } else {
+        visibility = View.GONE
+    }
 }
 
 fun Context.isDebuggable(): Boolean = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0

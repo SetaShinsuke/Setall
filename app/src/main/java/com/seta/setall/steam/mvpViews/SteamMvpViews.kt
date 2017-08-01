@@ -28,5 +28,6 @@ interface GameDetailMvpView : MvpView {
 
 interface GameDlcPackMvpView : MvpView {
     fun onGameLoad(gameDlcPackBean: GameDlcPackBean)
+    fun onGamesLoad(games: List<GameDlcPackBean>)
     fun onGameLoadFail(t: Throwable)
 }

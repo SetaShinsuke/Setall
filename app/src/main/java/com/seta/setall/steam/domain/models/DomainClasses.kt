@@ -20,5 +20,7 @@ data class SteamApp(val appId: Int,
                     val purchasedPrice: Int,
                     val purchasedDate: Date,
                     val type: Int,
+                    val iconImgId: String,
+                    val logoImgId: String,
                     val games: List<SteamApp>?) {
 }

@@ -59,7 +59,7 @@ class SteamMainActivity : BaseActivity() {
 
         val steamApps = ArrayList<SteamApp>()
         games.forEachIndexed { i, (appid, name) ->
-            steamApps.add(SteamApp(appid, name, "CNY", 100 * i, 10 * i, Date(), 0, null))
+            steamApps.add(SteamApp(appid, name, "CNY", 100 * i, 10 * i, Date(), 0, "", "", null))
         }
 
         //伪造数据
