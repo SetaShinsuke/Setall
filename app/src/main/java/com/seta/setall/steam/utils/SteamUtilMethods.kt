@@ -8,10 +8,13 @@ import com.seta.setall.steam.api.models.PackageDetailBean
  * Created by SETA_WORK on 2017/7/31.
  */
 object SteamUtilMethods {
-    fun createGameDetailBean(map: Any): GameDetailBean {
+    fun createGameDetailBean(map: Any): GameDetailBean? {
         val gson = GsonBuilder().create()
         val json = gson.toJsonTree(map).asJsonObject
         val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
+        if(data==null){
+            return null
+        }
         return gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
     }
 

@@ -81,22 +81,26 @@ class GameDlcPackPresenter : BasePresenter<GameDlcPackMvpView>() {
         Network.steamGameApi.getGameDetail(gameId)
                 .map {
                     return@map SteamUtilMethods.createGameDetailBean(it)
-                }.doSubscribe(object : Subscriber<GameDetailBean>() {
-            override fun onNext(t: GameDetailBean) {
+                }.doSubscribe(object : Subscriber<GameDetailBean?>() {
+            override fun onNext(t: GameDetailBean?) {
                 logD("LoadGame detail onNext : $t")
-                val reqGetDlc: Observable<List<GameDetailBean>>? = getReqGameDetails(t.dlc?.toList()) //获取DLC的Request
-                val reqGetPack: Observable<List<PackageDetailBean>>? = getReqPackageDetails(t.packages?.toList())
+                val reqGetDlc: Observable<List<GameDetailBean>>? = getReqGameDetails(t?.dlc?.toList()) //获取DLC的Request
+                val reqGetPack: Observable<List<PackageDetailBean>>? = getReqPackageDetails(t?.packages?.toList())
                 Observable.zip(reqGetDlc, reqGetPack) {
                     dlc, packs ->
-                    GameDlcPackBean(t, dlc, packs)
-                }.doSubscribe(object : Subscriber<GameDlcPackBean>() {
+                    t?.let{
+                        GameDlcPackBean(t, dlc, packs)
+                    }
+                }.doSubscribe(object : Subscriber<GameDlcPackBean?>() {
                     override fun onCompleted() {
                         logD("loadGameDlcPack onCompleted")
                     }
 
-                    override fun onNext(t: GameDlcPackBean) {
+                    override fun onNext(t: GameDlcPackBean?) {
                         logD("loadGameDlcPack onNext : $t")
-                        mvpView?.onGameLoad(t)
+                        t?.let {
+                            mvpView?.onGameLoad(t)
+                        }
                     }
 
                     override fun onError(e: Throwable) {
@@ -128,7 +132,9 @@ class GameDlcPackPresenter : BasePresenter<GameDlcPackMvpView>() {
         val observable: Observable<List<GameDetailBean>> = Observable.zip(reqArray) {
             val gameDetails = ArrayList<GameDetailBean>()
             it.forEach {
-                gameDetails.add(SteamUtilMethods.createGameDetailBean(it))
+                SteamUtilMethods.createGameDetailBean(it)?.let {
+                    gameDetails.add(it)
+                }
             }
             return@zip gameDetails
         }

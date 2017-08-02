@@ -30,7 +30,6 @@ import com.seta.setall.steam.presenters.GameDlcPackPresenter
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -122,36 +121,46 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
 
     override fun onGameDetailLoad(gameDetails: List<GameDetailBean>) {
         loadingDialog?.dismiss()
-        var dlcWarn: String = ""
+        val ids = ArrayList<Int>()
         gameDetails.forEach {
-            logD("Game dlc : ${it.dlc}")
-            if (it.dlc != null && it.dlc.isNotEmpty()) {
-                dlcWarn += "${it.name} has DLC : ${it.dlc}\n"
+            ids.add(it.steam_appid)
+            if (it.dlc != null) {
+                ids.addAll(it.dlc.toList())
             }
         }
-        if (dlcWarn != "") {
-            alert {
-                titleResource = R.string.hint
-                message = dlcWarn
-                positiveButton(R.string.confirm) {
-                    dialog ->
-                    val ids = ArrayList<Int>()
-                    gameDetails.forEach {
-                        ids.add(it.steam_appid)
-                        if (it.dlc != null) {
-                            ids.addAll(it.dlc.toList())
-                        }
-                    }
-                    startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids)
-                    dialog.dismiss()
-                }
-                negativeButton(R.string.cancel) {
-                    dialog ->
-                    dialog.dismiss()
-                }
-                show()
-            }
+        if (ids.isNotEmpty()) {
+            startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids)
         }
+//        var dlcWarn: String = ""
+//        gameDetails.forEach {
+//            logD("Game dlc : ${it.dlc}")
+//            if (it.dlc != null && it.dlc.isNotEmpty()) {
+//                dlcWarn += "${it.name} has DLC : ${it.dlc}\n"
+//            }
+//        }
+//        if (dlcWarn != "") {
+//            alert {
+//                titleResource = R.string.hint
+//                message = dlcWarn
+//                positiveButton(R.string.confirm) {
+//                    dialog ->
+//                    val ids = ArrayList<Int>()
+//                    gameDetails.forEach {
+//                        ids.add(it.steam_appid)
+//                        if (it.dlc != null) {
+//                            ids.addAll(it.dlc.toList())
+//                        }
+//                    }
+//                    startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids)
+//                    dialog.dismiss()
+//                }
+//                negativeButton(R.string.cancel) {
+//                    dialog ->
+//                    dialog.dismiss()
+//                }
+//                show()
+//            }
+//        }
         mRvApps.adapter = BasicAdapter(R.layout.item_owned_games, gameDetails) {
             view, position, game ->
             view.mTvGameName.text = game.name

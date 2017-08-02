@@ -17,7 +17,8 @@ object DelegateSteam {
 fun ImageView.loadImg(imgPath: String) {
     Glide.with(context)
             .load(imgPath)
-            .placeholder(R.mipmap.img_loading)
+//            .placeholder(R.mipmap.img_loading)
+            .thumbnail(Glide.with(context).load(R.mipmap.img_loading).centerCrop())
             .error(R.mipmap.img_fail)
             .into(this)
 }
@@ -25,7 +26,8 @@ fun ImageView.loadImg(imgPath: String) {
 fun ImageView.loadImg(imgResId: Int) {
     Glide.with(context)
             .load(imgResId)
-            .placeholder(R.mipmap.img_loading)
+//            .placeholder(R.mipmap.img_loading)
+            .thumbnail(Glide.with(context).load(R.mipmap.img_loading).centerCrop())
             .error(R.mipmap.img_fail)
             .into(this)
 }

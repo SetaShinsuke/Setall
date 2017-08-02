@@ -103,7 +103,11 @@
             android:label="@string/create_trans"
             android:theme="@style/SteamTheme.Swipable">
         </activity>
-        <activity android:name=".steam.activities.GameListActivity">
+        <activity
+            android:name=".steam.activities.GameListActivity"
+            android:theme="@style/SteamTheme"
+            android:label="@string/select_game_or_dlc"
+            >
         </activity>
     </application>
 

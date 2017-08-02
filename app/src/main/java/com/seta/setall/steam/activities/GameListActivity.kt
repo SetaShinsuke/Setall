@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout
 import com.seta.setall.R
+import com.seta.setall.common.extensions.deleteLine
+import com.seta.setall.common.extensions.money
 import com.seta.setall.common.extensions.setVisible
 import com.seta.setall.common.extensions.toast
 import com.seta.setall.common.views.adapters.BasicAdapter
@@ -36,6 +38,10 @@ class GameListActivity : AppCompatActivity(), GameDetailMvpView {
                 mTvGameName.text = data.name
                 mIvHeader.loadImg(data.header_image)
                 mIvHeaderCheck.setVisible(selectedIds.contains(data.steam_appid))
+                mTvPriceFinal.money = data.price_overview?.final
+                mTvPriceInit.money = data.price_overview?.initial
+                mTvPriceInit.deleteLine()
+                mTvPriceInit.setVisible(data.price_overview?.final != data.price_overview?.initial)
                 onClick {
                     if (selectedIds.contains(data.steam_appid)) {
                         selectedIds.remove(data.steam_appid)

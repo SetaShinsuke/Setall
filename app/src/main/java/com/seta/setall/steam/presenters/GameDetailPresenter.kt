@@ -22,7 +22,9 @@ class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
         val observable: Observable<List<GameDetailBean>> = Observable.zip(reqArray) {
             val gameDetails = ArrayList<GameDetailBean>()
             it.forEach {
-                gameDetails.add(SteamUtilMethods.createGameDetailBean(it))
+                SteamUtilMethods.createGameDetailBean(it)?.let {
+                    gameDetails.add(it)
+                }
             }
             return@zip gameDetails
         }

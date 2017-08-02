@@ -4,7 +4,9 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.graphics.Paint
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.seta.setall.common.logs.LogX
 
@@ -32,3 +34,18 @@ fun View.setVisible(boolean: Boolean) {
 fun Context.isDebuggable(): Boolean = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
 fun ProgressDialog.setMessage(resId: Int) = setMessage(context.getString(resId))
+
+fun TextView.underLine() {
+    paint.flags = Paint.UNDERLINE_TEXT_FLAG
+}
+
+fun TextView.deleteLine() {
+    paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
+}
+
+var TextView.money: Int?
+    set(valueCent) {
+        text = "￥%.2f".format(valueCent?.let { it * 0.01f })
+    }
+    get() = this.money
+
