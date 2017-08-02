@@ -45,7 +45,7 @@ class SteamMainActivity : BaseActivity() {
                 startActivity<SteamLoginActivity>()
             }
             R.id.mBtnAddTrans -> {
-                startActivity<CreateTransActivity>()
+                startActivity<OwnedGamesActivity>()
             }
         }
     }

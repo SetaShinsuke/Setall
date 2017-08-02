@@ -29,16 +29,16 @@ class TransactionDb(val map: MutableMap<String, Any?>, val steamAppDbs: List<Ste
 class SteamAppDb(val map: MutableMap<String, Any?>, val games: List<SteamAppDb>?) {
     var appId: Int by map
     var name: String by map
-    var currency: String by map //币种
-    var initPrice: Int by map //原价
-    var purchasedPrice: Int by map //购入价格
-    var purchasedDate: Long by map //购买日期 inMills
-    var type: Int by map //0:game, 1:dlc, 2:bundlePack
-    var iconImgId: String by map
-    var logoImgId: String by map
+    var currency: String? by map //币种
+    var initPrice: Int? by map //原价
+    var purchasedPrice: Int? by map //购入价格
+    var purchasedDate: Long? by map //购买日期 inMills
+    var type: Int? by map //0:game, 1:dlc, 2:bundlePack
+    var iconImgId: String? by map
+    var logoImgId: String? by map
 
-    constructor(appId: Int, name: String, currency: String, initPrice: Int, purchasedPrice: Int, purchasedDate: Long, type: Int,
-                iconImgId: String, logoImgId: String,
+    constructor(appId: Int, name: String, currency: String?, initPrice: Int?, purchasedPrice: Int?, purchasedDate: Long?, type: Int?,
+                iconImgId: String?, logoImgId: String?,
                 games: List<SteamAppDb>?)
             : this(HashMap(), games) {
         this.appId = appId

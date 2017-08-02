@@ -1,5 +1,6 @@
 package com.seta.setall.steam.domain.models
 
+import com.seta.setall.steam.api.models.GameBean
 import java.util.*
 
 /**
@@ -15,12 +16,13 @@ data class Transaction(val transId: Int,
 
 data class SteamApp(val appId: Int,
                     val name: String,
-                    val currency: String,
-                    val initPrice: Int,
-                    val purchasedPrice: Int,
-                    val purchasedDate: Date,
-                    val type: Int,
-                    val iconImgId: String,
-                    val logoImgId: String,
-                    val games: List<SteamApp>?) {
+                    val currency: String? = null,
+                    val initPrice: Int? = null,
+                    val purchasedPrice: Int? = null,
+                    val purchasedDate: Date? = null,
+                    val type: Int? = null,
+                    val iconImgId: String? = null,
+                    val logoImgId: String? = null,
+                    val games: List<SteamApp>? = null) {
+    constructor(gameBean: GameBean) : this(gameBean.appid, gameBean.name, iconImgId = gameBean.img_icon_url, logoImgId = gameBean.img_logo_url, games = null)
 }

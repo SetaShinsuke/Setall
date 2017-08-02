@@ -21,7 +21,7 @@ class SteamDbMapper {
         val containedGames = games?.map {
             convertAppFromDomain(it)
         }
-        SteamAppDb(appId, name, currency, initPrice, purchasedPrice, purchasedDate.time, type, iconImgId, logoImgId, containedGames)
+        SteamAppDb(appId, name, currency, initPrice, purchasedPrice, purchasedDate?.time, type, iconImgId, logoImgId, containedGames)
     }
     //endregion
 
@@ -37,7 +37,13 @@ class SteamDbMapper {
         val gamesInBundle = games?.map {
             convertAppsToDomain(it)
         }
-        SteamApp(appId, name, currency, initPrice, purchasedPrice, Date(purchasedDate), type, iconImgId, logoImgId, gamesInBundle)
+        val date: Date?
+        if (purchasedDate == null) {
+            date = null
+        } else {
+            date = Date(purchasedDate as Long)
+        }
+        SteamApp(appId, name, currency, initPrice, purchasedPrice, date, type, iconImgId, logoImgId, gamesInBundle)
     }
     //endregion
 }

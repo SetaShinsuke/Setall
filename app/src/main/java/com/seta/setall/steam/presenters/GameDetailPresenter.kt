@@ -26,7 +26,7 @@ class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
                     gameDetails.add(it)
                 }
             }
-            return@zip gameDetails
+            return@zip gameDetails.distinct()
         }
 
         observable.doSubscribe(object : Subscriber<List<GameDetailBean>>() {

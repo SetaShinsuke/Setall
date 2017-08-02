@@ -16,12 +16,11 @@ import com.seta.setall.steam.presenters.SteamLoginPresenter
 import kotlinx.android.synthetic.main.activity_steam_login.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import kotlin.properties.Delegates
 
 class SteamLoginActivity : BaseActivity(), SteamLoginView {
 
     var steamUserId: String by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
-    var loadingDialog by Delegates.notNull<ProgressDialog>()
+//    var loadingDialog by Delegates.notNull<ProgressDialog>()
 
     val mSteamLoginPresenter: SteamLoginPresenter = SteamLoginPresenter()
 
@@ -38,12 +37,12 @@ class SteamLoginActivity : BaseActivity(), SteamLoginView {
     override fun onDestroy() {
         super.onDestroy()
         mSteamLoginPresenter.detachView()
-        loadingDialog.dismiss()
+        loadingDialog?.dismiss()
     }
 
     override fun onLoginSuccess(steamLoginBean: SteamLoginBean) {
         toast(R.string.login_success)
-        loadingDialog.dismiss()
+        loadingDialog?.dismiss()
         steamUserId = steamLoginBean.steamid
         finish()
         logD("Login success , id : $steamUserId")
@@ -51,15 +50,13 @@ class SteamLoginActivity : BaseActivity(), SteamLoginView {
     }
 
     override fun onLoginFail(t: Throwable) {
-        loadingDialog.dismiss()
+        loadingDialog?.dismiss()
         toast(R.string.login_fail, " " + t.message)
     }
 
     fun onClick(view: View) {
         mSteamLoginPresenter.loginWithUrlName(mEtVanityUrlName.text.toString())
-        with(loadingDialog) {
-            setMessage(R.string.login_loading)
-            show()
-        }
+        loadingDialog?.setMessage(R.string.login_loading)
+        loadingDialog?.show()
     }
 }

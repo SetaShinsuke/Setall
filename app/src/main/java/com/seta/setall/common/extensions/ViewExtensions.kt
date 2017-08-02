@@ -45,6 +45,10 @@ fun TextView.deleteLine() {
 
 var TextView.money: Int?
     set(valueCent) {
+        if (valueCent == null) {
+            text = "￥?"
+            return
+        }
         text = "￥%.2f".format(valueCent?.let { it * 0.01f })
     }
     get() = this.money

@@ -1,7 +1,6 @@
 package com.seta.setall.steam.activities
 
 import android.app.DatePickerDialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -43,7 +42,6 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
     val playerInfoPresenter: PlayerInfoPresenter = PlayerInfoPresenter()
     val gameDetailPresenter: GameDetailPresenter = GameDetailPresenter()
     val gameDlcPackPresenter: GameDlcPackPresenter = GameDlcPackPresenter()
-    var loadingDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,7 +127,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
             }
         }
         if (ids.isNotEmpty()) {
-            startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids)
+            startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids.distinct())
         }
 //        var dlcWarn: String = ""
 //        gameDetails.forEach {
@@ -213,12 +211,13 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
                         view, position, i ->
                         view.mTvGameName.text = i.toString()
                     }
-                    loadingDialog = ProgressDialog(this)
-                            .apply {
-                                setMessage(getString(R.string.loading))
-                                setCancelable(false)
-                                show()
-                            }
+//                    loadingDialog = ProgressDialog(this)
+//                            .apply {
+//                                setMessage(getString(R.string.loading))
+//                                setCancelable(false)
+//                                show()
+//                            }
+                    loadingDialog?.show()
                     gameDetailPresenter.loadGameDetails(selectedIds)
 //                    gameDlcPackPresenter.loadGames(selectedIds)
                 }
