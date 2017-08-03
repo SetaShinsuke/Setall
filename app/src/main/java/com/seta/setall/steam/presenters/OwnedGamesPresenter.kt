@@ -25,6 +25,7 @@ class OwnedGamesPresenter : BasePresenter<OwnedGamesView>() {
                     }
 
                     override fun onNext(t: OwnedGameBean) {
+                        logD("loadOwnedGames onNext : $t")
                         mvpView?.onGamesLoad(t)
                     }
                 })

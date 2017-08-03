@@ -113,6 +113,10 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
+                if(selectedGameBeans.isEmpty()){
+                    toast(R.string.no_item_selected)
+                    return super.onOptionsItemSelected(item)
+                }
                 selectedGameBeans.forEach {
                     TransManager.steamApps.clear()
                     TransManager.steamApps.addAll(

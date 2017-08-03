@@ -39,8 +39,10 @@ data class GameBean(val appid: Int
         return result
     }
 
-    fun coverUrl() = "http://media.steampowered.com/steamcommunity/public/images/appSimples/$appid/$img_icon_url.jpg"
-    fun logoUrl() = "http://media.steampowered.com/steamcommunity/public/images/appSimples/$appid/$img_logo_url.jpg"
+    fun coverUrl() = "http://media.steampowered.com/steamcommunity/public/images/apps/$appid/$img_icon_url.jpg"
+    fun logoUrl() = "http://media.steampowered.com/steamcommunity/public/images/apps/$appid/$img_logo_url.jpg"
+//    fun coverUrl() = "http://media.steampowered.com/steamcommunity/public/images/appSimples/$appid/$img_icon_url.jpg"
+//    fun logoUrl() = "http://media.steampowered.com/steamcommunity/public/images/appSimples/$appid/$img_logo_url.jpg"
 }
 
 data class GameDetailPojo(val games: List<GameDetailBean> = ArrayList())

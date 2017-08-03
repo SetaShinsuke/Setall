@@ -6,7 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import com.seta.setall.R
-import com.seta.setall.common.extensions.*
+import com.seta.setall.common.extensions.deleteLine
+import com.seta.setall.common.extensions.logD
+import com.seta.setall.common.extensions.money
+import com.seta.setall.common.extensions.setVisible
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
@@ -19,6 +22,7 @@ import kotlinx.android.synthetic.main.item_game_detail.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
 class GameListActivity : BaseActivity(), GameDetailMvpView {
@@ -79,6 +83,10 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
+                if (selectedIds.isEmpty()) {
+                    toast(R.string.no_item_selected)
+                    return super.onOptionsItemSelected(item)
+                }
                 startActivity<CreateTransActivity>()
             }
         }
