@@ -91,17 +91,11 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
         loadingDialog?.dismiss()
         val ids = ArrayList<Int>()
         gameDetails.forEach {
-            //            ids.add(it.steam_appid)
-//            if (it.dlc != null) {
-//                ids.addAll(it.dlc.toList())
-//            }
             it.packages?.let {
                 ids.addAll(it)
             }
         }
-        if (ids.isNotEmpty()) {
-            startActivity<PackageListActivity>(SteamConstants.PACK_IDS to ids.distinct())
-        }
+        startActivity<PackageListActivity>(SteamConstants.PACK_IDS to ids.distinct())
     }
 
     override fun onGameDetailLoadFail(t: Throwable) {
@@ -113,7 +107,7 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
-                if(selectedGameBeans.isEmpty()){
+                if (selectedGameBeans.isEmpty()) {
                     toast(R.string.no_item_selected)
                     return super.onOptionsItemSelected(item)
                 }

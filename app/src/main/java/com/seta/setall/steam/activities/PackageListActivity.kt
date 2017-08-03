@@ -50,7 +50,7 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
                     index, app ->
                     content += app.name
                     if (index != lastIndex) {
-                        content += ", "
+                        content += "\n"
                     }
                 }
                 mTvApps.text = content
