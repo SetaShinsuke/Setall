@@ -14,3 +14,5 @@ fun <T : MvpView?> BasePresenter<T>.logD(message: String) {
 fun <T : MvpView?> BasePresenter<T>.logW(message: String, throwable: Throwable? = null) {
     Log.w(javaClass.simpleName, message, throwable)
 }
+
+fun Int.toYuan():Float = this*0.01f

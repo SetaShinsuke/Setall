@@ -23,5 +23,6 @@ class SteamConstants {
 
         val SELECTED_IDS = "SELECTED_IDS"
         val GAME_IDS = "GAME_IDS"
+        val PACK_IDS = "PACK_IDS"
     }
 }

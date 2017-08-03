@@ -91,13 +91,16 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
         loadingDialog?.dismiss()
         val ids = ArrayList<Int>()
         gameDetails.forEach {
-//            ids.add(it.steam_appid)
-            if (it.dlc != null) {
-                ids.addAll(it.dlc.toList())
+            //            ids.add(it.steam_appid)
+//            if (it.dlc != null) {
+//                ids.addAll(it.dlc.toList())
+//            }
+            it.packages?.let {
+                ids.addAll(it)
             }
         }
         if (ids.isNotEmpty()) {
-            startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids.distinct())
+            startActivity<PackageListActivity>(SteamConstants.PACK_IDS to ids.distinct())
         }
     }
 
@@ -110,10 +113,6 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
-//                val intent = Intent()
-//                intent.putIntegerArrayListExtra(SteamConstants.SELECTED_IDS, selectedIds)
-//                setResult(SteamConstants.CODE_SELECT_GAMES, intent)
-//                finish()
                 selectedGameBeans.forEach {
                     TransManager.steamApps.clear()
                     TransManager.steamApps.addAll(
@@ -121,12 +120,6 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
                                 SteamApp(it)
                             })
                 }
-//                loadingDialog = ProgressDialog(this)
-//                        .apply {
-//                            setMessage(getString(R.string.loading))
-//                            setCancelable(false)
-//                            show()
-//                        }
                 loadingDialog?.show()
                 gameDetailPresenter.loadGameDetails(selectedGameBeans.map { it.appid })
             }

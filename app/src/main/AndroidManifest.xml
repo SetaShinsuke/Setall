@@ -105,8 +105,13 @@
         </activity>
         <activity
             android:name=".steam.activities.GameListActivity"
-            android:theme="@style/SteamTheme"
             android:label="@string/select_game_or_dlc"
+            android:theme="@style/SteamTheme">
+        </activity>
+        <activity
+            android:name=".steam.activities.PackageListActivity"
+            android:label="@string/select_packages"
+            android:theme="@style/SteamTheme"
             >
         </activity>
     </application>

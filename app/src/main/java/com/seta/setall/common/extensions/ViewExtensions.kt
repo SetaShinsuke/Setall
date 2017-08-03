@@ -23,6 +23,10 @@ fun Context.toast(textResource: Int, vararg extraString: String?) {
     Toast.makeText(this, content, Toast.LENGTH_SHORT).show()
 }
 
+fun Context.getStringFormated(textResource: Int, vararg values: Any?): String? {
+    return String.format(getString(textResource), values)
+}
+
 fun View.setVisible(boolean: Boolean) {
     if (boolean) {
         visibility = View.VISIBLE

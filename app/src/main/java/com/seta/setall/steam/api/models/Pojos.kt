@@ -39,8 +39,8 @@ data class GameBean(val appid: Int
         return result
     }
 
-    fun coverUrl() = "http://media.steampowered.com/steamcommunity/public/images/apps/$appid/$img_icon_url.jpg"
-    fun logoUrl() = "http://media.steampowered.com/steamcommunity/public/images/apps/$appid/$img_logo_url.jpg"
+    fun coverUrl() = "http://media.steampowered.com/steamcommunity/public/images/appSimples/$appid/$img_icon_url.jpg"
+    fun logoUrl() = "http://media.steampowered.com/steamcommunity/public/images/appSimples/$appid/$img_logo_url.jpg"
 }
 
 data class GameDetailPojo(val games: List<GameDetailBean> = ArrayList())
@@ -54,6 +54,7 @@ data class GameDetailBean(val steam_appid: Int,
                           val required_age: Int,
                           val is_free: Boolean = false,
                           val short_description: String,
+                          val fullgame: AppSimpleBean?,
                           val header_image: String,
                           val website: String,
                           val developers: List<String> = ArrayList(),
@@ -62,7 +63,6 @@ data class GameDetailBean(val steam_appid: Int,
 
 )
 
-data class FullGameBean(val appid: String, val name: String)
 data class PriceBean(val currency: String, val initial: Int, val final: Int)
 data class PackageGroupPojo(val name: String, val title: String, val description: String, val subs: List<PackageGroupBean> = ArrayList())
 data class PackageGroupBean(val packageid: Int,
@@ -74,9 +74,9 @@ data class PackageGroupBean(val packageid: Int,
         get() = price_in_cents_with_discount * 100
 }
 
-data class PackAppBean(val id: Int, val name: String)
+data class AppSimpleBean(val id: Int, val name: String)
 data class ReleaseDateBean(val date: String)
-data class PackageDetailBean(val name: String, val page_image: String, val small_logo: String, val apps: List<PackAppBean>,
+data class PackageDetailBean(val id: Int, val name: String, val page_image: String, val small_logo: String, val apps: List<AppSimpleBean>,
                              val price: PriceBean, val release_date: ReleaseDateBean)
 
 data class GameDlcPackBean(val fullGame: GameDetailBean,
