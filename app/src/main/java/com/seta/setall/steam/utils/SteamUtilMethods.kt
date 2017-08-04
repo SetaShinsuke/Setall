@@ -2,6 +2,7 @@ package com.seta.setall.steam.utils
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
+import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.api.models.PackageDetailBean
 
@@ -28,5 +29,11 @@ object SteamUtilMethods {
         val packageDetailBean = gson.fromJson<PackageDetailBean>(data, PackageDetailBean::class.java)
 //        packageDetailBean.id = pair.first.toInt()
         return packageDetailBean
+    }
+
+    fun getTypeByString(type: String) = when (type) {
+        "dlc" -> SteamConstants.TYPE_DLC
+        "game" -> SteamConstants.TYPE_GAME
+        else -> SteamConstants.TYPE_UNKNOWN
     }
 }

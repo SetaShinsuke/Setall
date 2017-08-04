@@ -4,6 +4,7 @@ import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameBean
 import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.api.models.PackageDetailBean
+import com.seta.setall.steam.utils.SteamUtilMethods
 import java.util.*
 
 /**
@@ -50,6 +51,7 @@ data class SteamApp(val appId: Int,
             g.name,
             g.price_overview?.currency,
             g.price_overview?.initial,
+            type = SteamUtilMethods.getTypeByString(g.type),
             iconImgUrl = coverUrl,
             logoImgUrl = logoUrl
     )

@@ -30,6 +30,7 @@ import com.seta.setall.steam.presenters.GameDlcPackPresenter
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
+import kotlinx.android.synthetic.main.item_steam_app_game.view.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -58,14 +59,27 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
         mRvApps.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
         apps.addAll(TransManager.steamApps)
+        TransManager.steamApps.clear()
         logD("Steam apps selected : $apps")
+
+        mRvApps.adapter = BasicAdapter(R.layout.item_steam_app_game, apps) {
+            view, position, steamApp ->
+            with(steamApp) {
+                var s: String = "$position:\nName: $name\nType: $type\n"
+                if (games != null && games.isNotEmpty()) {
+                    s += "Games: ${games.map { it.name }}"
+                }
+                s += "\n=========="
+                view.mTvTest.text = s
+            }
+        }
     }
 
     fun onClick(view: View) {
         when (view.id) {
             R.id.mBtnAddApp -> {
                 val gameIds: List<Int> = games.map { it.appId }
-                startActivityForResult<OwnedGamesActivity>(SteamConstants.CODE_SELECT_GAMES, SteamConstants.SELECTED_IDS to gameIds)
+                startActivityForResult<OwnedGamesActivity>(SteamConstants.CODE_SELECT_GAMES)
             }
             R.id.mBtnDate -> {
                 val calendar = Calendar.getInstance()

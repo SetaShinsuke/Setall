@@ -86,7 +86,7 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
-                if (selectedApps.isEmpty()) {
+                if (TransManager.steamApps.isEmpty()) {
                     toast(R.string.no_item_selected)
                     return super.onOptionsItemSelected(item)
                 }

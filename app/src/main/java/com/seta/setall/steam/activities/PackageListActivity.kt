@@ -97,7 +97,7 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
-                if (selectedPackages.isEmpty()) {
+                if (TransManager.steamApps.isEmpty()) {
                     toast(R.string.no_item_selected)
                     return super.onOptionsItemSelected(item)
                 }
