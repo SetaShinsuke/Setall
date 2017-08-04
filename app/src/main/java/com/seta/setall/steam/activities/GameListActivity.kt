@@ -14,6 +14,8 @@ import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameDetailBean
+import com.seta.setall.steam.domain.TransManager
+import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.loadImg
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
 import com.seta.setall.steam.presenters.GameDetailPresenter
@@ -29,7 +31,8 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
 
     val gameDetailPresenter: GameDetailPresenter = GameDetailPresenter()
     var adapter by Delegates.notNull<BasicAdapter<GameDetailBean>>()
-    val selectedIds = ArrayList<Int>()
+    //    val selectedIds = ArrayList<Int>()
+    val selectedApps = ArrayList<GameDetailBean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,16 +45,16 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
                 dlcBadge.setVisible(data.type == "dlc")
                 mTvGameName.text = data.name
                 mIvHeader.loadImg(data.header_image)
-                mIvHeaderCheck.setVisible(selectedIds.contains(data.steam_appid))
+                mIvHeaderCheck.setVisible(selectedApps.contains(data))
                 mTvPriceFinal.money = data.price_overview?.final
                 mTvPriceInit.money = data.price_overview?.initial
                 mTvPriceInit.deleteLine()
                 mTvPriceInit.setVisible(data.price_overview?.final != data.price_overview?.initial)
                 onClick {
-                    if (selectedIds.contains(data.steam_appid)) {
-                        selectedIds.remove(data.steam_appid)
+                    if (selectedApps.contains(data)) {
+                        selectedApps.remove(data)
                     } else {
-                        selectedIds.add(data.steam_appid)
+                        selectedApps.add(data)
                     }
                     adapter.notifyItemChanged(data)
                 }
@@ -83,9 +86,17 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
-                if (selectedIds.isEmpty()) {
+                if (selectedApps.isEmpty()) {
                     toast(R.string.no_item_selected)
                     return super.onOptionsItemSelected(item)
+                }
+                val gameSimpleBeans = TransManager.steamApps.filter { selectedApps.map { it.steam_appid }.contains(it.appId) }
+                TransManager.steamApps.removeAll(gameSimpleBeans)
+                gameSimpleBeans.forEach {
+                    gameSimpleBean ->
+                    val id: Int = gameSimpleBean.appId
+                    val gameDetailBean = selectedApps.find { it.steam_appid == id }
+                    gameDetailBean?.let { TransManager.steamApps.add(SteamApp(it, gameSimpleBean.iconImgUrl, gameSimpleBean.logoImgUrl)) }
                 }
                 startActivity<CreateTransActivity>()
             }
@@ -94,10 +105,10 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
     }
 
     override fun onBackPressed() {
-        if (selectedIds.isNotEmpty()) {
+        if (selectedApps.isNotEmpty()) {
             alert {
                 titleResource = R.string.hint
-                message = String.format(getString(R.string.cancel_game_select_hint), selectedIds.size)
+                message = String.format(getString(R.string.cancel_game_select_hint), selectedApps.size)
                 positiveButton(R.string.confirm) { dialog ->
                     dialog.dismiss()
                     super.onBackPressed()

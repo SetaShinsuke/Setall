@@ -28,8 +28,8 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
 
     val packDetailPresenter = PackageDetailPresenter()
     var adapter by Delegates.notNull<BasicAdapter<PackageDetailBean>>()
-    //    val selectedIds = ArrayList<Int>()
     val selectedPackages = ArrayList<PackageDetailBean>()
+    val gameIds = ArrayList<Int>() //OwnedGamesActivity中选中的所有 gameId/DlcId
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +41,7 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
                 mIvHeader.loadImg(data.page_image)
                 mTvPackName.text = data.name
                 mIvHeaderCheck.setVisible(selectedPackages.contains(data))
-//                mTvAppsCount.text = getStringFormated(R.string.pack_contains_count, data.apps.size, data.price.final)
                 mTvAppsCount.text = String.format(getString(R.string.pack_contains_count), data.apps.size, data.price.final.toYuan())
-//                mTvAppsCount.text = getStringFormated(R.string.pack_contains_count, 1, 1)
                 var content = ""
                 val lastIndex = data.apps.lastIndex
                 data.apps.forEachIndexed {
@@ -68,6 +66,7 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
 
         packDetailPresenter.attachView(this)
         val packIds = intent.getIntegerArrayListExtra(SteamConstants.PACK_IDS)
+        gameIds.addAll(intent.getIntegerArrayListExtra(SteamConstants.GAME_IDS))
         packIds?.let {
             loadingDialog?.show()
             packDetailPresenter.loadPackages(packIds)
@@ -98,18 +97,33 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
-                if(selectedPackages.isEmpty()){
+                if (selectedPackages.isEmpty()) {
                     toast(R.string.no_item_selected)
                     return super.onOptionsItemSelected(item)
                 }
-                val packs = ArrayList<SteamApp>()
+                val allSelectedAppIds = ArrayList<Int>() //选中的包中包含的Game
                 selectedPackages.forEach {
-                    it.apps.forEach {
-                        packs.add(SteamApp(it.id, it.name))
-                    }
+                    allSelectedAppIds.addAll(it.apps.map { it.id }.distinct())
                 }
-                TransManager.steamApps.addAll(packs.distinct())
-                startActivity<GameListActivity>(SteamConstants.GAME_IDS to TransManager.steamApps.map { it.appId })
+                //过滤掉 包含在包中的 apps, 即剩下的 SteamApps 都是 未在包中的游戏、或者是包
+                //也即: 这些 SteamApp 的 type，要么是待定(UNKNOWN),要么是包(BUNDLE_PACK)
+                val allApps = TransManager.steamApps.filter { !allSelectedAppIds.contains(it.appId) } as ArrayList<SteamApp>
+                allApps.addAll(selectedPackages.distinct().map { SteamApp(it) })
+                TransManager.steamApps.clear()
+                TransManager.steamApps.addAll(allApps)
+                startActivity<GameListActivity>(SteamConstants.GAME_IDS to
+                        gameIds.filter {
+                            gameId ->
+                            selectedPackages.none {
+                                it.apps.map { it.id }.contains(gameId)
+                            }
+                        })
+                //下一步,剔除所有的包，只提交 type 未知的 Game/DLC
+//                startActivity<GameListActivity>(
+//                        SteamConstants.GAME_IDS to
+//                                TransManager.steamApps.filter {
+//                                    it.type == SteamConstants.TYPE_UNKNOWN
+//                                }.map { it.appId })
             }
         }
         return super.onOptionsItemSelected(item)

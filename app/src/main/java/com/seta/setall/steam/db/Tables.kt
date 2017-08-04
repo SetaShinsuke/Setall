@@ -20,8 +20,8 @@ object SteamAppTable {
     val PURCHASED_PRICE = "purchasedPrice"
     val PURCHASED_DATE = "purchasedDate"
     val TYPE = "type"
-    val ICON_ID = "iconImgId"
-    val LOGO_ID = "logoImgId"
+    val ICON_ID = "iconImgUrl"
+    val LOGO_ID = "logoImgUrl"
 }
 
 object TransAppRelationTable {

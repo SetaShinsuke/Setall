@@ -32,6 +32,12 @@ open class BaseActivity : AppCompatActivity(), SwipeBackActivityBase {
                 }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        loadingDialog?.hide()
+        loadingDialog = null
+    }
+
     fun setHomeAsBackEnabled(enabled: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(enabled)
         supportActionBar?.setDisplayShowHomeEnabled(enabled)

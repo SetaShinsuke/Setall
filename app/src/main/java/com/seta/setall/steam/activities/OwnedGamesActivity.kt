@@ -89,13 +89,19 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
 
     override fun onGameDetailLoad(gameDetails: List<GameDetailBean>) {
         loadingDialog?.dismiss()
-        val ids = ArrayList<Int>()
+        val packIds = ArrayList<Int>()
+        val gameIds = ArrayList<Int>()
         gameDetails.forEach {
             it.packages?.let {
-                ids.addAll(it)
+                packIds.addAll(it)
             }
+            gameIds.add(it.steam_appid)
+            it.dlc?.let { gameIds.addAll(it) }
         }
-        startActivity<PackageListActivity>(SteamConstants.PACK_IDS to ids.distinct())
+        startActivity<PackageListActivity>(
+                SteamConstants.PACK_IDS to packIds.distinct(),
+                SteamConstants.GAME_IDS to gameIds
+        )
     }
 
     override fun onGameDetailLoadFail(t: Throwable) {

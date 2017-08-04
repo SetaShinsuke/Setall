@@ -13,6 +13,7 @@ class SteamConstants {
         val STEAM_USER_ID = "steam_user_id"
 
         //Steam App 类型
+        val TYPE_UNKNOWN = -1
         val TYPE_GAME = 0
         val TYPE_DLC = 1
         val TYPE_BUNDLEPACK = 2

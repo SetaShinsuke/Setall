@@ -19,6 +19,7 @@ import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.api.models.GameDlcPackBean
 import com.seta.setall.steam.api.models.PlayerInfoBean
+import com.seta.setall.steam.domain.TransManager
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
@@ -43,6 +44,8 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
     val gameDetailPresenter: GameDetailPresenter = GameDetailPresenter()
     val gameDlcPackPresenter: GameDlcPackPresenter = GameDlcPackPresenter()
 
+    val apps = ArrayList<SteamApp>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_trans)
@@ -53,7 +56,9 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
         gameDetailPresenter.attachView(this)
         gameDlcPackPresenter.attachView(this)
         mRvApps.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-//        enableHomeAsBack(true)
+
+        apps.addAll(TransManager.steamApps)
+        logD("Steam apps selected : $apps")
     }
 
     fun onClick(view: View) {
@@ -129,36 +134,6 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
         if (ids.isNotEmpty()) {
             startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids.distinct())
         }
-//        var dlcWarn: String = ""
-//        gameDetails.forEach {
-//            logD("Game dlc : ${it.dlc}")
-//            if (it.dlc != null && it.dlc.isNotEmpty()) {
-//                dlcWarn += "${it.name} has DLC : ${it.dlc}\n"
-//            }
-//        }
-//        if (dlcWarn != "") {
-//            alert {
-//                titleResource = R.string.hint
-//                message = dlcWarn
-//                positiveButton(R.string.confirm) {
-//                    dialog ->
-//                    val ids = ArrayList<Int>()
-//                    gameDetails.forEach {
-//                        ids.add(it.steam_appid)
-//                        if (it.dlc != null) {
-//                            ids.addAll(it.dlc.toList())
-//                        }
-//                    }
-//                    startActivity<GameListActivity>(SteamConstants.GAME_IDS to ids)
-//                    dialog.dismiss()
-//                }
-//                negativeButton(R.string.cancel) {
-//                    dialog ->
-//                    dialog.dismiss()
-//                }
-//                show()
-//            }
-//        }
         mRvApps.adapter = BasicAdapter(R.layout.item_owned_games, gameDetails) {
             view, position, game ->
             view.mTvGameName.text = game.name
@@ -211,15 +186,8 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
                         view, position, i ->
                         view.mTvGameName.text = i.toString()
                     }
-//                    loadingDialog = ProgressDialog(this)
-//                            .apply {
-//                                setMessage(getString(R.string.loading))
-//                                setCancelable(false)
-//                                show()
-//                            }
                     loadingDialog?.show()
                     gameDetailPresenter.loadGameDetails(selectedIds)
-//                    gameDlcPackPresenter.loadGames(selectedIds)
                 }
             }
         }
