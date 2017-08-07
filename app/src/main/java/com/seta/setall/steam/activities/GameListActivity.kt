@@ -64,8 +64,12 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
 
         val fullGameIds: List<Int> = intent.getIntegerArrayListExtra(SteamConstants.GAME_IDS)
         logD("Full game ids : $fullGameIds")
-        loadingDialog?.show()
-        gameDetailPresenter.loadGameDetails(fullGameIds)
+        if (fullGameIds.isNotEmpty()) {
+            loadingDialog?.show()
+            gameDetailPresenter.loadGameDetails(fullGameIds)
+        }else{
+            startActivity<CreateTransActivity>()
+        }
     }
 
     override fun onGameDetailLoad(gameDetails: List<GameDetailBean>) {

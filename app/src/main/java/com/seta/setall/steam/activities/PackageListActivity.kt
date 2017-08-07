@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.seta.setall.R
+import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.extensions.setVisible
 import com.seta.setall.common.extensions.toYuan
 import com.seta.setall.common.framework.BaseActivity
@@ -66,10 +67,13 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
 
         packDetailPresenter.attachView(this)
         val packIds = intent.getIntegerArrayListExtra(SteamConstants.PACK_IDS)
+        logD("Pack ids : $packIds")
         gameIds.addAll(intent.getIntegerArrayListExtra(SteamConstants.GAME_IDS))
-        packIds?.let {
+        if(packIds!=null && packIds.isNotEmpty()){
             loadingDialog?.show()
             packDetailPresenter.loadPackages(packIds)
+        }else{
+            toast(R.string.no_package_to_select)
         }
     }
 

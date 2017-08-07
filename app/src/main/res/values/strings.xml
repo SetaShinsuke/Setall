@@ -36,5 +36,6 @@
     <string name="cancel_game_select_hint">已选择%1$d个游戏，确定退出？</string>
     <string name="select_game_or_dlc">选择Game或DLC</string>
     <string name="select_packages">选择包</string>
+    <string name="no_package_to_select">没有可选的包, 可跳过!</string>
     <string name="pack_contains_count">共包含%1$d件物品 ￥%2$.2f</string>
 </resources>
