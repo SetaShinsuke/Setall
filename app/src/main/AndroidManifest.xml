@@ -77,11 +77,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".common.activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".steam.activities.SteamLoginActivity"
@@ -92,6 +87,11 @@
             android:name=".steam.activities.SteamMainActivity"
             android:label="@string/steam"
             android:theme="@style/SteamTheme.Swipable">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".steam.activities.OwnedGamesActivity"

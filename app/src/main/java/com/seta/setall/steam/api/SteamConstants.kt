@@ -13,10 +13,10 @@ class SteamConstants {
         val STEAM_USER_ID = "steam_user_id"
 
         //Steam App 类型
-        val TYPE_UNKNOWN = -1
-        val TYPE_GAME = 0
-        val TYPE_DLC = 1
-        val TYPE_BUNDLEPACK = 2
+        val TYPE_UNKNOWN = "unknown"
+        val TYPE_GAME = "game"
+        val TYPE_DLC = "dlc"
+        val TYPE_BUNDLE_PACK = "bundle_pack"
 
         val CODE_SELECT_GAMES = 100 //给订单添加游戏
         val CODE_SELECT_DLCS = 101 //给订单添加DLC

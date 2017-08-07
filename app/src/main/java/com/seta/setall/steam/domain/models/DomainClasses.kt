@@ -24,7 +24,7 @@ data class SteamApp(val appId: Int,
                     val initPrice: Int? = null,
                     val purchasedPrice: Int? = null,
                     val purchasedDate: Date? = null,
-                    val type: Int? = SteamConstants.TYPE_UNKNOWN,
+                    val type: String? = SteamConstants.TYPE_UNKNOWN,
                     val iconImgUrl: String? = null,
                     val logoImgUrl: String? = null,
                     val games: List<SteamApp>? = null) { //只有 type = BUNDEL_PACK 时不为空
@@ -42,7 +42,7 @@ data class SteamApp(val appId: Int,
             packBean.name,
             currency = packBean.price.currency,
             initPrice = packBean.price.initial,
-            type = SteamConstants.TYPE_BUNDLEPACK,
+            type = SteamConstants.TYPE_BUNDLE_PACK,
             games = packBean.apps.map { SteamApp(it.id, it.name) }
     )
 

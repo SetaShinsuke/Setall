@@ -33,11 +33,11 @@ class SteamAppDb(val map: MutableMap<String, Any?>, val games: List<SteamAppDb>?
     var initPrice: Int? by map //原价
     var purchasedPrice: Int? by map //购入价格
     var purchasedDate: Long? by map //购买日期 inMills
-    var type: Int? by map //0:game, 1:dlc, 2:bundlePack
+    var type: String? by map //0:game, 1:dlc, 2:bundlePack
     var iconImgUrl: String? by map
     var logoImgUrl: String? by map
 
-    constructor(appId: Int, name: String, currency: String?, initPrice: Int?, purchasedPrice: Int?, purchasedDate: Long?, type: Int?,
+    constructor(appId: Int, name: String, currency: String?, initPrice: Int?, purchasedPrice: Int?, purchasedDate: Long?, type: String?,
                 iconImgId: String?, logoImgId: String?,
                 games: List<SteamAppDb>?)
             : this(HashMap(), games) {

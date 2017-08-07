@@ -62,8 +62,19 @@ data class GameDetailBean(val steam_appid: Int,
                           val developers: List<String> = ArrayList(),
                           val publishers: List<String> = ArrayList(),
                           val release_date: ReleaseDateBean
-
-)
+) : Comparable<GameDetailBean> {
+    override fun compareTo(other: GameDetailBean): Int {
+        if (type == other.type) {
+            return name.compareTo(other.name)
+        }
+        val typeAdv = (type == "game" && other.type == "dlc")
+        if (typeAdv) {
+            return -1
+        } else {
+            return 1
+        }
+    }
+}
 
 data class PriceBean(val currency: String, val initial: Int, val final: Int)
 data class PackageGroupPojo(val name: String, val title: String, val description: String, val subs: List<PackageGroupBean> = ArrayList())

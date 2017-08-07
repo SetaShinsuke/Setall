@@ -69,6 +69,9 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
     }
 
     override fun onGameDetailLoad(gameDetails: List<GameDetailBean>) {
+        if (selectedApps.isEmpty()) {
+            selectedApps.addAll(gameDetails.filter { it.type == "game" })
+        }
         adapter.refreshData(gameDetails)
         loadingDialog?.hide()
     }

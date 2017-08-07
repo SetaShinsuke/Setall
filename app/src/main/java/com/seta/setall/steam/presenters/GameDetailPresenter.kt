@@ -6,7 +6,6 @@ import com.seta.setall.common.http.Network
 import com.seta.setall.common.mvp.BasePresenter
 import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
-import com.seta.setall.steam.utils.SteamException
 import com.seta.setall.steam.utils.SteamUtilMethods
 import rx.Observable
 import rx.Subscriber
@@ -34,12 +33,9 @@ class GameDetailPresenter : BasePresenter<GameDetailMvpView>() {
                 logD("onCompleted")
             }
 
-            override fun onNext(t: List<GameDetailBean>?) {
+            override fun onNext(t: List<GameDetailBean>) {
                 logD("onNext : $t")
-                if (t == null) {
-                    return onError(SteamException(t))
-                }
-                mvpView?.onGameDetailLoad(t)
+                mvpView?.onGameDetailLoad(t.sorted())
             }
 
             override fun onError(e: Throwable) {
