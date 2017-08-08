@@ -7,13 +7,13 @@ package com.seta.setall.steam.db
  *      2.不是 data 类;
  */
 class TransactionDb(val map: MutableMap<String, Any?>, val steamAppDbs: List<SteamAppDb>) {
-    var transId: Int by map
-    var date: Long by map
-    var buyerName: String by map
-    var ownerName: String by map
+    var transId: Int? by map
+    var date: Long? by map
+    var buyerName: String? by map
+    var ownerName: String? by map
     var extraMsg: String? by map
 
-    constructor(transId: Int, date: Long, buyerId: String, ownerId: String, extraMsg: String?, steamAppDbs: List<SteamAppDb>) : this(HashMap(), steamAppDbs) {
+    constructor(transId: Int?, date: Long?, buyerId: String?, ownerId: String?, extraMsg: String?, steamAppDbs: List<SteamAppDb>) : this(HashMap(), steamAppDbs) {
         this.transId = transId
         this.date = date
         this.buyerName = buyerId

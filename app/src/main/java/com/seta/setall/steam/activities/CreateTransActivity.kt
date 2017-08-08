@@ -1,6 +1,5 @@
 package com.seta.setall.steam.activities
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -9,11 +8,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import com.seta.setall.R
-import com.seta.setall.common.extensions.DateUtils
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.extensions.toast
 import com.seta.setall.common.framework.BaseActivity
-import com.seta.setall.common.views.InputDialog
 import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.adapters.SteamAppAdapter
 import com.seta.setall.steam.api.SteamConstants
@@ -22,6 +19,7 @@ import com.seta.setall.steam.api.models.GameDlcPackBean
 import com.seta.setall.steam.api.models.PlayerInfoBean
 import com.seta.setall.steam.domain.TransManager
 import com.seta.setall.steam.domain.models.SteamApp
+import com.seta.setall.steam.domain.models.Transaction
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
 import com.seta.setall.steam.mvpViews.GameDlcPackMvpView
@@ -35,7 +33,6 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpView, GameDetailMvpView {
 
@@ -60,6 +57,8 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
 
         apps.addAll(TransManager.steamApps)
         TransManager.steamApps.clear()
+        TransManager.tranTmp = Transaction()
+        TransManager.tranTmp.date = Date()
         logD("Steam apps selected : ${apps.map { "${it.name}-${it.type}-[${it.games?.size}]" }}")
 
         mRvApps.adapter = SteamAppAdapter(apps)
@@ -82,54 +81,63 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
                 val gameIds: List<Int> = games.map { it.appId }
                 startActivityForResult<OwnedGamesActivity>(SteamConstants.CODE_SELECT_GAMES)
             }
-            R.id.mBtnDate -> {
-                val calendar = Calendar.getInstance()
-                val datePickDialog = DatePickerDialog(this,
-                        DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                            logD("$year-$month-$dayOfMonth")
-                            mTvDate.text = DateUtils.getYMD(year, month, dayOfMonth)
-                        },
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH))
-                datePickDialog.show()
-            }
-            R.id.mBtnBuyer -> {
-                val inputDialog = InputDialog(this)
-                inputDialog.show(R.string.buyer_name, object : InputDialog.InputDialogInterface {
-                    override fun onContentConfirm(content: String) {
-                        if (content == "") {
-                            toast(R.string.name_null_warn)
-                            return
-                        }
-                        mTvBuyer.text = content
-                    }
-
-                })
-            }
-            R.id.mBtnOwner -> {
-                val inputDialog = InputDialog(this)
-                inputDialog.show(R.string.owner_name, object : InputDialog.InputDialogInterface {
-                    override fun onContentConfirm(content: String) {
-                        if (content == "") {
-                            toast(R.string.name_null_warn)
-                            return
-                        }
-                        mTvOwner.text = content
-                    }
-
-                })
-            }
+//            R.id.mBtnDate -> {
+//                val calendar = Calendar.getInstance()
+//                val datePickDialog = DatePickerDialog(this,
+//                        DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+//                            logD("$year-$month-$dayOfMonth")
+//                            mTvDate.text = DateUtils.getYMD(year, month, dayOfMonth)
+//                        },
+//                        calendar.get(Calendar.YEAR),
+//                        calendar.get(Calendar.MONTH),
+//                        calendar.get(Calendar.DAY_OF_MONTH))
+//                datePickDialog.show()
+//            }
+//            R.id.mBtnBuyer -> {
+//                val inputDialog = InputDialog(this)
+//                inputDialog.show(R.string.buyer_name, object : InputDialog.InputDialogInterface {
+//                    override fun onContentConfirm(content: String) {
+//                        if (content == "") {
+//                            toast(R.string.name_null_warn)
+//                            return
+//                        }
+//                        mTvBuyer.text = content
+//                    }
+//
+//                })
+//            }
+//            R.id.mBtnOwner -> {
+//                val inputDialog = InputDialog(this)
+//                inputDialog.show(R.string.owner_name, object : InputDialog.InputDialogInterface {
+//                    override fun onContentConfirm(content: String) {
+//                        if (content == "") {
+//                            toast(R.string.name_null_warn)
+//                            return
+//                        }
+//                        mTvOwner.text = content
+//                    }
+//
+//                })
+//            }
         }
     }
 
     override fun onPlayerInfoLoad(playerInfoBean: PlayerInfoBean) {
-        if (mTvBuyer.text == null || mTvBuyer.text == "") {
-            mTvBuyer.text = playerInfoBean.personaname
+//        if (mTvBuyer.text == null || mTvBuyer.text == "") {
+//            mTvBuyer.text = playerInfoBean.personaname
+//        }
+//        if (mTvOwner.text == null || mTvOwner.text == "") {
+//            mTvOwner.text = playerInfoBean.personaname
+//        }
+        with(TransManager.tranTmp) {
+            if (buyerId == null || buyerId == "") {
+                buyerId = playerInfoBean.personaname
+            }
+            if (ownerId == null || ownerId == "") {
+                ownerId = playerInfoBean.personaname
+            }
         }
-        if (mTvOwner.text == null || mTvOwner.text == "") {
-            mTvOwner.text = playerInfoBean.personaname
-        }
+        mRvApps.adapter.notifyDataSetChanged()
     }
 
     override fun onPlayerInfoLoadFail(t: Throwable) {

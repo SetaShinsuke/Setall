@@ -6,17 +6,20 @@ import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.api.models.PackageDetailBean
 import com.seta.setall.steam.utils.SteamUtilMethods
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by SETA_WORK on 2017/7/18.
  */
 
-data class Transaction(val transId: Int,
-                       val date: Date,
-                       val buyerId: String,
-                       val ownerId: String,
-                       val extraMsg: String?,
-                       val steamApps: List<SteamApp>)
+data class Transaction(var transId: Int?,
+                       var date: Date?,
+                       var buyerId: String?,
+                       var ownerId: String?,
+                       var extraMsg: String?,
+                       val steamApps: List<SteamApp> = ArrayList()) {
+    constructor() : this(null, null, null, null, null)
+}
 
 data class SteamApp(val appId: Int,
                     val name: String,

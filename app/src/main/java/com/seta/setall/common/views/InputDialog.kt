@@ -11,17 +11,20 @@ import com.seta.setall.R
  */
 class InputDialog(context: Context) : AlertDialog.Builder(context) {
 
-    fun show(title: String, inputDialogInterface: InputDialogInterface) {
+    fun show(title: String, inputDialogInterface: InputDialogInterface, contentInit: String? = null) {
         val view = LayoutInflater.from(context).inflate(R.layout.input_dialog, null, false)
         val contentView = view.findViewById(R.id.mEtContent) as EditText
         setView(view)
         setTitle(title)
+        if (contentInit != null) {
+            contentView.setText(contentInit)
+        }
         setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
         setPositiveButton(R.string.confirm) { _, _ -> inputDialogInterface.onContentConfirm(contentView.text.toString()) }
         show()
     }
 
-    fun show(titleStringId: Int, inputDialogInterface: InputDialogInterface) {
+    fun show(titleStringId: Int, inputDialogInterface: InputDialogInterface, contentInit: String = "") {
         show(context.getString(titleStringId), inputDialogInterface)
     }
 
