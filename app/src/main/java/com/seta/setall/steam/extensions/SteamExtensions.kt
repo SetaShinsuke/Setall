@@ -14,7 +14,7 @@ object DelegateSteam {
     fun <T> steamPreference(context: Context, name: String, default: T) = Preference(SteamConstants.STEAM_PRF_NAME, context, name, default)
 }
 
-fun ImageView.loadImg(imgPath: String) {
+fun ImageView.loadImg(imgPath: String?) {
     Glide.with(context)
             .load(imgPath)
 //            .placeholder(R.mipmap.img_loading)
@@ -23,7 +23,7 @@ fun ImageView.loadImg(imgPath: String) {
             .into(this)
 }
 
-fun ImageView.loadImg(imgResId: Int) {
+fun ImageView.loadImg(imgResId: Int?) {
     Glide.with(context)
             .load(imgResId)
 //            .placeholder(R.mipmap.img_loading)

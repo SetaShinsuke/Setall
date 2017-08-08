@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    tools:ignore="RtlCompat"
+    >
+
+    <android.support.v7.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/mIvPackHeader"
+                android:layout_width="115dp"
+                android:layout_height="54dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:src="@mipmap/game_header_demo"/>
+
+            <ImageView
+                android:id="@+id/mIvPackHeaderCheck"
+                android:layout_width="115dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="0dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/header_check"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/mIvPackHeader"
+                app:layout_constraintEnd_toEndOf="@+id/mIvPackHeader"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/mIvPackHeader"
+                app:layout_constraintTop_toTopOf="@+id/mIvPackHeader"
+                app:layout_constraintVertical_bias="0.0"
+                />
+
+            <TextView
+                android:id="@+id/mTvPackName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/steam_theme_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/mIvPackHeader"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Borderlands 2 Game of the Year"/>
+
+            <TextView
+                android:id="@+id/mTvApps"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/mIvPackHeader"
+                app:layout_constraintTop_toBottomOf="@+id/mTvAppsCount"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="game1,game2,game3\ngame4,game5"/>
+
+            <TextView
+                android:id="@+id/mTvAppsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/mIvPackHeader"
+                app:layout_constraintTop_toBottomOf="@+id/mTvPackName"
+                tools:text="共包含4件物品"/>
+
+            <TextView
+                android:id="@+id/mTvPackBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                android:alpha="0.85"
+                android:background="@color/steam_theme_color_accent"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:text="Pack"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>

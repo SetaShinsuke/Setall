@@ -53,10 +53,10 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
                 mTvGameName.text = data.name
                 logD("Cover url : ${data.coverUrl()}")
                 if (selectedGameBeans.contains(data)) {
-                    mIvCover.loadImg(R.mipmap.ic_check)
+                    mIvHeader.loadImg(R.mipmap.ic_check)
                     view.isSelected = true
                 } else {
-                    mIvCover.loadImg(data.coverUrl())
+                    mIvHeader.loadImg(data.coverUrl())
 //                    mTvGameName.isSelected = false
                     view.isSelected = false
                 }

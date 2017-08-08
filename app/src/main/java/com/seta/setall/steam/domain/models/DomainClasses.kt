@@ -46,13 +46,13 @@ data class SteamApp(val appId: Int,
             games = packBean.apps.map { SteamApp(it.id, it.name) }
     )
 
-    constructor(g: GameDetailBean, coverUrl: String?, logoUrl: String?) : this(
+    constructor(g: GameDetailBean, coverUrl: String?) : this(
             g.steam_appid,
             g.name,
             g.price_overview?.currency,
             g.price_overview?.initial,
             type = SteamUtilMethods.getTypeByString(g.type),
             iconImgUrl = coverUrl,
-            logoImgUrl = logoUrl
+            logoImgUrl = g.header_image
     )
 }

@@ -15,6 +15,7 @@ import com.seta.setall.common.extensions.toast
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.InputDialog
 import com.seta.setall.common.views.adapters.BasicAdapter
+import com.seta.setall.steam.adapters.SteamAppAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.api.models.GameDlcPackBean
@@ -30,7 +31,6 @@ import com.seta.setall.steam.presenters.GameDlcPackPresenter
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
-import kotlinx.android.synthetic.main.item_steam_app_game.view.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -60,19 +60,20 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
 
         apps.addAll(TransManager.steamApps)
         TransManager.steamApps.clear()
-        logD("Steam apps selected : $apps")
+        logD("Steam apps selected : ${apps.map { "${it.name}-${it.type}-[${it.games?.size}]" }}")
 
-        mRvApps.adapter = BasicAdapter(R.layout.item_steam_app_game, apps) {
-            view, position, steamApp ->
-            with(steamApp) {
-                var s: String = "$position:\nName: $name\nType: $type\n"
-                if (games != null && games.isNotEmpty()) {
-                    s += "Games: ${games.map { it.name }}"
-                }
-                s += "\n=========="
-                view.mTvTest.text = s
-            }
-        }
+        mRvApps.adapter = SteamAppAdapter(apps)
+//        mRvApps.adapter = BasicAdapter(R.layout.item_steam_app_game, apps) {
+//            view, position, steamApp ->
+//            with(steamApp) {
+//                var s: String = "$position:\nName: $name\nType: $type\n"
+//                if (games != null && games.isNotEmpty()) {
+//                    s += "Games: ${games.map { it.name }}"
+//                }
+//                s += "\n=========="
+//                view.mTvGameName.text = s
+//            }
+//        }
     }
 
     fun onClick(view: View) {

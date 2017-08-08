@@ -67,7 +67,7 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
         if (fullGameIds.isNotEmpty()) {
             loadingDialog?.show()
             gameDetailPresenter.loadGameDetails(fullGameIds)
-        }else{
+        } else {
             startActivity<CreateTransActivity>()
         }
     }
@@ -99,12 +99,20 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
                 }
                 val gameSimpleBeans = TransManager.steamApps.filter { selectedApps.map { it.steam_appid }.contains(it.appId) }
                 TransManager.steamApps.removeAll(gameSimpleBeans)
-                gameSimpleBeans.forEach {
-                    gameSimpleBean ->
-                    val id: Int = gameSimpleBean.appId
-                    val gameDetailBean = selectedApps.find { it.steam_appid == id }
-                    gameDetailBean?.let { TransManager.steamApps.add(SteamApp(it, gameSimpleBean.iconImgUrl, gameSimpleBean.logoImgUrl)) }
+                val toAddApps = ArrayList<SteamApp>()
+//                gameSimpleBeans.forEach {
+//                    gameSimpleBean ->
+//                    val id: Int = gameSimpleBean.appId
+//                    val gameDetailBean = selectedApps.find { it.steam_appid == id }
+//                    gameDetailBean?.let { toAddApps.add(SteamApp(it, gameSimpleBean.iconImgUrl, gameSimpleBean.logoImgUrl)) }
+//                }
+                selectedApps.forEach {
+                    detailBean ->
+                    val id: Int = detailBean.steam_appid
+                    val gameSimpleBean = gameSimpleBeans.find { it.appId == id }
+                    toAddApps.add(SteamApp(detailBean, gameSimpleBean?.logoImgUrl))
                 }
+                TransManager.steamApps.addAll(toAddApps.distinct())
                 startActivity<CreateTransActivity>()
             }
         }

@@ -12,7 +12,7 @@
     tools:ignore="RtlCompat">
 
     <ImageView
-        android:id="@+id/mIvCover"
+        android:id="@+id/mIvHeader"
         android:layout_width="@dimen/item_cover_width"
         android:layout_height="@dimen/item_cover_width"
         android:layout_marginBottom="8dp"
@@ -35,7 +35,7 @@
         android:text="GameName"
         android:textColor="@color/steam_text_selector"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mIvCover"
+        app:layout_constraintStart_toEndOf="@+id/mIvHeader"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="The Wither 2:Assassins of Kings Enhanced Edition"
         app:layout_constraintEnd_toEndOf="parent"
