@@ -24,3 +24,11 @@ fun Int?.toYuanStr(): String {
         return "￥:${toYuan()}"
     }
 }
+
+fun Int?.toFloatYuan2(): String {
+    if (this == null) {
+        return ""
+    } else {
+        return String.format("%.2f", this*0.01f)
+    }
+}

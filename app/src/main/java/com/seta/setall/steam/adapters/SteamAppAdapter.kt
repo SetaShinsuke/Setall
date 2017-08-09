@@ -131,36 +131,29 @@ class GameHolder(view: View) : RecyclerView.ViewHolder(view) {
         mIvHeader.loadImg(steamApp.logoImgUrl)
         mTvGameName.text = steamApp.name
         mTvDlcBadge.setVisible(steamApp.type == SteamConstants.TYPE_DLC)
-        mTvExtraMsg.onClick {
-            //备注
-            InputDialog(getContext()).show(R.string.edit_msg, object : InputDialog.InputDialogInterface {
-                override fun onContentConfirm(content: String) {
-                    mTvExtraMsg.text = content
-                }
-            })
-        }
+
         if (mEtPriceInit.text == null || mEtPriceInit.text.toString() == "") {
-            mEtPriceInit.setText(steamApp.initPrice?.toString())
+            mEtPriceInit.setText(steamApp.initPrice.toFloatYuan2())
         }
         mEtPriceInit.onTextChange(object : TextChangeHandler {
             override fun onTextChange(s: Editable?) {
                 if (s == null || s.toString() == "") {
                     steamApp.initPrice = null
                 } else {
-                    steamApp.initPrice = s.toString().toInt()
+                    steamApp.initPrice = (s.toString().toFloat() * 100).toInt()
                 }
             }
 
         })
         if (mEtPriceFinal.text == null || mEtPriceFinal.text.toString() == "") {
-            mEtPriceFinal.setText(steamApp.purchasedPrice?.toString())
+            mEtPriceFinal.setText(steamApp.purchasedPrice.toFloatYuan2())
         }
         mEtPriceFinal.onTextChange(object : TextChangeHandler {
             override fun onTextChange(s: Editable?) {
                 if (s == null || s.toString() == "") {
                     steamApp.purchasedPrice = null
                 } else {
-                    steamApp.purchasedPrice = s.toString().toInt()
+                    steamApp.purchasedPrice = (s.toString().toFloat() * 100).toInt()
                 }
             }
         })
