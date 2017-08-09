@@ -15,4 +15,12 @@ fun <T : MvpView?> BasePresenter<T>.logW(message: String, throwable: Throwable? 
     Log.w(javaClass.simpleName, message, throwable)
 }
 
-fun Int.toYuan():Float = this*0.01f
+fun Int.toYuan(): Float = this * 0.01f
+
+fun Int?.toYuanStr(): String {
+    if (this == null) {
+        return "￥:?"
+    } else {
+        return "￥:${toYuan()}"
+    }
+}

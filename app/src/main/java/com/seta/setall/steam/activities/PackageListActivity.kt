@@ -42,7 +42,7 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
                 mIvHeader.loadImg(data.page_image)
                 mTvPackName.text = data.name
                 mIvHeaderCheck.setVisible(selectedPackages.contains(data))
-                mTvAppsCount.text = String.format(getString(R.string.pack_contains_count), data.apps.size, data.price.final.toYuan())
+                mTvAppsCount.text = String.format(getString(R.string.pack_contains_count_price), data.apps.size, data.price.final.toYuan())
                 var content = ""
                 val lastIndex = data.apps.lastIndex
                 data.apps.forEachIndexed {

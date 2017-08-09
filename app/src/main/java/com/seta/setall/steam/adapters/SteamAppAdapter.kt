@@ -2,14 +2,12 @@ package com.seta.setall.steam.adapters
 
 import android.app.DatePickerDialog
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.seta.setall.R
-import com.seta.setall.common.extensions.DateUtils
-import com.seta.setall.common.extensions.setVisible
-import com.seta.setall.common.extensions.toYMD
-import com.seta.setall.common.extensions.toast
+import com.seta.setall.common.extensions.*
 import com.seta.setall.common.logs.LogX
 import com.seta.setall.common.views.InputDialog
 import com.seta.setall.steam.api.SteamConstants
@@ -20,6 +18,7 @@ import kotlinx.android.synthetic.main.item_create_trans_header.view.*
 import kotlinx.android.synthetic.main.item_steam_app_game.view.*
 import kotlinx.android.synthetic.main.item_steam_app_pack.view.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.toast
 import java.util.*
 
 /**
@@ -38,7 +37,7 @@ class SteamAppAdapter(var data: List<SteamApp> = ArrayList()) : RecyclerView.Ada
         if (position == 0) {
             return TYPE_HEADER
         }
-        return when (data[position-1].type) {
+        return when (data[position - 1].type) {
             SteamConstants.TYPE_UNKNOWN -> TYPE_GAME
             SteamConstants.TYPE_GAME -> TYPE_GAME
             SteamConstants.TYPE_DLC -> TYPE_DLC
@@ -115,6 +114,14 @@ class HeaderHolder(view: View) : RecyclerView.ViewHolder(view) {
                 }
             }, mTvOwner.text.toString())
         }
+        mBtnTransExtraMsg.onClick {
+            val inputDialog = InputDialog(getContext())
+            inputDialog.show(R.string.edit_msg, object : InputDialog.InputDialogInterface {
+                override fun onContentConfirm(content: String) {
+                    mTvTransExtraMsg.text = content
+                }
+            }, mTvTransExtraMsg.text.toString())
+        }
     }
 }
 
@@ -130,21 +137,52 @@ class GameHolder(view: View) : RecyclerView.ViewHolder(view) {
                 override fun onContentConfirm(content: String) {
                     mTvExtraMsg.text = content
                 }
-
             })
         }
+        if (mEtPriceInit.text == null || mEtPriceInit.text.toString() == "") {
+            mEtPriceInit.setText(steamApp.initPrice?.toString())
+        }
+        mEtPriceInit.onTextChange(object : TextChangeHandler {
+            override fun onTextChange(s: Editable?) {
+                if (s == null || s.toString() == "") {
+                    steamApp.initPrice = null
+                } else {
+                    steamApp.initPrice = s.toString().toInt()
+                }
+            }
+
+        })
+        if (mEtPriceFinal.text == null || mEtPriceFinal.text.toString() == "") {
+            mEtPriceFinal.setText(steamApp.purchasedPrice?.toString())
+        }
+        mEtPriceFinal.onTextChange(object : TextChangeHandler {
+            override fun onTextChange(s: Editable?) {
+                if (s == null || s.toString() == "") {
+                    steamApp.purchasedPrice = null
+                } else {
+                    steamApp.purchasedPrice = s.toString().toInt()
+                }
+            }
+        })
     }
 }
 
 class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bindData(steamApp: SteamApp) = with(itemView) {
-        mIvPackHeader.loadImg(steamApp.logoImgUrl)
         mTvPackName.text = steamApp.name
+        if (steamApp.games != null) {
+            mTvAppsCount.text = String.format(context.getString(R.string.pack_contains_count), steamApp.games?.size)
+        }
+        mTvPackPriceInit.deleteLine().money = steamApp.initPrice
+        mTvPackPriceFinal.money = steamApp.purchasedPrice
+        mBtnEditPrice.onClick {
+            getContext().toast("修改价格")
+        }
         var content = ""
         val lastIndex = steamApp.games?.lastIndex
         steamApp.games?.forEachIndexed {
             index, app ->
-            content += app.name
+            content += "${app.name} ${app.initPrice.toYuanStr()}"
             if (index != lastIndex) {
                 content += "\n"
             }

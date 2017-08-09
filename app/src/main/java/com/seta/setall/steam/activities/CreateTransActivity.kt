@@ -61,6 +61,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
         TransManager.tranTmp.date = Date()
         logD("Steam apps selected : ${apps.map { "${it.name}-${it.type}-[${it.games?.size}]" }}")
 
+        mRvApps.setHasFixedSize(false)
         mRvApps.adapter = SteamAppAdapter(apps)
 //        mRvApps.adapter = BasicAdapter(R.layout.item_steam_app_game, apps) {
 //            view, position, steamApp ->

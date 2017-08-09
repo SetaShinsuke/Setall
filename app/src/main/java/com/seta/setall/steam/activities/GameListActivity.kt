@@ -47,9 +47,9 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
                 mIvHeader.loadImg(data.header_image)
                 mIvHeaderCheck.setVisible(selectedApps.contains(data))
                 mTvPriceFinal.money = data.price_overview?.final
-                mTvPriceInit.money = data.price_overview?.initial
-                mTvPriceInit.deleteLine()
-                mTvPriceInit.setVisible(data.price_overview?.final != data.price_overview?.initial)
+                mEtPriceInit.money = data.price_overview?.initial
+                mEtPriceInit.deleteLine()
+                mEtPriceInit.setVisible(data.price_overview?.final != data.price_overview?.initial)
                 onClick {
                     if (selectedApps.contains(data)) {
                         selectedApps.remove(data)

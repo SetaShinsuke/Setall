@@ -16,44 +16,14 @@
         app:cardBackgroundColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintVertical_bias="1.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/mIvPackHeader"
-                android:layout_width="115dp"
-                android:layout_height="54dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:scaleType="centerCrop"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                tools:src="@mipmap/game_header_demo"/>
-
-            <ImageView
-                android:id="@+id/mIvPackHeaderCheck"
-                android:layout_width="115dp"
-                android:layout_height="54dp"
-                android:layout_marginTop="0dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/header_check"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/mIvPackHeader"
-                app:layout_constraintEnd_toEndOf="@+id/mIvPackHeader"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/mIvPackHeader"
-                app:layout_constraintTop_toTopOf="@+id/mIvPackHeader"
-                app:layout_constraintVertical_bias="0.0"
-                />
 
             <TextView
                 android:id="@+id/mTvPackName"
@@ -63,11 +33,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/steam_theme_color"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/mIvPackHeader"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Borderlands 2 Game of the Year"/>
+                tools:text="Borderlands 2 Game of the Year"
+                app:layout_constraintEnd_toStartOf="@+id/mTvPackBadge"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/mTvApps"
@@ -76,27 +46,27 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/mIvPackHeader"
                 app:layout_constraintTop_toBottomOf="@+id/mTvAppsCount"
+                tools:text="game1,game2,game3\ngame4,game5"
                 app:layout_constraintVertical_bias="0.0"
-                tools:text="game1,game2,game3\ngame4,game5"/>
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/mTvAppsCount"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/mIvPackHeader"
-                app:layout_constraintTop_toBottomOf="@+id/mTvPackName"
-                tools:text="共包含4件物品"/>
+                app:layout_constraintTop_toBottomOf="@+id/mTvPackPriceInit"
+                tools:text="共包含4件物品"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/mTvPackBadge"
@@ -115,6 +85,39 @@
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/mTvPackPriceInit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mTvPackName"
+                tools:text="￥299"/>
+
+            <TextView
+                android:id="@+id/mTvPackPriceFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/mTvPackPriceInit"
+                app:layout_constraintStart_toEndOf="@+id/mTvPackPriceInit"
+                tools:text="￥29.9"/>
+
+            <ImageView
+                android:id="@+id/mBtnEditPrice"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginStart="8dp"
+                android:alpha="0.8"
+                android:background="?attr/selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="@+id/mTvPackPriceFinal"
+                app:layout_constraintStart_toEndOf="@+id/mTvPackPriceFinal"
+                app:layout_constraintTop_toTopOf="@+id/mTvPackPriceFinal"
+                app:srcCompat="@mipmap/icon_edit"/>
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>

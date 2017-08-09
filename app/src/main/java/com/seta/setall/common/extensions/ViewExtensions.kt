@@ -5,7 +5,10 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.graphics.Paint
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.seta.setall.common.logs.LogX
@@ -43,8 +46,9 @@ fun TextView.underLine() {
     paint.flags = Paint.UNDERLINE_TEXT_FLAG
 }
 
-fun TextView.deleteLine() {
+fun TextView.deleteLine(): TextView {
     paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
+    return this
 }
 
 var TextView.money: Int?
@@ -56,4 +60,26 @@ var TextView.money: Int?
         text = "￥%.2f".format(valueCent?.let { it * 0.01f })
     }
     get() = this.money
+
+fun EditText.onTextChange(textChangeHandler: TextChangeHandler) {
+    addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            textChangeHandler.onTextChange(s)
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+        }
+
+    })
+}
+
+
+interface TextChangeHandler {
+    fun onTextChange(s: Editable?)
+}
 
