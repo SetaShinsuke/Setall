@@ -89,7 +89,7 @@ data class PackageGroupBean(val packageid: Int,
 
 data class AppSimpleBean(val id: Int, val name: String)
 data class ReleaseDateBean(val date: String)
-data class PackageDetailBean(val id: Int, val name: String, val page_image: String, val small_logo: String, val apps: List<AppSimpleBean>,
+data class PackageDetailBean(val id: Int, val name: String, val page_image: String, val small_logo: String, val apps: ArrayList<AppSimpleBean>,
                              val price: PriceBean, val release_date: ReleaseDateBean)
 
 data class GameDlcPackBean(val fullGame: GameDetailBean,

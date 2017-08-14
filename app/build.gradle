@@ -28,22 +28,20 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
     implementation "com.android.support:appcompat-v7:$support_lib_version"
     compile "com.android.support:cardview-v7:$support_lib_version"
-    testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    //anko
+    compile "org.jetbrains.anko:anko:$anko_version"
     //design
     implementation "com.android.support:design:$support_lib_version"
     //recyclerView
     compile "com.android.support:recyclerview-v7:$support_lib_version"
     //滑动返回
     implementation project(':swipebackutility')
-    //anko
-    compile "org.jetbrains.anko:anko:$anko_version"
-//    compile "org.jetbrains.anko:anko-common:$anko_version"
-//    compile "org.jetbrains.anko:anko-sqlite:$anko_version"
-//    compile "org.jetbrains.anko:anko-coroutines:$anko_version"
     //网络log
     compile "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     //网络库

@@ -2,6 +2,7 @@ package com.seta.setall.steam.mvpViews
 
 import com.seta.setall.common.mvp.MvpView
 import com.seta.setall.steam.api.models.*
+import com.seta.setall.steam.domain.models.SteamApp
 
 /**
  * Created by SETA_WORK on 2017/7/4.
@@ -35,4 +36,9 @@ interface GameDlcPackMvpView : MvpView {
 interface PackageDetailMvpView : MvpView {
     fun onPackageDetailLoad(packDetails: List<PackageDetailBean>)
     fun onPackageDetailLoadFail(t: Throwable?)
+}
+
+interface SteamAppDetailMvpView : MvpView {
+    fun onAppsLoad(apps: List<SteamApp>)
+    fun onAppsLoadFail(t: Throwable)
 }

@@ -175,7 +175,7 @@ class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
         val lastIndex = steamApp.games?.lastIndex
         steamApp.games?.forEachIndexed {
             index, app ->
-            content += "${app.name} ${app.initPrice.toYuanStr()}"
+            content += "${app.name} ${app.initPrice.toYuanStr()} - ${app.type}"
             if (index != lastIndex) {
                 content += "\n"
             }

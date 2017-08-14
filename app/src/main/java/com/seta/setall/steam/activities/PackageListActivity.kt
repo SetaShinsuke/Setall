@@ -14,11 +14,14 @@ import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.PackageDetailBean
 import com.seta.setall.steam.domain.TransManager
 import com.seta.setall.steam.domain.models.SteamApp
+import com.seta.setall.steam.events.CreateStartEvent
 import com.seta.setall.steam.extensions.loadImg
 import com.seta.setall.steam.mvpViews.PackageDetailMvpView
 import com.seta.setall.steam.presenters.PackageDetailPresenter
 import kotlinx.android.synthetic.main.activity_package_list.*
 import kotlinx.android.synthetic.main.item_steam_package.view.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.startActivity
@@ -75,6 +78,12 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
         }else{
             toast(R.string.no_package_to_select)
         }
+        registerBus()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: CreateStartEvent) {
+        finish()
     }
 
     override fun onDestroy() {

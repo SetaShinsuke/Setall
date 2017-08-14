@@ -20,27 +20,33 @@ import com.seta.setall.steam.api.models.PlayerInfoBean
 import com.seta.setall.steam.domain.TransManager
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
+import com.seta.setall.steam.events.CreateStartEvent
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
 import com.seta.setall.steam.mvpViews.GameDlcPackMvpView
 import com.seta.setall.steam.mvpViews.PlayerInfoMvpView
+import com.seta.setall.steam.mvpViews.SteamAppDetailMvpView
 import com.seta.setall.steam.presenters.GameDetailPresenter
 import com.seta.setall.steam.presenters.GameDlcPackPresenter
 import com.seta.setall.steam.presenters.PlayerInfoPresenter
+import com.seta.setall.steam.presenters.SteamAppDetailPresenter
 import kotlinx.android.synthetic.main.activity_create_trans.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import java.util.*
 
-class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpView, GameDetailMvpView {
+class CreateTransActivity : BaseActivity(),
+        PlayerInfoMvpView, GameDlcPackMvpView, GameDetailMvpView, SteamAppDetailMvpView {
 
     var steamUserId: String by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
     val games: List<SteamApp> = ArrayList()
     val playerInfoPresenter: PlayerInfoPresenter = PlayerInfoPresenter()
     val gameDetailPresenter: GameDetailPresenter = GameDetailPresenter()
     val gameDlcPackPresenter: GameDlcPackPresenter = GameDlcPackPresenter()
+    val steamAppDetailPresenter: SteamAppDetailPresenter = SteamAppDetailPresenter()
 
     val apps = ArrayList<SteamApp>()
 
@@ -53,6 +59,7 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
         }
         gameDetailPresenter.attachView(this)
         gameDlcPackPresenter.attachView(this)
+        steamAppDetailPresenter.attachView(this)
         mRvApps.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
         apps.addAll(TransManager.steamApps)
@@ -63,17 +70,16 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
 
         mRvApps.setHasFixedSize(false)
         mRvApps.adapter = SteamAppAdapter(apps)
-//        mRvApps.adapter = BasicAdapter(R.layout.item_steam_app_game, apps) {
-//            view, position, steamApp ->
-//            with(steamApp) {
-//                var s: String = "$position:\nName: $name\nType: $type\n"
-//                if (games != null && games.isNotEmpty()) {
-//                    s += "Games: ${games.map { it.name }}"
-//                }
-//                s += "\n=========="
-//                view.mTvGameName.text = s
-//            }
-//        }
+        postEvent(CreateStartEvent())
+        steamAppDetailPresenter.loadSteamApps(apps)
+        loadingDialog?.show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        gameDetailPresenter.detachView()
+        gameDlcPackPresenter.detachView()
+        steamAppDetailPresenter.detachView()
     }
 
     fun onClick(view: View) {
@@ -82,54 +88,18 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
                 val gameIds: List<Int> = games.map { it.appId }
                 startActivityForResult<OwnedGamesActivity>(SteamConstants.CODE_SELECT_GAMES)
             }
-//            R.id.mBtnDate -> {
-//                val calendar = Calendar.getInstance()
-//                val datePickDialog = DatePickerDialog(this,
-//                        DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-//                            logD("$year-$month-$dayOfMonth")
-//                            mTvDate.text = DateUtils.getYMD(year, month, dayOfMonth)
-//                        },
-//                        calendar.get(Calendar.YEAR),
-//                        calendar.get(Calendar.MONTH),
-//                        calendar.get(Calendar.DAY_OF_MONTH))
-//                datePickDialog.show()
-//            }
-//            R.id.mBtnBuyer -> {
-//                val inputDialog = InputDialog(this)
-//                inputDialog.show(R.string.buyer_name, object : InputDialog.InputDialogInterface {
-//                    override fun onContentConfirm(content: String) {
-//                        if (content == "") {
-//                            toast(R.string.name_null_warn)
-//                            return
-//                        }
-//                        mTvBuyer.text = content
-//                    }
-//
-//                })
-//            }
-//            R.id.mBtnOwner -> {
-//                val inputDialog = InputDialog(this)
-//                inputDialog.show(R.string.owner_name, object : InputDialog.InputDialogInterface {
-//                    override fun onContentConfirm(content: String) {
-//                        if (content == "") {
-//                            toast(R.string.name_null_warn)
-//                            return
-//                        }
-//                        mTvOwner.text = content
-//                    }
-//
-//                })
-//            }
         }
     }
 
+    override fun onAppsLoad(apps: List<SteamApp>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onAppsLoadFail(t: Throwable) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun onPlayerInfoLoad(playerInfoBean: PlayerInfoBean) {
-//        if (mTvBuyer.text == null || mTvBuyer.text == "") {
-//            mTvBuyer.text = playerInfoBean.personaname
-//        }
-//        if (mTvOwner.text == null || mTvOwner.text == "") {
-//            mTvOwner.text = playerInfoBean.personaname
-//        }
         with(TransManager.tranTmp) {
             if (buyerId == null || buyerId == "") {
                 buyerId = playerInfoBean.personaname
@@ -216,5 +186,22 @@ class CreateTransActivity : BaseActivity(), PlayerInfoMvpView, GameDlcPackMvpVie
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onBackPressed() {
+        if (apps.isNotEmpty()) {
+            alert {
+                titleResource = R.string.hint
+                message = String.format(getString(R.string.cancel_game_select_hint), apps.size)
+                positiveButton(R.string.confirm) { dialog ->
+                    dialog.dismiss()
+                    super.onBackPressed()
+                }
+                negativeButton(R.string.cancel) { dialog -> dialog.dismiss() }
+                show()
+            }
+            return
+        }
+        super.onBackPressed()
     }
 }

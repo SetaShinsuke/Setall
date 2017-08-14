@@ -16,11 +16,14 @@ import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.domain.TransManager
 import com.seta.setall.steam.domain.models.SteamApp
+import com.seta.setall.steam.events.CreateStartEvent
 import com.seta.setall.steam.extensions.loadImg
 import com.seta.setall.steam.mvpViews.GameDetailMvpView
 import com.seta.setall.steam.presenters.GameDetailPresenter
 import kotlinx.android.synthetic.main.activity_game_list.*
 import kotlinx.android.synthetic.main.item_game_detail.view.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.startActivity
@@ -70,6 +73,7 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
         } else {
             startActivity<CreateTransActivity>()
         }
+        registerBus()
     }
 
     override fun onGameDetailLoad(gameDetails: List<GameDetailBean>) {
@@ -117,6 +121,11 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: CreateStartEvent) {
+        finish()
     }
 
     override fun onBackPressed() {

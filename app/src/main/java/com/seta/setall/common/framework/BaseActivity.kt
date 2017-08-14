@@ -10,6 +10,7 @@ import com.seta.swipebackutility.SwipeBackLayout
 import com.seta.swipebackutility.Utils
 import com.seta.swipebackutility.app.SwipeBackActivityBase
 import com.seta.swipebackutility.app.SwipeBackActivityHelper
+import org.greenrobot.eventbus.EventBus
 import kotlin.properties.Delegates
 
 /**
@@ -32,10 +33,21 @@ open class BaseActivity : AppCompatActivity(), SwipeBackActivityBase {
                 }
     }
 
+    fun registerBus() {
+        EventBus.getDefault().register(this)
+    }
+
+    fun postEvent(event: Any) {
+        EventBus.getDefault().post(event)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         loadingDialog?.hide()
         loadingDialog = null
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this)
+        }
     }
 
     fun setHomeAsBackEnabled(enabled: Boolean) {
