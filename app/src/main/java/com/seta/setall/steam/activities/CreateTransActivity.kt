@@ -95,6 +95,8 @@ class CreateTransActivity : BaseActivity(),
     }
 
     override fun onAppsLoad(apps: List<SteamApp>) {
+        this.apps.clear()
+        this.apps.addAll(apps)
         loadingDialog?.hide()
         adapter.refreshData(apps)
     }

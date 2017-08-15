@@ -28,7 +28,7 @@ data class SteamApp(val appId: Int,
                     var purchasedPrice: Int? = null,
                     var purchasedDate: Date? = null,
                     val type: String? = SteamConstants.TYPE_UNKNOWN,
-                    val iconImgUrl: String? = null,
+                    val iconImgUrl: String? = null, //cover/icon
                     val logoImgUrl: String? = null, // GameDetailBean 里的 header_image
                     val games: List<SteamApp>? = null) { //只有 type = BUNDEL_PACK 时不为空
     //从 GameBean 创建
