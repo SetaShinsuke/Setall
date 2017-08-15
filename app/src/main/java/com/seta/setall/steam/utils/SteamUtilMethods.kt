@@ -14,9 +14,7 @@ object SteamUtilMethods {
         val gson = GsonBuilder().create()
         val json = gson.toJsonTree(map).asJsonObject
         val data = json.entrySet().iterator().next().toPair().second.asJsonObject["data"]
-        if (data == null) {
-            return null
-        }
+        data ?: return null
         return gson.fromJson<GameDetailBean>(data, GameDetailBean::class.java)
     }
 

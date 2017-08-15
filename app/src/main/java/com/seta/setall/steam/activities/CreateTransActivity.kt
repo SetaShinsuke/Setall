@@ -37,6 +37,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import java.util.*
+import kotlin.properties.Delegates
 
 class CreateTransActivity : BaseActivity(),
         PlayerInfoMvpView, GameDlcPackMvpView, GameDetailMvpView, SteamAppDetailMvpView {
@@ -49,6 +50,7 @@ class CreateTransActivity : BaseActivity(),
     val steamAppDetailPresenter: SteamAppDetailPresenter = SteamAppDetailPresenter()
 
     val apps = ArrayList<SteamApp>()
+    var adapter: SteamAppAdapter by Delegates.notNull<SteamAppAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +71,8 @@ class CreateTransActivity : BaseActivity(),
         logD("Steam apps selected : ${apps.map { "${it.name}-${it.type}-[${it.games?.size}]" }}")
 
         mRvApps.setHasFixedSize(false)
-        mRvApps.adapter = SteamAppAdapter(apps)
+        adapter = SteamAppAdapter(apps)
+        mRvApps.adapter = adapter
         postEvent(CreateStartEvent())
         steamAppDetailPresenter.loadSteamApps(apps)
         loadingDialog?.show()
@@ -92,11 +95,13 @@ class CreateTransActivity : BaseActivity(),
     }
 
     override fun onAppsLoad(apps: List<SteamApp>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        loadingDialog?.hide()
+        adapter.refreshData(apps)
     }
 
     override fun onAppsLoadFail(t: Throwable) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        loadingDialog?.hide()
+        toast("加载失败 : ${t.message}")
     }
 
     override fun onPlayerInfoLoad(playerInfoBean: PlayerInfoBean) {

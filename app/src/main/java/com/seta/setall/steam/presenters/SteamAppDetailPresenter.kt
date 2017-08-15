@@ -1,6 +1,7 @@
 package com.seta.setall.steam.presenters
 
 import com.seta.setall.common.extensions.logD
+import com.seta.setall.common.extensions.logW
 import com.seta.setall.common.http.Network
 import com.seta.setall.common.mvp.BasePresenter
 import com.seta.setall.steam.api.SteamConstants
@@ -38,7 +39,8 @@ class SteamAppDetailPresenter : BasePresenter<SteamAppDetailMvpView>() {
         }
         observable.map {
             gameDetails ->
-            apps.removeAll(packs)
+            //            apps.removeAll(packs)
+//            val inflatedGames = ArrayList<SteamApp>()
             packs.forEach {
                 pack ->
                 pack.games?.forEach {
@@ -46,14 +48,16 @@ class SteamAppDetailPresenter : BasePresenter<SteamAppDetailMvpView>() {
                     gameDetails.find { it.steam_appid == game.appId }.let {
                         if (it != null) {
                             (pack.games as ArrayList).add(SteamApp(it, null))
+//                            pack.games.remove(game)
                         }
                     }
-                    (pack.games as ArrayList).remove(game)
                 }
             }
+            logD("Packs : $packs")
             return@map apps
         }.doSubscribe(object : Subscriber<ArrayList<SteamApp>>() {
             override fun onError(e: Throwable) {
+                logW("On error", e)
                 mvpView?.onAppsLoadFail(e)
             }
 

@@ -33,6 +33,11 @@ class SteamAppAdapter(var data: List<SteamApp> = ArrayList()) : RecyclerView.Ada
         val TYPE_PACK = 3
     }
 
+    fun refreshData(newData: List<SteamApp>) {
+        this.data = newData
+        notifyDataSetChanged()
+    }
+
     override fun getItemViewType(position: Int): Int {
         if (position == 0) {
             return TYPE_HEADER
