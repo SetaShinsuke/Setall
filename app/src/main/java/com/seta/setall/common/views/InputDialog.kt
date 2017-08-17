@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.widget.EditText
 import com.seta.setall.R
+import com.seta.setall.common.utils.hideInputMethod
 
 /**
  * Created by SETA_WORK on 2017/7/24.
@@ -19,13 +20,19 @@ class InputDialog(context: Context) : AlertDialog.Builder(context) {
         if (contentInit != null) {
             contentView.setText(contentInit)
         }
-        setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
-        setPositiveButton(R.string.confirm) { _, _ -> inputDialogInterface.onContentConfirm(contentView.text.toString()) }
+        setNegativeButton(R.string.cancel) { dialog, _ ->
+            dialog.dismiss()
+            hideInputMethod(contentView)
+        }
+        setPositiveButton(R.string.confirm) { _, _ ->
+            inputDialogInterface.onContentConfirm(contentView.text.toString())
+            hideInputMethod(contentView)
+        }
         show()
     }
 
     fun show(titleStringId: Int, inputDialogInterface: InputDialogInterface, contentInit: String = "") {
-        show(context.getString(titleStringId), inputDialogInterface)
+        show(context.getString(titleStringId), inputDialogInterface, contentInit)
     }
 
     interface InputDialogInterface {

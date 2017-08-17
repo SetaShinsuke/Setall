@@ -45,4 +45,5 @@
     <string name="price_purchased">购入价:￥</string>
     <string name="add_extra_msg">+备注</string>
     <string name="edit_msg">编辑备注</string>
+    <string name="edit_prices">编辑价格</string>
 </resources>

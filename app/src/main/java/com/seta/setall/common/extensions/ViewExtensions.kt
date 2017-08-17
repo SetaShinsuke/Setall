@@ -59,7 +59,16 @@ var TextView.money: Int?
         }
         text = "￥%.2f".format(valueCent?.let { it * 0.01f })
     }
-    get() = this.money
+    get() {
+        if (text == "￥?") {
+            return null
+        }
+        try {
+            return (text.subSequence(1, text.lastIndex).toString().toFloat() * 100).toInt()
+        } catch (e: Exception) {
+            return null
+        }
+    }
 
 fun EditText.onTextChange(textChangeHandler: TextChangeHandler) {
     addTextChangedListener(object : TextWatcher {

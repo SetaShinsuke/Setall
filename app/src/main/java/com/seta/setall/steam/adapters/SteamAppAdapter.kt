@@ -14,6 +14,7 @@ import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.domain.TransManager
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.loadImg
+import com.seta.setall.steam.views.PriceEditDialog
 import kotlinx.android.synthetic.main.item_create_trans_header.view.*
 import kotlinx.android.synthetic.main.item_steam_app_game.view.*
 import kotlinx.android.synthetic.main.item_steam_app_pack.view.*
@@ -174,7 +175,16 @@ class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
         mTvPackPriceInit.deleteLine().money = steamApp.initPrice
         mTvPackPriceFinal.money = steamApp.purchasedPrice
         mBtnEditPrice.onClick {
-            getContext().toast("修改价格")
+            val priceEditDialog = PriceEditDialog(getContext())
+            priceEditDialog.show(R.string.edit_prices, object : PriceEditDialog.PriceEditInterface {
+                override fun onContentConfirm(priceInit: Int, priceFinal: Int) {
+                    steamApp.initPrice = priceInit
+                    steamApp.purchasedPrice = priceFinal
+                    mTvPackPriceInit.deleteLine().money = steamApp.initPrice
+                    mTvPackPriceFinal.money = steamApp.purchasedPrice
+                }
+            }, mTvPackPriceInit.money?.toFloatYuan2(), mTvPackPriceFinal.money?.toFloatYuan2())
+
         }
         var content = ""
         val lastIndex = steamApp.games?.lastIndex
