@@ -12,6 +12,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.seta.setall.common.logs.LogX
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import kotlin.coroutines.experimental.CoroutineContext
 
 /**
  * Created by SETA_WORK on 2017/7/3.
@@ -70,7 +74,23 @@ var TextView.money: Int?
         }
     }
 
-fun EditText.onTextChange(textChangeHandler: TextChangeHandler) {
+fun EditText.isTextEmpty(): Boolean {
+    return text == null || text.toString() == ""
+}
+
+fun EditText.onTextChange(context: CoroutineContext = UI,
+                          handler: suspend CoroutineScope.(s: Editable?) -> Unit) {
+    setTextChangeHandler(
+            object : TextChangeHandler {
+                override fun onTextChange(s: Editable?) {
+                    launch(context) {
+                        handler(s)
+                    }
+                }
+            })
+}
+
+fun EditText.setTextChangeHandler(textChangeHandler: TextChangeHandler) {
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             textChangeHandler.onTextChange(s)
@@ -89,6 +109,6 @@ fun EditText.onTextChange(textChangeHandler: TextChangeHandler) {
 
 
 interface TextChangeHandler {
-    fun onTextChange(s: Editable?)
+    fun onTextChange(s: Editable?): Unit
 }
 

@@ -1,26 +1,31 @@
 package com.seta.setall.steam.adapters
 
 import android.app.DatePickerDialog
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.seta.setall.R
 import com.seta.setall.common.extensions.*
 import com.seta.setall.common.logs.LogX
 import com.seta.setall.common.views.InputDialog
+import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.domain.TransManager
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.loadImg
 import com.seta.setall.steam.views.PriceEditDialog
 import kotlinx.android.synthetic.main.item_create_trans_header.view.*
+import kotlinx.android.synthetic.main.item_game_in_pack.view.*
 import kotlinx.android.synthetic.main.item_steam_app_game.view.*
 import kotlinx.android.synthetic.main.item_steam_app_pack.view.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.toast
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by SETA_WORK on 2017/8/7.
@@ -143,10 +148,10 @@ class GameHolder(view: View) : RecyclerView.ViewHolder(view) {
         mTvGameName.text = steamApp.name
         mTvDlcBadge.setVisible(steamApp.type == SteamConstants.TYPE_DLC)
 
-        if (mEtPriceInit.text == null || mEtPriceInit.text.toString() == "") {
+        if (mEtPriceInit.isTextEmpty()) {
             mEtPriceInit.setText(steamApp.initPrice.toFloatYuan2())
         }
-        mEtPriceInit.onTextChange(object : TextChangeHandler {
+        mEtPriceInit.setTextChangeHandler(object : TextChangeHandler {
             override fun onTextChange(s: Editable?) {
                 if (s == null || s.toString() == "") {
                     steamApp.initPrice = null
@@ -156,10 +161,10 @@ class GameHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
 
         })
-        if (mEtPriceFinal.text == null || mEtPriceFinal.text.toString() == "") {
+        if (mEtPriceFinal.isTextEmpty()) {
             mEtPriceFinal.setText(steamApp.purchasedPrice.toFloatYuan2())
         }
-        mEtPriceFinal.onTextChange(object : TextChangeHandler {
+        mEtPriceFinal.setTextChangeHandler(object : TextChangeHandler {
             override fun onTextChange(s: Editable?) {
                 if (s == null || s.toString() == "") {
                     steamApp.purchasedPrice = null
@@ -202,5 +207,16 @@ class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
         }
         mTvApps.text = content
+        //显示包内的游戏
+        mRvGIP.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
+        val gamesInPack = steamApp.games ?: ArrayList<SteamApp>()
+        mRvGIP.adapter = BasicAdapter<SteamApp>(R.layout.item_game_in_pack, gamesInPack) {
+            view, position, gameInPack ->
+            with(view) {
+                mTvGIPName?.text = "($position)-${gameInPack.name}"
+                mEtGIPPriceInit.onTextChange { LogX.d("Init Price change : $it") }
+                mEtGIPPriceFinal.onTextChange { LogX.d("Final Price change : $it") }
+            }
+        }
     }
 }

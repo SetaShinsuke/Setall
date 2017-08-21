@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/mTvGIPName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Borderlands:Mad Moxxi's Underdome Riot"/>
+
+    <EditText
+        android:id="@+id/mEtGIPPriceFinal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="16dp"
+        android:ems="5"
+        android:focusable="true"
+        android:imeOptions="actionNext"
+        android:focusableInTouchMode="true"
+        android:inputType="numberDecimal"
+        android:nextFocusDown="@+id/mEtGIPPriceFinal"
+        android:nextFocusForward="@+id/mEtGIPPriceFinal"
+        android:nextFocusLeft="@+id/mEtGIPPriceFinal"
+        android:nextFocusRight="@+id/mEtGIPPriceFinal"
+        android:nextFocusUp="@+id/mEtGIPPriceFinal"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mTvGIPName"/>
+
+    <EditText
+        android:id="@+id/mEtGIPPriceInit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="5"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:inputType="numberDecimal"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/mTvGIPPriceFinal"
+        app:layout_constraintEnd_toStartOf="@+id/mTvGIPPriceFinal"/>
+
+    <TextView
+        android:id="@+id/mTvGIPPriceFinal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/price_purchased"
+        app:layout_constraintBaseline_toBaselineOf="@+id/mEtGIPPriceFinal"
+        app:layout_constraintEnd_toStartOf="@+id/mEtGIPPriceFinal"/>
+
+    <TextView
+        android:id="@+id/mTvGIPPriceInit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:text="@string/price_init"
+        app:layout_constraintBaseline_toBaselineOf="@+id/mEtGIPPriceInit"
+        app:layout_constraintEnd_toStartOf="@+id/mEtGIPPriceInit"/>
+</android.support.constraint.ConstraintLayout>

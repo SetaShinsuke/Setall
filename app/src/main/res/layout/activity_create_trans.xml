@@ -11,19 +11,25 @@
     tools:context="com.seta.setall.steam.activities.CreateTransActivity"
     >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mRvApps"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/main_padding"
-        />
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mRvApps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/main_padding"
+            />
+    </FrameLayout>
 
     <Button
         android:id="@+id/mBtnAddApp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:background="@color/steam_theme_color"
         android:onClick="onClick"
         android:padding="@dimen/main_margin"
