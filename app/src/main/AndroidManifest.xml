@@ -81,12 +81,12 @@
         <activity
             android:name=".steam.activities.SteamLoginActivity"
             android:label="@string/app_name"
-            android:theme="@style/SteamTheme.Swipable">
+            android:theme="@style/SteamTheme">
         </activity>
         <activity
             android:name=".steam.activities.SteamMainActivity"
             android:label="@string/app_name"
-            android:theme="@style/SteamTheme.Swipable">
+            android:theme="@style/SteamTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -101,6 +101,7 @@
         <activity
             android:name=".steam.activities.CreateTransActivity"
             android:label="@string/create_trans"
+            android:launchMode="singleInstance"
             android:theme="@style/SteamTheme.Swipable">
         </activity>
         <activity

@@ -1,7 +1,9 @@
 package com.seta.setall.steam.db
 
+import android.content.Context
 import com.seta.setall.common.extensions.clear
 import com.seta.setall.common.extensions.toVarargArray
+import com.seta.setall.common.utils.UtilMethods
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
 import org.jetbrains.anko.db.insert
@@ -14,6 +16,17 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
 
     companion object {
         val instance by lazy { SteamDb() }
+    }
+
+    fun saveTransaction(transaction: Transaction) = dbHelper.use {
+        with(steamDbMapper.convertTransFromDomain(transaction)) {
+            //保存交易记录
+            insert(TransActionTable.TABLE_NAME, *map.toVarargArray())
+            //保存每个游戏
+            steamAppDbs.forEach {
+                saveApp(transId, it)
+            }
+        }
     }
 
     fun saveTransactions(allTransactions: List<Transaction>) = dbHelper.use {
@@ -55,4 +68,6 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
             }
         }
     }
+
+    fun export(context: Context) = UtilMethods.exportDb(context, SteamDbHelper.STEAM_DB_NAME)
 }

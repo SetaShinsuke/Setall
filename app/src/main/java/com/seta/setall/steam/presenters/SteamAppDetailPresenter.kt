@@ -19,7 +19,7 @@ class SteamAppDetailPresenter : BasePresenter<SteamAppDetailMvpView>() {
 
     fun loadSteamApps(apps: ArrayList<SteamApp>) {
         val packs = apps.filter { it.type == SteamConstants.TYPE_BUNDLE_PACK }
-        val allIds = ArrayList<Int>()
+        val allIds = ArrayList<Int>() //只拉取所有 包内的app
         packs.forEach {
             it.games?.map { it.appId }?.let {
                 allIds.addAll(it)
@@ -31,6 +31,11 @@ class SteamAppDetailPresenter : BasePresenter<SteamAppDetailMvpView>() {
         val ids = allIds.distinct()
 
         val reqArray = ids.map { Network.steamGameApi.getGameDetail(it) }
+        logD("The Count of apps to load in pack : ${reqArray.size}")
+        if (reqArray.isEmpty()) {
+            mvpView?.onAppsLoad(apps)
+            return
+        }
         val observable: Observable<List<GameDetailBean>> = Observable.zip(reqArray) {
             val gameDetails = ArrayList<GameDetailBean>()
             it.forEach {

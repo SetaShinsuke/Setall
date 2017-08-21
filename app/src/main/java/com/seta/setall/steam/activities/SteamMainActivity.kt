@@ -5,9 +5,8 @@ import android.view.View
 import com.seta.setall.R
 import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.framework.BaseActivity
-import com.seta.setall.common.utils.UtilMethods
 import com.seta.setall.steam.api.SteamConstants
-import com.seta.setall.steam.db.SteamDbHelper
+import com.seta.setall.steam.db.SteamDb
 import com.seta.setall.steam.extensions.DelegateSteam
 import kotlinx.android.synthetic.main.activity_steam_main.*
 import org.jetbrains.anko.startActivity
@@ -40,7 +39,7 @@ class SteamMainActivity : BaseActivity() {
             R.id.mBtnAddTrans -> {
                 startActivity<OwnedGamesActivity>()
             }
-            R.id.mBtnExpDb -> UtilMethods.exportDb(this, SteamDbHelper.STEAM_DB_NAME)
+            R.id.mBtnExpDb -> SteamDb.instance.export(this@SteamMainActivity)
         }
     }
 }

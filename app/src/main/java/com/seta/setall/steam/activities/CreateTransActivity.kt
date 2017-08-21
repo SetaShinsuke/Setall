@@ -17,6 +17,7 @@ import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameDetailBean
 import com.seta.setall.steam.api.models.GameDlcPackBean
 import com.seta.setall.steam.api.models.PlayerInfoBean
+import com.seta.setall.steam.db.SteamDb
 import com.seta.setall.steam.domain.TransManager
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
@@ -34,7 +35,6 @@ import kotlinx.android.synthetic.main.activity_create_trans.*
 import kotlinx.android.synthetic.main.item_owned_games.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import java.util.*
 import kotlin.properties.Delegates
@@ -55,6 +55,7 @@ class CreateTransActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_trans)
+        setSwipeBackEnable(false)
         playerInfoPresenter.attachView(this)
         if (steamUserId != "") {
             playerInfoPresenter.loadPlayerInfo(steamUserId)
@@ -64,18 +65,30 @@ class CreateTransActivity : BaseActivity(),
         steamAppDetailPresenter.attachView(this)
         mRvApps.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
+        initData()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        initData()
+    }
+
+    fun initData() {
         apps.addAll(TransManager.steamApps)
         TransManager.steamApps.clear()
-        TransManager.tranTmp = Transaction()
-        TransManager.tranTmp.date = Date()
+//        TransManager.tranTmp = Transaction()
+        if (TransManager.tranTmp.date == null) {
+            TransManager.tranTmp.date = Date()
+        }
+        logD("Trans tmp date : ${TransManager.tranTmp.date}")
         logD("Steam apps selected : ${apps.map { "${it.name}-${it.type}-[${it.games?.size}]" }}")
 
         mRvApps.setHasFixedSize(false)
         adapter = SteamAppAdapter(apps)
         mRvApps.adapter = adapter
         postEvent(CreateStartEvent())
-        steamAppDetailPresenter.loadSteamApps(apps)
         loadingDialog?.show()
+        steamAppDetailPresenter.loadSteamApps(apps)
     }
 
     override fun onDestroy() {
@@ -88,15 +101,16 @@ class CreateTransActivity : BaseActivity(),
     fun onClick(view: View) {
         when (view.id) {
             R.id.mBtnAddApp -> {
-                val gameIds: List<Int> = games.map { it.appId }
-                startActivityForResult<OwnedGamesActivity>(SteamConstants.CODE_SELECT_GAMES)
+                startActivity<OwnedGamesActivity>()
             }
         }
     }
 
     override fun onAppsLoad(apps: List<SteamApp>) {
-        this.apps.clear()
-        this.apps.addAll(apps)
+        if (this.apps != apps) {
+            this.apps.clear()
+            this.apps.addAll(apps)
+        }
         loadingDialog?.hide()
         adapter.refreshData(apps)
     }
@@ -171,8 +185,34 @@ class CreateTransActivity : BaseActivity(),
         val itemId = item?.itemId
         when (itemId) {
             R.id.menu_save -> {
-                //TODO:保存条目
-                toast("保存")
+                apps.firstOrNull {
+                    it.initPrice == null
+                            || it.purchasedPrice == null
+                }?.let {
+                    //有价格没填
+                    toast(R.string.price_null_not_allowed)
+                    return super.onOptionsItemSelected(item)
+                }
+                alert {
+                    titleResource = R.string.hint
+                    messageResource = R.string.save_confirm_msg
+                    negativeButton(R.string.cancel) { it.dismiss() }
+                    positiveButton(R.string.save) {
+                        it.dismiss()
+                        //TODO:保存条目
+                        toast("保存")
+                        apps.forEach {
+                            it.apply {
+                                purchasedDate = TransManager.tranTmp.date
+                            }
+                        }
+                        SteamDb.instance.saveTransaction(TransManager.tranTmp.copy(steamApps = apps))
+                        logD("保存订单 : ${TransManager.tranTmp.copy(steamApps = apps)}")
+                        TransManager.tranTmp = Transaction()
+                        finish()
+                    }
+                    show()
+                }
             }
         }
         return super.onOptionsItemSelected(item)

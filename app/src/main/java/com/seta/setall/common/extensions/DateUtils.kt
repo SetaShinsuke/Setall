@@ -1,6 +1,5 @@
 package com.seta.setall.common.extensions
 
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -24,13 +23,16 @@ fun Date?.toYMD(): String {
     if (this == null) {
         return ""
     }
-    val simpleDateFormat = SimpleDateFormat.getInstance()
-    return simpleDateFormat.format(this)
+    val cal = Calendar.getInstance()
+    cal.time = this
+    return cal.toYMD()
+//    val simpleDateFormat = SimpleDateFormat.getInstance()
+//    return simpleDateFormat.format(this)
 }
 
 fun Calendar?.toYMD(): String {
     if (this == null) {
         return ""
     }
-    return "${get(Calendar.YEAR)}-${get(Calendar.MONTH)}-${Calendar.DAY_OF_MONTH}"
+    return "${get(Calendar.YEAR)}-${get(Calendar.MONTH)+1}-${Calendar.DAY_OF_MONTH}"
 }

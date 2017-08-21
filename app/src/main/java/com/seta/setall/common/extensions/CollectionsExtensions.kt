@@ -9,5 +9,5 @@ package com.seta.setall.common.extensions
 /**
  * Map -> (List) -> vararg 数组
  */
-fun <K, V : Any> MutableMap<K, V?>.toVarargArray(): Array<out Pair<K, V>> =
-        map({ Pair(it.key, it.value!!) }).toTypedArray()
+fun <K, V : Any> MutableMap<K, V?>.toVarargArray(): Array<out Pair<K, V?>> =
+        map({ Pair(it.key, it.value) }).toTypedArray()

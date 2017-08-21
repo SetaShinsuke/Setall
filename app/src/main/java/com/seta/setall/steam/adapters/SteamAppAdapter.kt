@@ -82,8 +82,10 @@ class HeaderHolder(view: View) : RecyclerView.ViewHolder(view) {
         mTvDate.text = TransManager.tranTmp.date?.toYMD()
         mTvBuyer.text = TransManager.tranTmp.buyerId
         mTvOwner.text = TransManager.tranTmp.ownerId
-        mTvDate.onClick {
+        mBtnDate.onClick {
+            requestFocus()
             val calendar = Calendar.getInstance()
+            TransManager.tranTmp.date?.let { calendar.time = it }
             val datePickDialog = DatePickerDialog(getContext(),
                     DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                         LogX.d("$year-$month-$dayOfMonth")
@@ -96,6 +98,7 @@ class HeaderHolder(view: View) : RecyclerView.ViewHolder(view) {
             datePickDialog.show()
         }
         mBtnBuyer.onClick {
+            requestFocus()
             val inputDialog = InputDialog(getContext())
             inputDialog.show(R.string.buyer_name, object : InputDialog.InputDialogInterface {
                 override fun onContentConfirm(content: String) {
@@ -109,6 +112,7 @@ class HeaderHolder(view: View) : RecyclerView.ViewHolder(view) {
             }, mTvBuyer.text.toString())
         }
         mBtnOwner.onClick {
+            requestFocus()
             val inputDialog = InputDialog(getContext())
             inputDialog.show(R.string.owner_name, object : InputDialog.InputDialogInterface {
                 override fun onContentConfirm(content: String) {
@@ -121,6 +125,7 @@ class HeaderHolder(view: View) : RecyclerView.ViewHolder(view) {
             }, mTvOwner.text.toString())
         }
         mBtnTransExtraMsg.onClick {
+            requestFocus()
             val inputDialog = InputDialog(getContext())
             inputDialog.show(R.string.edit_msg, object : InputDialog.InputDialogInterface {
                 override fun onContentConfirm(content: String) {
@@ -175,6 +180,7 @@ class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
         mTvPackPriceInit.deleteLine().money = steamApp.initPrice
         mTvPackPriceFinal.money = steamApp.purchasedPrice
         mBtnEditPrice.onClick {
+            requestFocus()
             val priceEditDialog = PriceEditDialog(getContext())
             priceEditDialog.show(R.string.edit_prices, object : PriceEditDialog.PriceEditInterface {
                 override fun onContentConfirm(priceInit: Int, priceFinal: Int) {
