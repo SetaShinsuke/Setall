@@ -47,7 +47,7 @@ fun SQLiteDatabase.insertOrUpdate(tableName: String,
                                   argValue: String,
                                   vararg values: Pair<String, Any?>) {
     if (exists(tableName, argName, argValue)) {
-        val result = update(tableName, *values)
+        val result = update(tableName, *values).exec()
         LogX.d("Update result : $result")
     } else {
         insert(tableName, *values)
