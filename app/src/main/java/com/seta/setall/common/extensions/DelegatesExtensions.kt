@@ -1,4 +1,4 @@
-package com.azusasoft.kotlintest.extensions
+package com.seta.setall.common.extensions
 
 import android.annotation.SuppressLint
 import android.content.Context

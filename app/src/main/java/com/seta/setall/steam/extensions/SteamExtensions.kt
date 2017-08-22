@@ -2,9 +2,9 @@ package com.seta.setall.steam.extensions
 
 import android.content.Context
 import android.widget.ImageView
-import com.azusasoft.kotlintest.extensions.Preference
 import com.bumptech.glide.Glide
 import com.seta.setall.R
+import com.seta.setall.common.extensions.Preference
 import com.seta.setall.steam.api.SteamConstants
 
 /**

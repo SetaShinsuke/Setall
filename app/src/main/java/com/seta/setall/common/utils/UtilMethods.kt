@@ -12,7 +12,7 @@ import java.io.IOException
  * Created by SETA_WORK on 2017/7/17.
  */
 object UtilMethods {
-    fun exportDb(context: Context, dbName: String) {
+    fun exportDb(context: Context, dbName: String): String? {
         LogX.d("Export db, dbName : $dbName")
         val sd = Environment.getExternalStorageDirectory()
         val data = Environment.getDataDirectory()
@@ -27,9 +27,11 @@ object UtilMethods {
             destination.transferFrom(source, 0, source.size())
             source.close()
             destination.close()
+            return backupDBPath
         } catch (e: IOException) {
             e.printStackTrace()
             LogX.e("Error when exporting database : ${e.message}")
+            return null
         }
     }
 }

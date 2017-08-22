@@ -39,7 +39,13 @@ class SteamMainActivity : BaseActivity() {
             R.id.mBtnAddTrans -> {
                 startActivity<OwnedGamesActivity>()
             }
-            R.id.mBtnExpDb -> SteamDb.instance.export(this@SteamMainActivity)
+            R.id.mBtnExpDb -> {
+                SteamDb.instance.export(this@SteamMainActivity)?.let {
+                    toast("导出成功!\n$it")
+                    return
+                }
+                toast("导出失败!")
+            }
         }
     }
 }

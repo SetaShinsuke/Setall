@@ -142,6 +142,7 @@ class HeaderHolder(view: View) : RecyclerView.ViewHolder(view) {
             inputDialog.show(R.string.edit_msg, object : InputDialog.InputDialogInterface {
                 override fun onContentConfirm(content: String) {
                     mTvTransExtraMsg.text = content
+                    TransManager.tranTmp.extraMsg = content
                 }
             }, mTvTransExtraMsg.text.toString())
         }

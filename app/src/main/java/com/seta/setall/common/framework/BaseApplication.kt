@@ -1,7 +1,7 @@
 package com.seta.setall.common.framework
 
 import android.app.Application
-import com.azusasoft.kotlintest.extensions.DelegateExt
+import com.seta.setall.common.extensions.DelegateExt
 
 /**
  * Created by SETA_WORK on 2017/7/3.
