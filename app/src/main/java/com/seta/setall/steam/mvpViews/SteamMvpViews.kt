@@ -39,6 +39,6 @@ interface PackageDetailMvpView : MvpView {
 }
 
 interface SteamAppDetailMvpView : MvpView {
-    fun onAppsLoad(apps: List<SteamApp>)
+    fun onAppsLoad(apps: ArrayList<SteamApp>)
     fun onAppsLoadFail(t: Throwable)
 }

@@ -12,6 +12,7 @@ import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.extensions.toast
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.adapters.BasicAdapter
+import com.seta.setall.steam.adapters.AppItemLongClickListener
 import com.seta.setall.steam.adapters.SteamAppAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.GameDetailBean
@@ -37,6 +38,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 class CreateTransActivity : BaseActivity(),
@@ -64,7 +66,6 @@ class CreateTransActivity : BaseActivity(),
         gameDlcPackPresenter.attachView(this)
         steamAppDetailPresenter.attachView(this)
         mRvApps.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-
         initData()
     }
 
@@ -84,7 +85,25 @@ class CreateTransActivity : BaseActivity(),
         logD("Steam apps selected : ${apps.map { "${it.name}-${it.type}-[${it.games?.size}]" }}")
 
         mRvApps.setHasFixedSize(false)
-        adapter = SteamAppAdapter(apps)
+        adapter = SteamAppAdapter(apps, object : AppItemLongClickListener {
+            override fun onItemLongClick(steamApp: SteamApp, adapterPosition: Int): Boolean {
+                alert {
+                    titleResource = R.string.remove_app_confirm
+                    positiveButton(R.string.confirm) {
+                        logD("Remove item $adapterPosition")
+                        apps.remove(steamApp)
+                        adapter.notifyItemRemoved(adapterPosition)
+                        adapter.notifyItemRangeChanged(adapterPosition, apps.size)
+//                        adapter.refreshData(apps)
+                    }
+                    negativeButton(R.string.cancel) {
+                        it.dismiss()
+                    }
+                    show()
+                }
+                return true
+            }
+        })
         mRvApps.adapter = adapter
         postEvent(CreateStartEvent())
         loadingDialog?.show()
@@ -106,7 +125,7 @@ class CreateTransActivity : BaseActivity(),
         }
     }
 
-    override fun onAppsLoad(apps: List<SteamApp>) {
+    override fun onAppsLoad(apps: ArrayList<SteamApp>) {
         if (this.apps != apps) {
             this.apps.clear()
             this.apps.addAll(apps)

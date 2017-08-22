@@ -1,6 +1,8 @@
 package com.seta.setall.common.extensions
 
+import android.text.Editable
 import android.util.Log
+import com.seta.setall.common.logs.LogX
 import com.seta.setall.common.mvp.BasePresenter
 import com.seta.setall.common.mvp.MvpView
 
@@ -29,6 +31,18 @@ fun Int?.toFloatYuan2(): String {
     if (this == null) {
         return ""
     } else {
-        return String.format("%.2f", this*0.01f)
+        return String.format("%.2f", this * 0.01f)
+    }
+}
+
+fun Editable?.toCent(): Int? = if (this == null) {
+    null
+} else {
+    try {
+        (this.toString().toFloat() * 100).toInt()
+    } catch (e: NumberFormatException) {
+        e.printStackTrace()
+        LogX.e("Format editText content to Cent error : ${e.message}")
+        null
     }
 }

@@ -30,7 +30,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by SETA_WORK on 2017/8/7.
  */
-class SteamAppAdapter(var data: List<SteamApp> = ArrayList()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SteamAppAdapter(var data: ArrayList<SteamApp> = ArrayList(), val onAppItemLongClickListener: AppItemLongClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         val TYPE_HEADER = 0
@@ -39,7 +39,7 @@ class SteamAppAdapter(var data: List<SteamApp> = ArrayList()) : RecyclerView.Ada
         val TYPE_PACK = 3
     }
 
-    fun refreshData(newData: List<SteamApp>) {
+    fun refreshData(newData: ArrayList<SteamApp>) {
         this.data = newData
         notifyDataSetChanged()
     }
@@ -73,10 +73,17 @@ class SteamAppAdapter(var data: List<SteamApp> = ArrayList()) : RecyclerView.Ada
     override fun getItemCount(): Int = data.size + 1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+//        val onLongClick = object : AppItemLongClickListener {
+//            override fun onItemLongClick(steamApp: SteamApp): Boolean {
+//                notifyItemRemoved(data.indexOf(steamApp))
+//                data.remove(steamApp)
+//                return true
+//            }
+//        }
         when (getItemViewType(position)) {
             TYPE_HEADER -> (holder as HeaderHolder).bindData()
-            TYPE_GAME, TYPE_DLC -> (holder as GameHolder).bindData(data[position - 1])
-            TYPE_PACK -> (holder as PackHolder).bindData(data[position - 1])
+            TYPE_GAME, TYPE_DLC -> (holder as GameHolder).bindData(data[position - 1], onAppItemLongClickListener)
+            TYPE_PACK -> (holder as PackHolder).bindData(data[position - 1], onAppItemLongClickListener)
         }
     }
 
@@ -143,7 +150,10 @@ class HeaderHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class GameHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bindData(steamApp: SteamApp) = with(itemView) {
+    fun bindData(steamApp: SteamApp, onAppItemLongClickListener: AppItemLongClickListener) = with(itemView) {
+        setOnLongClickListener {
+            onAppItemLongClickListener.onItemLongClick(steamApp, adapterPosition)
+        }
         mIvHeader.loadImg(steamApp.logoImgUrl)
         mTvGameName.text = steamApp.name
         mTvDlcBadge.setVisible(steamApp.type == SteamConstants.TYPE_DLC)
@@ -177,7 +187,12 @@ class GameHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
-    fun bindData(steamApp: SteamApp) = with(itemView) {
+    fun bindData(steamApp: SteamApp,
+                 onAppItemLongClickListener: AppItemLongClickListener)
+            = with(itemView) {
+        setOnLongClickListener {
+            onAppItemLongClickListener.onItemLongClick(steamApp, adapterPosition)
+        }
         mTvPackName.text = steamApp.name
         if (steamApp.games != null) {
             mTvAppsCount.text = String.format(context.getString(R.string.pack_contains_count), steamApp.games?.size)
@@ -217,12 +232,23 @@ class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
                 mEtGIPPriceInit.onTextChange {
                     //修改TransTmp 中对应包中对应游戏的价格
                     LogX.d("Init Price change : $it")
+                    gameInPack.initPrice = it.toCent()
                 }
-                mEtGIPPriceFinal.onTextChange { LogX.d("Final Price change : $it") }
-                if (mEtPriceInit.isTextEmpty()) {
-                    mEtPriceInit.setText(gameInPack.initPrice.toString())
+                mEtGIPPriceFinal.onTextChange {
+                    LogX.d("Final Price change : $it")
+                    gameInPack.purchasedPrice = it.toCent()
+                }
+                if (mEtGIPPriceInit.isTextEmpty() && gameInPack.initPrice != null) {
+                    mEtGIPPriceInit.setText(gameInPack.initPrice.toFloatYuan2())
+                }
+                if (mEtGIPPriceFinal.isTextEmpty() && gameInPack.purchasedPrice != null) {
+                    mEtGIPPriceFinal.setText(gameInPack.purchasedPrice.toFloatYuan2())
                 }
             }
         }
     }
+}
+
+interface AppItemLongClickListener {
+    fun onItemLongClick(steamApp: SteamApp, adapterPosition: Int): Boolean
 }

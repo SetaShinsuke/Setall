@@ -43,7 +43,7 @@ open class BaseActivity : AppCompatActivity(), SwipeBackActivityBase {
 
     override fun onDestroy() {
         super.onDestroy()
-        loadingDialog?.hide()
+        loadingDialog?.dismiss()
         loadingDialog = null
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)

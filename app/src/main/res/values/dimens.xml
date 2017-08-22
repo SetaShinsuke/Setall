@@ -7,4 +7,6 @@
     <dimen name="item_height">72dp</dimen>
     <dimen name="item_height_single_line">48dp</dimen>
     <dimen name="item_cover_width">16dp</dimen>
+
+    <dimen name="adapter_price_text">12sp</dimen>
 </resources>
