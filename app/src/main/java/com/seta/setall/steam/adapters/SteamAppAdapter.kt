@@ -214,8 +214,14 @@ class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
             view, position, gameInPack ->
             with(view) {
                 mTvGIPName?.text = "($position)-${gameInPack.name}"
-                mEtGIPPriceInit.onTextChange { LogX.d("Init Price change : $it") }
+                mEtGIPPriceInit.onTextChange {
+                    //修改TransTmp 中对应包中对应游戏的价格
+                    LogX.d("Init Price change : $it")
+                }
                 mEtGIPPriceFinal.onTextChange { LogX.d("Final Price change : $it") }
+                if (mEtPriceInit.isTextEmpty()) {
+                    mEtPriceInit.setText(gameInPack.initPrice.toString())
+                }
             }
         }
     }
