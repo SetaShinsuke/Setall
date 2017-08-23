@@ -42,3 +42,8 @@ interface SteamAppDetailMvpView : MvpView {
     fun onAppsLoad(apps: ArrayList<SteamApp>)
     fun onAppsLoadFail(t: Throwable)
 }
+
+interface AppRestoreMvpView : MvpView {
+    fun onAppsRestored(apps: List<AppRestoredBean>)
+    fun onAppRestoreFail(t: Throwable)
+}

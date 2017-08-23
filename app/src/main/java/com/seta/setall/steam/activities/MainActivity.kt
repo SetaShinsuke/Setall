@@ -9,20 +9,24 @@ import com.seta.setall.common.extensions.logD
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
+import com.seta.setall.steam.api.models.AppRestoredBean
 import com.seta.setall.steam.db.SteamDb
-import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.extensions.DelegateSteam
 import com.seta.setall.steam.extensions.loadImg
+import com.seta.setall.steam.mvpViews.AppRestoreMvpView
+import com.seta.setall.steam.presenters.AppRestorePresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_restored_app.view.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), AppRestoreMvpView {
+
     var userId: String? by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
     //    val ownedGamePresenter: OwnedGamesPresenter = OwnedGamesPresenter()
-    var adapter by Delegates.notNull<BasicAdapter<SteamApp>>()
+    var adapter by Delegates.notNull<BasicAdapter<AppRestoredBean>>()
+    val appRestorePresenter = AppRestorePresenter();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +38,15 @@ class MainActivity : BaseActivity() {
         }
         mTvMsg.text = "User id : $userId\nTransActions : loading..."
         mRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-        adapter = BasicAdapter<SteamApp>(R.layout.item_restored_app) {
-            itemView, positin, steamApp ->
+        adapter = BasicAdapter<AppRestoredBean>(R.layout.item_restored_app) {
+            itemView, positin, app ->
             with(itemView) {
-                mIvLogo.loadImg(steamApp.logoImgUrl)
+                mIvLogo.loadImg(app.steamApp.logoImgUrl)
             }
         }
-//        enableHomeAsBack(true)
+        mRecyclerView.adapter = adapter
+        appRestorePresenter.attachView(this)
+        appRestorePresenter.restoreApps()
     }
 
     fun onClick(view: View) {
@@ -62,5 +68,15 @@ class MainActivity : BaseActivity() {
                 toast("导出失败!")
             }
         }
+    }
+
+
+    override fun onAppsRestored(apps: List<AppRestoredBean>) {
+        logD("App restored : $apps")
+        adapter.refreshData(apps)
+    }
+
+    override fun onAppRestoreFail(t: Throwable) {
+        toast("Restore apps fail !\n${t.message}")
     }
 }
