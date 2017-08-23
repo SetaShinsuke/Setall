@@ -46,7 +46,7 @@ class SteamLoginActivity : BaseActivity(), SteamLoginView {
         steamUserId = steamLoginBean.steamid
         finish()
         logD("Login success , id : $steamUserId")
-        startActivity<SteamMainActivity>()
+        startActivity<MainActivity>()
     }
 
     override fun onLoginFail(t: Throwable) {

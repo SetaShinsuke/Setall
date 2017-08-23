@@ -12,4 +12,6 @@
     <color name="steam_theme_color_accent">#4d9869</color>
 
     <color name="divider_color">#d2d2d2</color>
+    <color name="up_red">#880e4f</color>
+    <color name="down_green">#0097a7</color>
 </resources>
