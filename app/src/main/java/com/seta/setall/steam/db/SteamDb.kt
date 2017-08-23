@@ -2,13 +2,13 @@ package com.seta.setall.steam.db
 
 import android.content.Context
 import com.seta.setall.common.extensions.clear
-import com.seta.setall.common.extensions.insertOrUpdate
 import com.seta.setall.common.extensions.toVarargArray
 import com.seta.setall.common.logs.LogX
 import com.seta.setall.common.utils.UtilMethods
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
 import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.replace
 
 /**
  * Created by SETA_WORK on 2017/7/14.
@@ -27,7 +27,7 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
             LogX.d("Insert tran , row id : $rowId")
             //保存每个游戏
             steamAppDbs.forEach {
-                saveApp(transId, it)
+                saveApp(rowId.toInt(), it)
             }
         }
     }
@@ -77,7 +77,9 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
 //                insert(SteamAppTable.TABLE_NAME, *map.toVarargArray())
 //            }
 
-            insertOrUpdate(SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID, steamAppDb.appId.toString(), *map.toVarargArray())
+//            insertOrUpdate(SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID, steamAppDb.appId.toString(), *map.toVarargArray())
+
+            replace(SteamAppTable.TABLE_NAME, *map.toVarargArray())
 
             //保存关系
             if (transId != null) {

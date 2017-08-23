@@ -224,6 +224,11 @@ class CreateTransActivity : BaseActivity(),
                             it.apply {
                                 purchasedDate = TransManager.tranTmp.date
                             }
+                            it.games?.forEach {
+                                it.apply {
+                                    it.purchasedDate = TransManager.tranTmp.date
+                                }
+                            }
                         }
                         SteamDb.instance.saveTransaction(TransManager.tranTmp.copy(steamApps = apps))
                         logD("保存订单 : ${TransManager.tranTmp.copy(steamApps = apps)}")

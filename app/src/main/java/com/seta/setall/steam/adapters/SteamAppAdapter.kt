@@ -201,7 +201,7 @@ class PackHolder(view: View) : RecyclerView.ViewHolder(view) {
         mTvPackPriceInit.deleteLine().money = steamApp.initPrice
         mTvPackPriceFinal.money = steamApp.purchasedPrice
         mBtnEditPrice.onClick {
-            requestFocus()
+//            requestFocus()
             val priceEditDialog = PriceEditDialog(getContext())
             priceEditDialog.show(R.string.edit_prices, object : PriceEditDialog.PriceEditInterface {
                 override fun onContentConfirm(priceInit: Int, priceFinal: Int) {

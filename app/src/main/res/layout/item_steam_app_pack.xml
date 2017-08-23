@@ -111,8 +111,6 @@
                 android:layout_marginStart="8dp"
                 android:alpha="0.8"
                 android:background="?attr/selectableItemBackground"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 app:layout_constraintBottom_toBottomOf="@+id/mTvPackPriceFinal"
                 app:layout_constraintStart_toEndOf="@+id/mTvPackPriceFinal"
                 app:layout_constraintTop_toTopOf="@+id/mTvPackPriceFinal"
