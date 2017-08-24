@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_filter"
+        android:icon="@mipmap/filter"
+        android:title="@string/filter"
+        app:showAsAction="ifRoom"
+        >
+        <menu>
+            <item
+                android:id="@+id/filter_time"
+                android:title="按时间"
+                />
+            <item
+                android:id="@+id/filter_dlc"
+                android:title="显示/隐藏DLC"
+                />
+            <item
+                android:id="@+id/filter_pack"
+                android:title="显示/隐藏包"
+                />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_edit"
+        android:icon="@mipmap/ic_more"
+        android:title="@string/more"
+        app:showAsAction="ifRoom"
+        >
+        <menu>
+            <item
+                android:id="@+id/menu_add_trans"
+                android:title="@string/create_trans"
+                />
+            <item
+                android:id="@+id/menu_export_db"
+                android:title="@string/export_db"
+                />
+            <item
+                android:id="@+id/menu_logout"
+                android:title="@string/logout"
+                />
+        </menu>
+    </item>
+
+</menu>

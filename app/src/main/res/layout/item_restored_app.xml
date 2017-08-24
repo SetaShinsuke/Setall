@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,21 +19,24 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="8dp"
+            >
 
             <ImageView
                 android:id="@+id/mIvLogo"
                 android:layout_width="115dp"
                 android:layout_height="54dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/game_header_demo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintVertical_bias="0.5"/>
+                app:layout_constraintVertical_bias="0.5"
+                app:srcCompat="@mipmap/game_header_demo"/>
 
             <TextView
                 android:id="@+id/mAppName"
@@ -41,28 +44,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:maxLines="1"
+                android:layout_marginTop="8dp"
                 android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="@color/steam_theme_color"
                 app:layout_constraintEnd_toStartOf="@+id/mTvPackBadge"
                 app:layout_constraintStart_toEndOf="@+id/mIvLogo"
-                tools:layout_editor_absoluteY="8dp"
-                tools:text="Game Name : Details of this title babababa"/>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Game NameGame NameGame NameGame NameGame Name"/>
 
             <TextView
                 android:id="@+id/mTvPurchasedPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:textAllCaps="false"
                 android:textColor="@color/up_red"
                 android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@+id/mIvLogo"
+                app:layout_constraintTop_toBottomOf="@+id/mTvPriceInit"
                 tools:text="￥12"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"
-                android:layout_marginTop="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="8dp"/>
+                app:layout_constraintStart_toEndOf="@+id/mIvLogo"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="0dp"/>
 
             <TextView
                 android:id="@+id/mTvPackBadge"
@@ -83,34 +86,42 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/mTvPriceSaved"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textColor="@color/up_red"
-                app:layout_constraintBaseline_toBaselineOf="@+id/mTvPurchasedPrice"
                 app:layout_constraintStart_toEndOf="@+id/mTvPurchasedPrice"
-                tools:text="-￥88(10%)"/>
+                tools:text="-￥88(10%)"
+                app:layout_constraintBaseline_toBaselineOf="@+id/mTvPurchasedPrice"/>
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/mTvPriceInit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="￥120"
-                app:layout_constraintStart_toEndOf="@+id/mIvLogo"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintTop_toBottomOf="@+id/mAppName"
-                />
+                app:layout_constraintStart_toEndOf="@+id/mIvLogo"
+                android:layout_marginStart="8dp"/>
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/mTvCurrentDiscount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
-                app:layout_constraintStart_toEndOf="@+id/textView5"
-                tools:text="￥12(-90%)"/>
+                app:layout_constraintBaseline_toBaselineOf="@+id/mTvPriceInit"
+                app:layout_constraintStart_toEndOf="@+id/mTvPriceInit"
+                tools:text="￥-12(-90%)"/>
+
+            <TextView
+                android:id="@+id/mTvPriceCurrent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/mTvCurrentDiscount"
+                app:layout_constraintStart_toEndOf="@+id/mTvCurrentDiscount"
+                tools:text="￥100"/>
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>

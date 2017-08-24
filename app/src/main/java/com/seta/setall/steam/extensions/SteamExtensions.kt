@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.seta.setall.R
 import com.seta.setall.common.extensions.Preference
 import com.seta.setall.steam.api.SteamConstants
+import com.seta.setall.steam.api.models.AppRestoredBean
 
 /**
  * Created by SETA_WORK on 2017/7/5.
@@ -31,3 +32,27 @@ fun ImageView.loadImg(imgResId: Int?) {
             .error(R.mipmap.img_fail)
             .into(this)
 }
+
+
+val AppRestoredBean.savedPrice: Int?
+    get() {
+        val initPrice = steamApp.initPrice
+        val purchased = steamApp.purchasedPrice
+        initPrice?.let {
+            if (purchased != null) {
+                return it - purchased
+            }
+        }
+        return null
+    }
+
+val AppRestoredBean.savedPercent: Int?
+    get() {
+        savedPrice?.let {
+            if (steamApp.initPrice != null) {
+                val percentFloat = it * 100f / steamApp.initPrice!!
+                return percentFloat.toInt()
+            }
+        }
+        return null
+    }
