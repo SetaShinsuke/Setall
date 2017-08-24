@@ -30,15 +30,19 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
     var userId: String? by DelegateSteam.steamPreference(this, SteamConstants.STEAM_USER_ID, "")
     //    val ownedGamePresenter: OwnedGamesPresenter = OwnedGamesPresenter()
     var adapter by Delegates.notNull<BasicAdapter<AppRestoredBean>>()
-    val appRestorePresenter = AppRestorePresenter();
+    val appRestorePresenter = AppRestorePresenter()
+    val showTypes: ArrayList<String> = arrayListOf(SteamConstants.TYPE_UNKNOWN, SteamConstants.TYPE_GAME)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setHomeAsBackEnabled(false)
+        setSwipeBackEnable(false)
         if (userId == "") {
             logD("userId : $userId")
             startActivity<SteamLoginActivity>()
             finish()
+            return
         }
         mRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         adapter = BasicAdapter<AppRestoredBean>(R.layout.item_restored_app) {
@@ -50,7 +54,10 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
                 mTvPackBadge.setVisible(true)
                 mTvPriceInit.deleteLine().money = app.steamApp.initPrice
                 mTvPurchasedPrice.money = app.steamApp.purchasedPrice
-                mTvPriceSaved.setVisible(true)
+                val showSave: Boolean? = app.savedPrice?.let {
+                    return@let it != 0
+                }
+                mTvPriceSaved.setVisible(showSave)
                 mTvPriceSaved.text = "-￥${app.savedPrice?.toYuanInt()}(${app.savedPercent}%)"
 
                 //类型标识
@@ -71,7 +78,8 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
         }
         mRecyclerView.adapter = adapter
         appRestorePresenter.attachView(this)
-        appRestorePresenter.restoreApps()
+        loadingDialog?.show()
+        appRestorePresenter.loadApps(showTypes)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -95,16 +103,27 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
                 toast("已注销！")
                 startActivity<SteamLoginActivity>()
             }
+        //筛选
+            R.id.filter_dlc -> {
+                showTypes.switch(SteamConstants.TYPE_DLC)
+                appRestorePresenter.loadApps(showTypes)
+            }
+            R.id.filter_pack -> {
+                showTypes.switch(SteamConstants.TYPE_BUNDLE_PACK)
+                appRestorePresenter.loadApps(showTypes)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onAppsRestored(apps: List<AppRestoredBean>) {
         logD("App restored : $apps")
+        loadingDialog?.hide()
         adapter.refreshData(apps)
     }
 
     override fun onAppRestoreFail(t: Throwable) {
+        loadingDialog?.hide()
         toast("Restore apps fail !\n${t.message}")
     }
 }

@@ -34,7 +34,11 @@ fun Context.getStringFormated(textResource: Int, vararg values: Any?): String? {
     return String.format(getString(textResource), values)
 }
 
-fun View.setVisible(boolean: Boolean) {
+fun View.setVisible(boolean: Boolean?) {
+    if(boolean == null){
+        visibility = View.GONE
+        return
+    }
     if (boolean) {
         visibility = View.VISIBLE
     } else {

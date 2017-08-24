@@ -49,7 +49,7 @@ val AppRestoredBean.savedPrice: Int?
 val AppRestoredBean.savedPercent: Int?
     get() {
         savedPrice?.let {
-            if (steamApp.initPrice != null) {
+            if (steamApp.initPrice != null && steamApp.initPrice != 0) {
                 val percentFloat = it * 100f / steamApp.initPrice!!
                 return percentFloat.toInt()
             }

@@ -75,15 +75,23 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
     }
 
 
-    fun findAllApps(callback: (List<SteamApp>) -> Unit) = dbHelper.use {
-        val firres = select(SteamAppTable.TABLE_NAME)
-        val result = firres.parseList {
+    fun findAllApps(vararg types: String, callback: (List<SteamApp>) -> Unit) = dbHelper.use {
+        var selectReq = "${SteamAppTable.TYPE} = ? "
+        val columns = select(SteamAppTable.TABLE_NAME)
+        var colFiltered = columns
+        if (types.isNotEmpty()) {
+            types.forEach {
+                selectReq += "OR ${SteamAppTable.TYPE} = ? "
+            }
+            colFiltered = columns.whereSimple(selectReq, *types)
+        }
+        val result = colFiltered.parseList {
             SteamAppDb(HashMap(it.mapValues {
-                if(it.value is Long && (it.value as Long) < Int.MAX_VALUE) {
+                if (it.value is Long && (it.value as Long) < Int.MAX_VALUE) {
                     return@mapValues (it.value as Long).toInt()
-                }else if(it.value is Unit){
+                } else if (it.value is Unit) {
                     return@mapValues null
-                }else{
+                } else {
                     return@mapValues it.value
                 }
             }), null)

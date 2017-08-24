@@ -10,9 +10,11 @@ import com.seta.setall.steam.mvpViews.AppRestoreMvpView
  */
 class AppRestorePresenter : BasePresenter<AppRestoreMvpView>() {
 
-    fun restoreApps(type: String? = null) {
+    fun loadApps(typeList: List<String> = ArrayList()) {
         //TODO:筛选类型
-        SteamDb.instance.findAllApps {
+        val types = typeList.filter { it is String }
+                .toTypedArray()
+        SteamDb.instance.findAllApps(*types) {
             appsDb ->
             mvpView?.onAppsRestored(
                     appsDb.map { AppRestoredBean(it, null, null) })
