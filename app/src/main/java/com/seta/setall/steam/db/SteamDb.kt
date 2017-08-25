@@ -11,6 +11,7 @@ import com.seta.setall.steam.domain.models.Transaction
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.replace
 import org.jetbrains.anko.db.select
+import rx.Observable
 
 /**
  * Created by SETA_WORK on 2017/7/14.
@@ -75,7 +76,11 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
     }
 
 
-    fun findAllApps(vararg types: String, callback: (List<SteamApp>) -> Unit) = dbHelper.use {
+    //todo:返回Observable？
+    fun findAllApps(vararg types: String,
+                    doObserve: Boolean = false,
+//                    callback: ((Observable<List<SteamApp>>) -> Unit)? = null) = dbHelper.use {
+                    callback: ((List<SteamApp>,Observable<List<SteamApp>>) -> Unit)? = null) = dbHelper.use {
         var selectReq = "${SteamAppTable.TYPE} = ? "
         val columns = select(SteamAppTable.TABLE_NAME)
         var colFiltered = columns
@@ -85,7 +90,7 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
             }
             colFiltered = columns.whereSimple(selectReq, *types)
         }
-        val result = colFiltered.parseList {
+        val result: List<SteamAppDb> = colFiltered.parseList {
             SteamAppDb(HashMap(it.mapValues {
                 if (it.value is Long && (it.value as Long) < Int.MAX_VALUE) {
                     return@mapValues (it.value as Long).toInt()
@@ -96,10 +101,21 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
                 }
             }), null)
         }
-        callback(result.map {
+
+        if (doObserve) {
+            return@use Observable.just(result)
+        }
+        val toRet = result.map {
             steamDbMapper.convertAppsToDomain(it)
-        })
+        }
+//        callback?.invoke(Observable.just(toRet))
+        callback?.invoke(toRet,Observable.just(toRet))
+        return@use toRet
     }
 
     fun export(context: Context) = UtilMethods.exportDb(context, SteamDbHelper.STEAM_DB_NAME)
+
+    fun backUp(context: Context, path: String) {
+//        val observableApps: Observable<List<SteamAppDb>> = findAllApps(doObserve = true)
+    }
 }

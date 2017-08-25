@@ -10,6 +10,9 @@ class SteamConstants {
         val STEAM_STORE_API_HOST = "http://store.steampowered.com/"
         val STEAM_API_KEY = "40A665497280D522561D5DA4F8E14C0D"
         val STEAM_PRF_NAME = "steam"
+
+        val STEAM_DIR = "setall_steam"
+        val DB_BACKUP_FILE_NAME = "setall_steam.stm"
         val STEAM_USER_ID = "steam_user_id"
 
         //Steam App 类型

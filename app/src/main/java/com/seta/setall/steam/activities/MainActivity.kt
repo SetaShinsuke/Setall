@@ -12,10 +12,7 @@ import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.AppRestoredBean
 import com.seta.setall.steam.db.SteamDb
-import com.seta.setall.steam.extensions.DelegateSteam
-import com.seta.setall.steam.extensions.loadImg
-import com.seta.setall.steam.extensions.savedPercent
-import com.seta.setall.steam.extensions.savedPrice
+import com.seta.setall.steam.extensions.*
 import com.seta.setall.steam.mvpViews.AppRestoreMvpView
 import com.seta.setall.steam.presenters.AppRestorePresenter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -46,7 +43,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
         }
         mRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         adapter = BasicAdapter<AppRestoredBean>(R.layout.item_restored_app) {
-            itemView, positin, app ->
+            itemView, position, app ->
             with(itemView) {
                 mIvLogo.setVisible(true)
                 mIvLogo.loadImg(app.steamApp.logoImgUrl)
@@ -61,17 +58,24 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
                 mTvPriceSaved.text = "-￥${app.savedPrice?.toYuanInt()}(${app.savedPercent}%)"
 
                 //类型标识
+                mTvPackBadge.setVisible(false)
+                mTvCurrentDiscount.setVisible(app.currentSaved != null)
+                mTvCurrentDiscount.text = "-￥${app.currentSaved}(${app.currentSavedPercent}%)"
                 when (app.steamApp.type) {
                     SteamConstants.TYPE_BUNDLE_PACK -> {
                         mTvPackBadge.backgroundResource = R.color.steam_theme_color_accent
                         mTvPackBadge.text = "Pack"
                         mIvLogo.setVisible(false)
+                        mTvPriceCurrent.money = app.packageDetailBean?.price?.final
                     }
                     SteamConstants.TYPE_DLC -> {
                         mTvPackBadge.backgroundResource = R.color.steam_theme_color
                         mTvPackBadge.text = "DLC"
+                        mTvPriceCurrent.money = app.gameDetailBean?.price_overview?.final
                     }
-                    else -> mTvPackBadge.setVisible(false)
+                    SteamConstants.TYPE_GAME -> {
+                        mTvPriceCurrent.money = app.gameDetailBean?.price_overview?.final
+                    }
                 }
 
             }
@@ -79,7 +83,8 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
         mRecyclerView.adapter = adapter
         appRestorePresenter.attachView(this)
         loadingDialog?.show()
-        appRestorePresenter.loadApps(showTypes)
+        val returnValue = appRestorePresenter.loadApps(showTypes)
+        logD("Return value : $returnValue")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
