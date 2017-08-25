@@ -97,6 +97,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
             R.id.menu_add_trans -> startActivity<OwnedGamesActivity>()
             R.id.menu_export_db -> {
                 SteamDb.instance.export(this@MainActivity)?.let {
+                    SteamDb.instance.backUp(this@MainActivity)
                     toast("导出成功!\n$it")
                     return super.onOptionsItemSelected(item)
                 }

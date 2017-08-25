@@ -1,10 +1,12 @@
 package com.seta.setall.steam.db
 
 import android.content.Context
+import com.google.gson.Gson
 import com.seta.setall.common.extensions.clear
 import com.seta.setall.common.extensions.parseList
 import com.seta.setall.common.extensions.toVarargArray
 import com.seta.setall.common.logs.LogX
+import com.seta.setall.common.mvp.writeFile
 import com.seta.setall.common.utils.UtilMethods
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
@@ -79,8 +81,8 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
     //todo:返回Observable？
     fun findAllApps(vararg types: String,
                     doObserve: Boolean = false,
-//                    callback: ((Observable<List<SteamApp>>) -> Unit)? = null) = dbHelper.use {
-                    callback: ((List<SteamApp>,Observable<List<SteamApp>>) -> Unit)? = null) = dbHelper.use {
+            //                    callback: ((Observable<List<SteamApp>>) -> Unit)? = null) = dbHelper.use {
+                    callback: ((List<SteamApp>) -> Unit)? = null) = dbHelper.use {
         var selectReq = "${SteamAppTable.TYPE} = ? "
         val columns = select(SteamAppTable.TABLE_NAME)
         var colFiltered = columns
@@ -109,13 +111,17 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
             steamDbMapper.convertAppsToDomain(it)
         }
 //        callback?.invoke(Observable.just(toRet))
-        callback?.invoke(toRet,Observable.just(toRet))
+        callback?.invoke(toRet)
         return@use toRet
     }
 
     fun export(context: Context) = UtilMethods.exportDb(context, SteamDbHelper.STEAM_DB_NAME)
 
-    fun backUp(context: Context, path: String) {
-//        val observableApps: Observable<List<SteamAppDb>> = findAllApps(doObserve = true)
+    fun backUp(context: Context, path: String = "apps_bkp${System.currentTimeMillis()}.json") {
+        findAllApps {
+            apps ->
+            val appTableJson = Gson().toJson(apps)
+            writeFile(path, appTableJson)
+        }
     }
 }

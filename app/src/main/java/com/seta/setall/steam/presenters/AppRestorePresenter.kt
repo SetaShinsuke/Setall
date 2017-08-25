@@ -24,7 +24,7 @@ class AppRestorePresenter : BasePresenter<AppRestoreMvpView>() {
         val types = typeList.filter { it is String }
                 .toTypedArray()
         val res = SteamDb.instance.findAllApps(*types) {
-            appsDb, observable ->
+            appsDb ->
             //            mvpView?.onAppsRestored(
 //                    appsDb.map { AppRestoredBean(it, null, null) })
 
