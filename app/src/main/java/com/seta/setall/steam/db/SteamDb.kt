@@ -92,6 +92,10 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
         return@use Observable.just(result)
     }
 
+    fun findAppById(appId: String) = dbHelper.use {
+        val req = "${}"
+    }
+
     fun findTransActions(minDate: Date? = null,
                          maxDate: Date? = null,
                          callback: ((List<Transaction>) -> Unit)? = null): Observable<List<Transaction>>
@@ -122,6 +126,18 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
         callback?.invoke(toRet)
         LogX.d("Find all transactions : $toRet")
         return@use Observable.just(toRet)
+    }
+
+    fun findAppsByTransId(transId: Int,
+                          callback: ((List<SteamApp>) -> Unit)) = dbHelper.use {
+        val req = " ${TransAppRelationTable.TRANS_ID} = ?"
+        val relations = select(TransAppRelationTable.TABLE_NAME)
+                .whereSimple(req, transId.toString())
+                .parseList {
+                    TransAppRelation(HashMap(it.varyByDb()))
+                }
+
+
     }
 
 
