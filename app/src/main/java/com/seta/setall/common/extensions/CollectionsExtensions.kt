@@ -19,3 +19,18 @@ fun <T> MutableCollection<T>.switch(element: T) {
         add(element)
     }
 }
+
+/**
+ * 检查Database中读取出的类型
+ * 如果是【小于 Int 最大值的Long】,则当作【Int】来处理
+ * 如果是【Unit】,则当作【null】对象
+ */
+fun <K, V> Map<K, V>.varyByDb(): Map<K, Any?>? = mapValues {
+    if (it.value is Long && (it.value as Long) < Int.MAX_VALUE) {
+        return@mapValues (it.value as Long).toInt()
+    } else if (it.value is Unit) {
+        return@mapValues null
+    } else {
+        return@mapValues it.value
+    }
+}

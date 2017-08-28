@@ -85,6 +85,8 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
         loadingDialog?.show()
         val returnValue = appRestorePresenter.loadApps(showTypes)
         logD("Return value : $returnValue")
+
+        startActivity<TransactionListActivity>()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -51,8 +51,12 @@
         <activity
             android:name=".steam.activities.PackageListActivity"
             android:label="@string/select_packages"
-            android:theme="@style/SteamTheme"
-            >
+            android:theme="@style/SteamTheme">
+        </activity>
+        <activity
+            android:name=".steam.activities.TransactionListActivity"
+            android:label="@string/transaction_histories"
+            android:theme="@style/SteamTheme.Swipable">
         </activity>
     </application>
 

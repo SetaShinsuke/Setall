@@ -25,6 +25,7 @@
     <string name="login_loading">登录中</string>
     <string name="exit">注销</string>
 
+    <string name="transaction_histories">交易记录</string>
     <string name="create_trans">新建交易记录</string>
     <string name="purchased_date">交易日期</string>
     <string name="choose_date">选择日期</string>

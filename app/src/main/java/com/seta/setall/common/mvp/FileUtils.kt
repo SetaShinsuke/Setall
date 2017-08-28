@@ -10,14 +10,14 @@ import java.io.IOException
 /**
  * Created by SETA_WORK on 2017/8/25.
  */
-fun writeFile(path: String, content: String): Boolean {
+fun writeFile(dir: String, path: String, content: String): Boolean {
     try {
         val sd = Environment.getExternalStorageDirectory()
-        val file = FileWriter(sd.path + path)
-        val dir = File(sd.path + path)
-        if (!dir.exists()) {
-            dir.mkdirs()
+        val dirFile = File(sd.path + dir)
+        if (!dirFile.exists()) {
+            dirFile.mkdirs()
         }
+        val file = FileWriter(sd.path + dir + path)
         file.write(content)
         file.flush()
         file.close()

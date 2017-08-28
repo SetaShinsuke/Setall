@@ -3,6 +3,7 @@ package com.seta.setall.steam.mvpViews
 import com.seta.setall.common.mvp.MvpView
 import com.seta.setall.steam.api.models.*
 import com.seta.setall.steam.domain.models.SteamApp
+import com.seta.setall.steam.domain.models.Transaction
 
 /**
  * Created by SETA_WORK on 2017/7/4.
@@ -46,4 +47,9 @@ interface SteamAppDetailMvpView : MvpView {
 interface AppRestoreMvpView : MvpView {
     fun onAppsRestored(apps: List<AppRestoredBean>)
     fun onAppRestoreFail(t: Throwable)
+}
+
+interface TransactionRestoreMvpView : MvpView {
+    fun onTranListRestored(tranList: List<Transaction>)
+    fun onTranListRestoreFail(t: Throwable)
 }
