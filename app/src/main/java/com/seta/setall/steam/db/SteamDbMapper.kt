@@ -28,7 +28,7 @@ class SteamDbMapper {
     //region Db -> Domain
     fun convertTransToDomain(transactionDb: TransactionDb) = with(transactionDb) {
         val gamesOfTrans = steamAppDbs.map {
-            convertAppsToDomain(it)
+            convertAppToDomain(it)
         }
         var dateParam: Date? = null
         if (date is Long) {
@@ -37,9 +37,9 @@ class SteamDbMapper {
         Transaction(transId, dateParam, buyerName, ownerName, extraMsg, gamesOfTrans)
     }
 
-    fun convertAppsToDomain(steamApp: SteamAppDb): SteamApp = with(steamApp) {
+    fun convertAppToDomain(steamApp: SteamAppDb): SteamApp = with(steamApp) {
         val gamesInBundle = games?.map {
-            convertAppsToDomain(it)
+            convertAppToDomain(it)
         }
         val date: Date?
         if (purchasedDate == null) {
