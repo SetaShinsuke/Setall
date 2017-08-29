@@ -92,12 +92,12 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
     }
 
     override fun onPackageDetailLoad(packDetails: List<PackageDetailBean>) {
-        loadingDialog?.hide()
+        loadingDialog?.dismiss()
         adapter.refreshData(packDetails.filter { it.apps.size > 1 }) //剔除只有1个游戏的包
     }
 
     override fun onPackageDetailLoadFail(t: Throwable?) {
-        loadingDialog?.hide()
+        loadingDialog?.dismiss()
         toast(R.string.games_load_fail)
     }
 

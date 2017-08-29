@@ -81,7 +81,7 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
             selectedApps.addAll(gameDetails.filter { it.type == "game" })
         }
         adapter.refreshData(gameDetails)
-        loadingDialog?.hide()
+        loadingDialog?.dismiss()
     }
 
     override fun onGameDetailLoadFail(t: Throwable) {

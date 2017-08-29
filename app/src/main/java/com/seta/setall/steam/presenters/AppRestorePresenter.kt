@@ -20,9 +20,7 @@ import rx.Subscriber
 class AppRestorePresenter : BasePresenter<AppRestoreMvpView>() {
 
     fun loadApps(typeList: List<String> = ArrayList()) {
-        //TODO:筛选类型
-        val types = typeList.filter { it is String }
-                .toTypedArray()
+        val types = typeList.toTypedArray()
         val res = SteamDb.instance.findAllApps(*types) {
             appsDb ->
             //            mvpView?.onAppsRestored(

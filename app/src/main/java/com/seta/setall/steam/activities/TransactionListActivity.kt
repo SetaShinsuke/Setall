@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import com.seta.setall.R
 import com.seta.setall.common.extensions.deleteLine
 import com.seta.setall.common.extensions.money
+import com.seta.setall.common.extensions.toFloatYuan2
 import com.seta.setall.common.extensions.toYMD
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.adapters.BasicAdapter
@@ -29,11 +30,11 @@ class TransactionListActivity : BaseActivity(), TransactionRestoreMvpView {
         adapter = BasicAdapter(R.layout.item_trans_history) {
             itemView, position, trans ->
             with(itemView) {
-                mTvDate.text = "$position-${trans.date.toYMD()}"
+                mTvDate.text = "${position+1}.${trans.date.toYMD()}"
                 var text = ""
                 trans.steamApps.forEachIndexed {
                     index, steamApp ->
-                    text += steamApp.name
+                    text += "${steamApp.name} - ￥${steamApp.purchasedPrice.toFloatYuan2()}"
                     if (index < trans.steamApps.lastIndex) {
                         text += "\n"
                     }

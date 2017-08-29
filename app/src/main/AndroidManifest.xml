@@ -56,7 +56,7 @@
         <activity
             android:name=".steam.activities.TransactionListActivity"
             android:label="@string/transaction_histories"
-            android:theme="@style/SteamTheme.Swipable">
+            android:theme="@style/SteamTheme">
         </activity>
     </application>
 

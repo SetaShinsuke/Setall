@@ -37,6 +37,10 @@
                 android:title="@string/create_trans"
                 />
             <item
+                android:id="@+id/menu_check_trans"
+                android:title="@string/check_trans_histories"
+                />
+            <item
                 android:id="@+id/menu_export_db"
                 android:title="@string/export_db"
                 />

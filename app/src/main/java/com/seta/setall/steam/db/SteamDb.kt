@@ -7,6 +7,7 @@ import com.seta.setall.common.extensions.toVarargArray
 import com.seta.setall.common.extensions.varyByDb
 import com.seta.setall.common.logs.LogX
 import com.seta.setall.common.utils.UtilMethods
+import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
 import org.jetbrains.anko.db.insert
@@ -76,22 +77,46 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
         val result: List<SteamApp> = colFiltered.parseList {
             //todo:恢复关系表 bundle-app
             SteamAppDb(HashMap(it.varyByDb()), null)
-        }.map { steamDbMapper.convertAppToDomain(it) }
-
+        }.map { steamDbMapper.convertAppToDomain(it) } //List<SteamApp> 但是 games 必为空
+                .map {
+                    findAppById(it.appId)
+                }.filterIsInstance<SteamApp>()
+        LogX.d("Copy result : $result")
         callback?.invoke(result)
         return@use Observable.just(result)
     }
 
-    fun findAppById(appId: String, callback: ((SteamApp?) -> Unit)? = null): Observable<SteamApp?> = dbHelper.use {
+    fun findAppById(appId: Int): SteamApp? = dbHelper.use {
         val req = " ${SteamAppTable.APP_ID} = ?"
         val result: SteamApp? = select(SteamAppTable.TABLE_NAME)
-                .whereSimple(req, appId)
+                .whereSimple(req, appId.toString())
                 .parseOpt {
                     //todo:恢复 pack-app 关系表
                     steamDbMapper.convertAppToDomain(SteamAppDb(HashMap(it.varyByDb()), null))
                 }
-        callback?.invoke(result)
-        return@use Observable.just(result)
+        LogX.d("FindAppById type : ${result?.type}")
+        if (result?.type == SteamConstants.TYPE_BUNDLE_PACK) {
+            val gamesInPack: List<SteamApp> = findAppsInPack(appId)
+            return@use result.copy(games = gamesInPack)
+        }
+        return@use result
+    }
+
+    fun findAppsInPack(packAppId: Int): List<SteamApp> = dbHelper.use {
+        val req = " ${BundleAppRelationTable.PACK_APP_ID} = ? "
+        val relations: List<BundleAppRelation> = select(BundleAppRelationTable.TABLE_NAME)
+                .whereSimple(req, packAppId.toString())
+                .parseList {
+                    BundleAppRelation(HashMap(it.varyByDb()))
+                }
+        val apps: ArrayList<SteamApp> = ArrayList()
+        relations.forEach {
+            //查找 pack-app 关系时，阻断递归查询app的 pack-app 关系
+            findAppById(it.gameId)?.let {
+                apps.add(it)
+            }
+        }
+        return@use apps
     }
 
     fun findTransActions(minDate: Date? = null,
@@ -117,7 +142,7 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
         //查找
         columnsFiltered = columns.whereSimple(selectReq, *(paramArray.toTypedArray()))
         val result: List<Transaction> = columnsFiltered.parseList {
-            //todo:恢复关系表 trans-app
+            //恢复关系表 trans-app
             TransactionDb(HashMap(it.varyByDb()), ArrayList<SteamAppDb>())
         }.map {
             steamDbMapper.convertTransToDomain(it)
@@ -145,12 +170,11 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
                 }
         val apps: ArrayList<SteamApp> = ArrayList()
         relations.forEach {
-            findAppById(it.appId.toString()) {
-                it?.let {
-                    apps.add(it)
-                }
+            findAppById(it.appId)?.let {
+                apps.add(it)
             }
         }
+        LogX.d("findAppsByTransId result apps : $apps")
         callback.invoke(apps)
         return@use Observable.just(apps)
     }

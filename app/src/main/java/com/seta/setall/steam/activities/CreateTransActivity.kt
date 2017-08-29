@@ -130,12 +130,12 @@ class CreateTransActivity : BaseActivity(),
             this.apps.clear()
             this.apps.addAll(apps)
         }
-        loadingDialog?.hide()
+        loadingDialog?.dismiss()
         adapter.refreshData(apps)
     }
 
     override fun onAppsLoadFail(t: Throwable) {
-        loadingDialog?.hide()
+        loadingDialog?.dismiss()
         toast("加载失败 : ${t.message}")
     }
 

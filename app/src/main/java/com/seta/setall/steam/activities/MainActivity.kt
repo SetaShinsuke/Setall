@@ -61,16 +61,30 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
                 mTvPackBadge.setVisible(false)
                 mTvCurrentDiscount.setVisible(app.currentSaved != null)
                 mTvCurrentDiscount.text = "-￥${app.currentSaved}(${app.currentSavedPercent}%)"
+                mTvPackDetail.setVisible(false)
                 when (app.steamApp.type) {
                     SteamConstants.TYPE_BUNDLE_PACK -> {
                         mTvPackBadge.backgroundResource = R.color.steam_theme_color_accent
                         mTvPackBadge.text = "Pack"
+                        mTvPackBadge.setVisible(true)
                         mIvLogo.setVisible(false)
                         mTvPriceCurrent.money = app.packageDetailBean?.price?.final
+                        logD("Type pack, games: ${app.steamApp.games}")
+                        mTvPackDetail.setVisible(app.steamApp.games?.isNotEmpty())
+                        var detailStr = "共包含${app.steamApp.games?.size}件物品"
+                        app.steamApp.games?.forEachIndexed {
+                            index, steamApp ->
+                            detailStr += steamApp.name
+                            if (index < app.steamApp.games.lastIndex) {
+                                detailStr += "\n"
+                            }
+                        }
+                        mTvPackDetail.text = detailStr
                     }
                     SteamConstants.TYPE_DLC -> {
                         mTvPackBadge.backgroundResource = R.color.steam_theme_color
                         mTvPackBadge.text = "DLC"
+                        mTvPackBadge.setVisible(true)
                         mTvPriceCurrent.money = app.gameDetailBean?.price_overview?.final
                     }
                     SteamConstants.TYPE_GAME -> {
@@ -85,8 +99,6 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
         loadingDialog?.show()
         val returnValue = appRestorePresenter.loadApps(showTypes)
         logD("Return value : $returnValue")
-
-        startActivity<TransactionListActivity>()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -97,6 +109,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_add_trans -> startActivity<OwnedGamesActivity>()
+            R.id.menu_check_trans -> startActivity<TransactionListActivity>()
             R.id.menu_export_db -> {
                 SteamDb.instance.export(this@MainActivity)?.let {
                     SteamDb.instance.backUp(this@MainActivity)
@@ -113,10 +126,12 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
             }
         //筛选
             R.id.filter_dlc -> {
+                loadingDialog?.show()
                 showTypes.switch(SteamConstants.TYPE_DLC)
                 appRestorePresenter.loadApps(showTypes)
             }
             R.id.filter_pack -> {
+                loadingDialog?.show()
                 showTypes.switch(SteamConstants.TYPE_BUNDLE_PACK)
                 appRestorePresenter.loadApps(showTypes)
             }
@@ -126,12 +141,12 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
 
     override fun onAppsRestored(apps: List<AppRestoredBean>) {
         logD("App restored : $apps")
-        loadingDialog?.hide()
+        loadingDialog?.dismiss()
         adapter.refreshData(apps)
     }
 
     override fun onAppRestoreFail(t: Throwable) {
-        loadingDialog?.hide()
+        loadingDialog?.dismiss()
         toast("Restore apps fail !\n${t.message}")
     }
 }

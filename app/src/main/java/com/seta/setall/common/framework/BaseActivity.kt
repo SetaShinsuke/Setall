@@ -29,7 +29,8 @@ open class BaseActivity : AppCompatActivity(), SwipeBackActivityBase {
         loadingDialog = ProgressDialog(this)
                 .apply {
                     setMessage(getString(R.string.loading))
-                    setCancelable(false)
+                    setCancelable(true)
+                    setCanceledOnTouchOutside(false)
                 }
     }
 
