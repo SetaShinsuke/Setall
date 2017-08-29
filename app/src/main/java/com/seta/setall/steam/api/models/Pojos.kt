@@ -1,6 +1,7 @@
 package com.seta.setall.steam.api.models
 
 import com.seta.setall.steam.domain.models.SteamApp
+import com.seta.setall.steam.domain.models.Transaction
 
 /**
  * Created by SETA_WORK on 2017/7/4.
@@ -9,6 +10,8 @@ import com.seta.setall.steam.domain.models.SteamApp
 data class AppRestoredBean(val steamApp: SteamApp,
                            val gameDetailBean: GameDetailBean? = null,
                            val packageDetailBean: PackageDetailBean? = null)
+
+data class TransRestoredBean(val transactions: List<Transaction>)
 
 data class SteamLoginPojo(val response: SteamLoginBean)
 

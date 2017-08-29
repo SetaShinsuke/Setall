@@ -1,12 +1,14 @@
 package com.seta.setall.steam.db
 
 import android.content.Context
+import com.google.gson.Gson
 import com.seta.setall.common.extensions.parseList
 import com.seta.setall.common.extensions.parseOpt
 import com.seta.setall.common.extensions.toVarargArray
 import com.seta.setall.common.extensions.varyByDb
 import com.seta.setall.common.logs.LogX
 import com.seta.setall.common.utils.UtilMethods
+import com.seta.setall.common.utils.writeFile
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
@@ -182,14 +184,9 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
 
     fun export(context: Context) = UtilMethods.exportDb(context, SteamDbHelper.STEAM_DB_NAME)
 
-    fun backUp(context: Context, path: String = "/apps_bkp${System.currentTimeMillis()}.json") = dbHelper.use {
-        //        val observableApps: Observable<List<SteamAppDb>> = findAllApps()
-    }
-//    {
-//        findAllApps {
-//            apps ->
-//            val appTableJson = Gson().toJson(apps)
-//            writeFile(SteamConstants.STEAM_DIR, path, appTableJson)
-//        }
-//    }
+    fun backUp(dir: String = SteamConstants.STEAM_DIR, path: String = "/apps_bkp${System.currentTimeMillis()}.json") =
+            SteamDb.instance.findTransActions {
+                val content = Gson().toJson(it)
+                writeFile(dir, path, content)
+            }
 }

@@ -1,4 +1,4 @@
-package com.seta.setall.common.mvp
+package com.seta.setall.common.utils
 
 import android.os.Environment
 import com.seta.setall.common.logs.LogX

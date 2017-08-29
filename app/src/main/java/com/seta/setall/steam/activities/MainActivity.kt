@@ -96,6 +96,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
         }
         mRecyclerView.adapter = adapter
         appRestorePresenter.attachView(this)
+        loadingDialog
         loadingDialog?.show()
         val returnValue = appRestorePresenter.loadApps(showTypes)
         logD("Return value : $returnValue")
@@ -112,7 +113,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
             R.id.menu_check_trans -> startActivity<TransactionListActivity>()
             R.id.menu_export_db -> {
                 SteamDb.instance.export(this@MainActivity)?.let {
-                    SteamDb.instance.backUp(this@MainActivity)
+                    SteamDb.instance.backUp()
                     toast("导出成功!\n$it")
                     return super.onOptionsItemSelected(item)
                 }

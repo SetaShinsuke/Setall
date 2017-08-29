@@ -53,3 +53,8 @@ interface TransactionRestoreMvpView : MvpView {
     fun onTranListRestored(tranList: List<Transaction>)
     fun onTranListRestoreFail(t: Throwable)
 }
+
+interface DataBackupMvpView : MvpView {
+    fun onDataBackup(message: String)
+    fun onDataBackupFail(t: Throwable)
+}
