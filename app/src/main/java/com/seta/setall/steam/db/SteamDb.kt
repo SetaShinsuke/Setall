@@ -184,9 +184,11 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
 
     fun export(context: Context) = UtilMethods.exportDb(context, SteamDbHelper.STEAM_DB_NAME)
 
-    fun backUp(dir: String = SteamConstants.STEAM_DIR, path: String = "/apps_bkp${System.currentTimeMillis()}.json") =
+    fun backUp(dir: String = SteamConstants.STEAM_DIR, path: String = "/trans_bkp${System.currentTimeMillis()}.json") =
             SteamDb.instance.findTransActions {
                 val content = Gson().toJson(it)
+//                val restored: List<TransRestoredBean> = Gson().fromJson<List<TransRestoredBean>>(content)
+//                LogX.d("Backup restore test : $restored")
                 writeFile(dir, path, content)
             }
 }
