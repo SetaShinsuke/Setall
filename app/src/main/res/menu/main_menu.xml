@@ -45,6 +45,10 @@
                 android:title="@string/export_db"
                 />
             <item
+                android:id="@+id/menu_backup"
+                android:title="@string/backup"
+                />
+            <item
                 android:id="@+id/menu_logout"
                 android:title="@string/logout"
                 />

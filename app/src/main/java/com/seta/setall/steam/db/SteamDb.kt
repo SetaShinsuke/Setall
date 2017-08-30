@@ -2,19 +2,20 @@ package com.seta.setall.steam.db
 
 import android.content.Context
 import com.google.gson.Gson
-import com.seta.setall.common.extensions.parseList
-import com.seta.setall.common.extensions.parseOpt
-import com.seta.setall.common.extensions.toVarargArray
-import com.seta.setall.common.extensions.varyByDb
+import com.seta.setall.common.extensions.*
+import com.seta.setall.common.interfaces.ResultHandler
 import com.seta.setall.common.logs.LogX
 import com.seta.setall.common.utils.UtilMethods
+import com.seta.setall.common.utils.readFile
 import com.seta.setall.common.utils.writeFile
 import com.seta.setall.steam.api.SteamConstants
+import com.seta.setall.steam.api.models.TransRestoredBean
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.replace
 import org.jetbrains.anko.db.select
+import org.json.JSONObject
 import rx.Observable
 import java.util.*
 import kotlin.collections.ArrayList
@@ -182,13 +183,35 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
     }
 
 
-    fun export(context: Context) = UtilMethods.exportDb(context, SteamDbHelper.STEAM_DB_NAME)
+    fun export(context: Context): String? = UtilMethods.exportDb(context, SteamDbHelper.STEAM_DB_NAME)
 
-    fun backUp(dir: String = SteamConstants.STEAM_DIR, path: String = "/trans_bkp${System.currentTimeMillis()}.json") =
+    fun backUp(dir: String = SteamConstants.STEAM_DIR,
+               path: String = "/trans_bkp${System.currentTimeMillis()}.json",
+               callback: ((String) -> Unit)
+    ) =
             SteamDb.instance.findTransActions {
-                val content = Gson().toJson(it)
+                val jsonObject = JSONObject()
+                jsonObject.put("transactions", Gson().toJsonTree(it).asJsonArray)
 //                val restored: List<TransRestoredBean> = Gson().fromJson<List<TransRestoredBean>>(content)
 //                LogX.d("Backup restore test : $restored")
-                writeFile(dir, path, content)
+                val result: String? = writeFile(dir, path, jsonObject.toString())
+                if (result != null) {
+                    callback("导出成功!\n$result")
+                } else {
+                    callback("导出失败!请重试!")
+                }
             }
+
+    fun restoreFromFile(filePath: String?, resultHandler: ResultHandler) {
+        val jsonStr: String? = readFile(filePath)
+        jsonStr?.let {
+            try {
+                val transList: List<Transaction> = Gson().fromJson<TransRestoredBean>(jsonStr).transactions
+                saveTransactions(transList)
+                resultHandler.onSuccess(transList)
+            } catch (e: Exception) {
+                resultHandler.onFail(e)
+            }
+        }
+    }
 }

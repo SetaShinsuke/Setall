@@ -58,6 +58,17 @@
             android:label="@string/transaction_histories"
             android:theme="@style/SteamTheme">
         </activity>
+        <activity
+            android:name=".steam.activities.TransRestoreActivity"
+            android:label="@string/restore_to_setall"
+            android:theme="@style/SteamTheme.Swipable"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/*"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

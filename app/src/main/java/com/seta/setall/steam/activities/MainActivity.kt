@@ -113,11 +113,13 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
             R.id.menu_check_trans -> startActivity<TransactionListActivity>()
             R.id.menu_export_db -> {
                 SteamDb.instance.export(this@MainActivity)?.let {
-                    SteamDb.instance.backUp()
                     toast("导出成功!\n$it")
                     return super.onOptionsItemSelected(item)
                 }
                 toast("导出失败!")
+            }
+            R.id.menu_backup -> SteamDb.instance.backUp {
+                toast(it)
             }
             R.id.menu_logout -> {
                 userId = null
