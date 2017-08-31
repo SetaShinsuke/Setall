@@ -61,13 +61,13 @@ val AppRestoredBean.currentSaved: Int?
     get() {
         when (steamApp.type) {
             SteamConstants.TYPE_GAME, SteamConstants.TYPE_DLC -> {
-                return gameDetailBean?.price_overview?.final.let {
-                    return@let steamApp.initPrice?.minus(it!!)
+                return gameDetailBean?.price_overview?.final?.let {
+                    return@let steamApp.initPrice?.minus(it)
                 }
             }
             SteamConstants.TYPE_BUNDLE_PACK -> {
-                return packageDetailBean?.price?.final.let {
-                    return@let steamApp.initPrice?.minus(it!!)
+                return packageDetailBean?.price?.final?.let {
+                    return@let steamApp.initPrice?.minus(it)
                 }
             }
         }

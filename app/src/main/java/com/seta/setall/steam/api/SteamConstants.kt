@@ -8,6 +8,8 @@ class SteamConstants {
     companion object {
         val STEAM_API_HOST = "http://api.steampowered.com/"
         val STEAM_STORE_API_HOST = "http://store.steampowered.com/"
+
+        val STEAM_STORE_APP_URL = "http://store.steampowered.com/app/"
         val STEAM_API_KEY = "40A665497280D522561D5DA4F8E14C0D"
         val STEAM_PRF_NAME = "steam"
 
