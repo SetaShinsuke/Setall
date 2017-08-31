@@ -15,7 +15,6 @@ import com.seta.setall.steam.domain.models.Transaction
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.replace
 import org.jetbrains.anko.db.select
-import org.json.JSONObject
 import rx.Observable
 import java.util.*
 import kotlin.collections.ArrayList
@@ -190,11 +189,10 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
                callback: ((String) -> Unit)
     ) =
             SteamDb.instance.findTransActions {
-                val jsonObject = JSONObject()
-                jsonObject.put("transactions", Gson().toJsonTree(it).asJsonArray)
+                val toSave: TransRestoredBean = TransRestoredBean(it)
 //                val restored: List<TransRestoredBean> = Gson().fromJson<List<TransRestoredBean>>(content)
 //                LogX.d("Backup restore test : $restored")
-                val result: String? = writeFile(dir, path, jsonObject.toString())
+                val result: String? = writeFile(dir, path, Gson().toJson(toSave))
                 if (result != null) {
                     callback("导出成功!\n$result")
                 } else {
@@ -207,7 +205,7 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
         jsonStr?.let {
             try {
                 val transList: List<Transaction> = Gson().fromJson<TransRestoredBean>(jsonStr).transactions
-                saveTransactions(transList)
+                saveTransactions(transList.map { it.copy(transId = null) })
                 resultHandler.onSuccess(transList)
             } catch (e: Exception) {
                 resultHandler.onFail(e)
