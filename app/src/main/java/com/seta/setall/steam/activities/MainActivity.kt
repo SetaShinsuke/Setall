@@ -12,11 +12,14 @@ import com.seta.setall.common.views.adapters.BasicAdapter
 import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.AppRestoredBean
 import com.seta.setall.steam.db.SteamDb
+import com.seta.setall.steam.events.TransEditEvent
 import com.seta.setall.steam.extensions.*
 import com.seta.setall.steam.mvpViews.AppRestoreMvpView
 import com.seta.setall.steam.presenters.AppRestorePresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_restored_app.view.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -35,6 +38,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
         setContentView(R.layout.activity_main)
         setHomeAsBackEnabled(false)
         setSwipeBackEnable(false)
+        registerBus()
         if (userId == "") {
             logD("userId : $userId")
             startActivity<SteamLoginActivity>()
@@ -100,6 +104,11 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
         loadingDialog?.show()
         val returnValue = appRestorePresenter.loadApps(showTypes)
         logD("Return value : $returnValue")
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: TransEditEvent) {
+        appRestorePresenter.loadApps(showTypes)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

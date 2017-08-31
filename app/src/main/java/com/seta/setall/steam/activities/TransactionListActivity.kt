@@ -10,11 +10,17 @@ import com.seta.setall.common.extensions.toFloatYuan2
 import com.seta.setall.common.extensions.toYMD
 import com.seta.setall.common.framework.BaseActivity
 import com.seta.setall.common.views.adapters.BasicAdapter
+import com.seta.setall.steam.db.SteamDb
 import com.seta.setall.steam.domain.models.Transaction
+import com.seta.setall.steam.events.TransEditEvent
 import com.seta.setall.steam.mvpViews.TransactionRestoreMvpView
 import com.seta.setall.steam.presenters.TransactionRestorePresenter
 import kotlinx.android.synthetic.main.activity_transaction_list.*
 import kotlinx.android.synthetic.main.item_trans_history.view.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.sdk25.coroutines.onLongClick
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
@@ -30,7 +36,7 @@ class TransactionListActivity : BaseActivity(), TransactionRestoreMvpView {
         adapter = BasicAdapter(R.layout.item_trans_history) {
             itemView, position, trans ->
             with(itemView) {
-                mTvDate.text = "${position+1}.${trans.date.toYMD()}"
+                mTvDate.text = "${position + 1}.${trans.date.toYMD()}"
                 var text = ""
                 trans.steamApps.forEachIndexed {
                     index, steamApp ->
@@ -46,10 +52,28 @@ class TransactionListActivity : BaseActivity(), TransactionRestoreMvpView {
                     total: Int?, next: Int? ->
                     total?.let { next?.plus(it) }
                 }
+                onLongClick {
+                    alert {
+                        title = "确认删除?"
+                        positiveButton(R.string.confirm) {
+                            SteamDb.instance.removeTransaction(trans.transId)
+                        }
+                        negativeButton(R.string.cancel) {
+
+                        }
+                        show()
+                    }
+                }
             }
         }
         mRvTransactions.adapter = adapter
         transRestorePresenter.attachView(this)
+        transRestorePresenter.restoreTransactions()
+        registerBus()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: TransEditEvent) {
         transRestorePresenter.restoreTransactions()
     }
 

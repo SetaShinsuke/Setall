@@ -12,6 +12,8 @@ import com.seta.setall.steam.api.SteamConstants
 import com.seta.setall.steam.api.models.TransRestoredBean
 import com.seta.setall.steam.domain.models.SteamApp
 import com.seta.setall.steam.domain.models.Transaction
+import com.seta.setall.steam.events.TransEditEvent
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.replace
 import org.jetbrains.anko.db.select
@@ -40,9 +42,26 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
                 saveApp(rowId.toInt(), it)
             }
         }
+        EventBus.getDefault().post(TransEditEvent())
     }
 
-    fun saveTransactions(allTransactions: List<Transaction>) = allTransactions.forEach { saveTransaction(it) }
+    fun removeTransaction(transId: Int?): Int? {
+        val result: Int? = dbHelper.use {
+            transId?.let {
+                execSQL("PRAGMA foreign_keys = ON") //打开外键约束
+//                delete(TransActionTable.TABLE_NAME, TransActionTable.TRANS_ID, " ${TransActionTable.TRANS_ID} = ? " to it.toString())
+                delete(TransActionTable.TABLE_NAME, " ${TransActionTable.TRANS_ID} = ? ", arrayOf(transId.toString()))
+            }
+        }
+        LogX.d("Delete transaction from DB result : $result")
+        EventBus.getDefault().post(TransEditEvent())
+        return result
+    }
+
+    fun saveTransactions(allTransactions: List<Transaction>) {
+        allTransactions.forEach { saveTransaction(it) }
+        EventBus.getDefault().post(TransEditEvent())
+    }
 
     private fun saveApp(transId: Int? = null, steamAppDb: SteamAppDb): Unit = dbHelper.use {
         with(steamAppDb) {
