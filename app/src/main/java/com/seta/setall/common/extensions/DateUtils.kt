@@ -1,5 +1,6 @@
 package com.seta.setall.common.extensions
 
+import com.seta.setall.common.logs.LogX
 import java.util.*
 
 /**
@@ -34,5 +35,7 @@ fun Calendar?.toYMD(): String {
     if (this == null) {
         return ""
     }
-    return "${get(Calendar.YEAR)}-${get(Calendar.MONTH)+1}-${Calendar.DAY_OF_MONTH}"
+    val result = "${get(Calendar.YEAR)}-${get(Calendar.MONTH) + 1}-${Calendar.DAY_OF_MONTH}"
+    LogX.d("Cal to YMD : $result")
+    return result
 }

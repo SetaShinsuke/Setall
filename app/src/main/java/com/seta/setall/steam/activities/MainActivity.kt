@@ -63,8 +63,9 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
 
                 //类型标识
                 mTvPackBadge.setVisible(false)
-                mTvCurrentDiscount.setVisible(app.currentSaved != null)
-                mTvCurrentDiscount.text = "-￥${app.currentSaved}(${app.currentSavedPercent}%)"
+                mTvPriceInit.setVisible(app.currentSaved != null && app.currentSaved != 0)
+                mTvCurrentDiscount.setVisible(app.currentSaved != null && app.currentSaved != 0)
+                mTvCurrentDiscount.text = "-￥${app.currentSaved?.toYuanInt()}(${app.currentSavedPercent}%)"
                 mTvPackDetail.setVisible(false)
                 when (app.steamApp.type) {
                     SteamConstants.TYPE_BUNDLE_PACK -> {

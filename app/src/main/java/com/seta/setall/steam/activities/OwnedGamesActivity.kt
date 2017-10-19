@@ -98,8 +98,8 @@ class OwnedGamesActivity : BaseActivity(), OwnedGamesView, GameDetailMvpView {
 
     override fun onGameDetailLoad(gameDetails: List<GameDetailBean>) {
         loadingDialog?.dismiss()
-        val packIds = ArrayList<Int>()
-        val gameIds = ArrayList<Int>()
+        val packIds = ArrayList<Int>() //包含所选游戏的包
+        val gameIds = ArrayList<Int>() //选择的游戏的id
         gameDetails.forEach {
             it.packages?.let {
                 packIds.addAll(it)

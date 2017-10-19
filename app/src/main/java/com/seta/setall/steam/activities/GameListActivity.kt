@@ -80,6 +80,8 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
         if (selectedApps.isEmpty()) {
             selectedApps.addAll(gameDetails.filter { it.type == "game" })
         }
+        val toRemove: List<SteamApp> = TransManager.steamApps.filter { gameDetails.map { it.steam_appid }.contains(it.appId) }
+        TransManager.steamApps.removeAll(toRemove)
         adapter.refreshData(gameDetails)
         loadingDialog?.dismiss()
     }
@@ -97,10 +99,11 @@ class GameListActivity : BaseActivity(), GameDetailMvpView {
         val id = item?.itemId
         when (id) {
             R.id.menu_commit -> {
-                if (TransManager.steamApps.isEmpty()) {
+                if (TransManager.steamApps.isEmpty() && selectedApps.isEmpty()) {
                     toast(R.string.no_item_selected)
                     return super.onOptionsItemSelected(item)
                 }
+                //把 manager 里不完整的 gameBean 替换成 detailBean
                 val gameSimpleBeans = TransManager.steamApps.filter { selectedApps.map { it.steam_appid }.contains(it.appId) }
                 TransManager.steamApps.removeAll(gameSimpleBeans)
                 val toAddApps = ArrayList<SteamApp>()

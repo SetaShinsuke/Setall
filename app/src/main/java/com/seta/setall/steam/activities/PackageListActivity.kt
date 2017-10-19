@@ -33,7 +33,7 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
     val packDetailPresenter = PackageDetailPresenter()
     var adapter by Delegates.notNull<BasicAdapter<PackageDetailBean>>()
     val selectedPackages = ArrayList<PackageDetailBean>()
-    val gameIds = ArrayList<Int>() //OwnedGamesActivity中选中的所有 gameId/DlcId
+    val gameIds = ArrayList<Int>() //OwnedGamesActivity中选中的所有主gameId
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,10 +72,10 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
         val packIds = intent.getIntegerArrayListExtra(SteamConstants.PACK_IDS)
         logD("Pack ids : $packIds")
         gameIds.addAll(intent.getIntegerArrayListExtra(SteamConstants.GAME_IDS))
-        if(packIds!=null && packIds.isNotEmpty()){
+        if (packIds != null && packIds.isNotEmpty()) {
             loadingDialog?.show()
             packDetailPresenter.loadPackages(packIds)
-        }else{
+        } else {
             toast(R.string.no_package_to_select)
         }
         registerBus()
@@ -116,14 +116,19 @@ class PackageListActivity : BaseActivity(), PackageDetailMvpView {
                 }
                 val allSelectedAppIds = ArrayList<Int>() //选中的包中包含的Game
                 selectedPackages.forEach {
-                    allSelectedAppIds.addAll(it.apps.map { it.id }.distinct())
+                    allSelectedAppIds.addAll(it.apps.map { it.id }.distinct()) //包里的所有appId
                 }
+                //从 Manager 缓存的 Apps 中
                 //过滤掉 包含在包中的 apps, 即剩下的 SteamApps 都是 未在包中的游戏、或者是包
                 //也即: 这些 SteamApp 的 type，要么是待定(UNKNOWN),要么是包(BUNDLE_PACK)
+                //1.剔除包内的App
                 val allApps = TransManager.steamApps.filter { !allSelectedAppIds.contains(it.appId) } as ArrayList<SteamApp>
+                //2.添加包
                 allApps.addAll(selectedPackages.distinct().map { SteamApp(it) })
-                TransManager.steamApps.clear()
+                TransManager.steamApps.clear() //重置 Manager 的缓存
                 TransManager.steamApps.addAll(allApps)
+                TransManager.steamApps.forEach { logD(it.name) }
+                //去掉包含在包中的 app, 留下尚未选择的 主game
                 startActivity<GameListActivity>(SteamConstants.GAME_IDS to
                         gameIds.filter {
                             gameId ->
