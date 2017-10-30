@@ -35,7 +35,7 @@ fun Calendar?.toYMD(): String {
     if (this == null) {
         return ""
     }
-    val result = "${get(Calendar.YEAR)}-${get(Calendar.MONTH) + 1}-${Calendar.DAY_OF_MONTH}"
+    val result = "${get(Calendar.YEAR)}-${get(Calendar.MONTH) + 1}-${get(Calendar.DAY_OF_MONTH)}"
     LogX.d("Cal to YMD : $result")
     return result
 }
