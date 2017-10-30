@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_restored_app.view.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -119,6 +120,14 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
+            R.id.filter_time -> {
+                val data = adapter.data.sortedBy { it.steamApp.purchasedDate }
+                adapter.refreshData(data)
+            }
+            R.id.filter_name -> {
+                val data = adapter.data.sortedBy { it.steamApp.name.toUpperCase() }
+                adapter.refreshData(data)
+            }
             R.id.menu_add_trans -> startActivity<OwnedGamesActivity>()
             R.id.menu_check_trans -> startActivity<TransactionListActivity>()
             R.id.menu_export_db -> {
@@ -132,10 +141,19 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
                 toast(it)
             }
             R.id.menu_logout -> {
-                userId = null
-                finish()
-                toast("已注销！")
-                startActivity<SteamLoginActivity>()
+                alert {
+                    titleResource = R.string.title_logout
+                    positiveButton(R.string.confirm) {
+                        userId = null
+                        finish()
+                        toast("已注销！")
+                        startActivity<SteamLoginActivity>()
+                    }
+                    negativeButton(R.string.cancel) {
+                        it.dismiss()
+                    }
+                    show()
+                }
             }
         //筛选
             R.id.filter_dlc -> {

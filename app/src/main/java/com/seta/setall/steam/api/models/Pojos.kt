@@ -44,7 +44,7 @@ data class GameBean(val appid: Int
                     , val img_icon_url: String
                     , val img_logo_url: String) : Comparable<GameBean> {
     override fun compareTo(other: GameBean): Int {
-        val result = name.compareTo(other.name)
+        val result = name.toUpperCase().compareTo(other.name.toUpperCase())
         return result
     }
 

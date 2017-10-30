@@ -57,4 +57,6 @@
     <string name="save_confirm_msg">确定保存?</string>
     <string name="price_null_not_allowed">请填写所有价格!</string>
     <string name="remove_app_confirm">确定删除此项？</string>
+
+    <string name="title_logout">确定退出?</string>
 </resources>
