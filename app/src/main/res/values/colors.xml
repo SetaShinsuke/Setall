@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="main_background">#fafafa</color>
+    <color name="main_background">#f2f2f2</color>
     <color name="hint_text">#67000000</color>
 
     <color name="steam_theme_color">#091b40</color>

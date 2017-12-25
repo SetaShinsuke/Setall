@@ -33,7 +33,7 @@ fun ImageView.loadImg(imgResId: Int?) {
             .into(this)
 }
 
-
+//购入时的折扣
 val AppRestoredBean.savedPrice: Int?
     get() {
         val initPrice = steamApp.initPrice
@@ -57,6 +57,7 @@ val AppRestoredBean.savedPercent: Int?
         return null
     }
 
+//现价折扣
 val AppRestoredBean.currentSaved: Int?
     get() {
         when (steamApp.type) {
@@ -76,8 +77,7 @@ val AppRestoredBean.currentSaved: Int?
 
 val AppRestoredBean.currentSavedPercent: Int?
     get() {
-        currentSaved?.let {
-            currentSaved ->
+        currentSaved?.let { currentSaved ->
             return if (steamApp.initPrice != 0) {
                 (currentSaved * 100f / steamApp.initPrice!!).toInt()
             } else {
@@ -86,3 +86,9 @@ val AppRestoredBean.currentSavedPercent: Int?
         }
         return null
     }
+
+fun AppRestoredBean.isAtAdvantage() = if (currentSaved != null && savedPrice != null) {
+    currentSaved!! < savedPrice!!
+} else {
+    true
+}

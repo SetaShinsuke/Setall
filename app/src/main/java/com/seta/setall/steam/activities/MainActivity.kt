@@ -47,8 +47,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
             return
         }
         mRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-        adapter = BasicAdapter<AppRestoredBean>(R.layout.item_restored_app) {
-            itemView, position, app ->
+        adapter = BasicAdapter<AppRestoredBean>(R.layout.item_restored_app) { itemView, position, app ->
             with(itemView) {
                 mIvLogo.setVisible(true)
                 mIvLogo.loadImg(app.steamApp.logoImgUrl)
@@ -60,6 +59,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
                     return@let it != 0
                 }
                 mTvPriceSaved.setVisible(showSave)
+                mTvPriceSaved.isSelected = app.isAtAdvantage()
                 mTvPriceSaved.text = "-￥${app.savedPrice?.toYuanInt()}(${app.savedPercent}%)"
 
                 //类型标识
@@ -68,6 +68,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
                 mTvCurrentDiscount.setVisible(app.currentSaved != null && app.currentSaved != 0)
                 mTvCurrentDiscount.text = "-￥${app.currentSaved?.toYuanInt()}(${app.currentSavedPercent}%)"
                 mTvPackDetail.setVisible(false)
+                mTvPurchasedDate.text = "购买日期: ${app.steamApp.purchasedDate.toYMD()}"
                 when (app.steamApp.type) {
                     SteamConstants.TYPE_BUNDLE_PACK -> {
                         mTvPackBadge.backgroundResource = R.color.steam_theme_color_accent
@@ -78,8 +79,7 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
                         logD("Type pack, games: ${app.steamApp.games}")
                         mTvPackDetail.setVisible(app.steamApp.games?.isNotEmpty())
                         var detailStr = "共包含${app.steamApp.games?.size}件物品"
-                        app.steamApp.games?.forEachIndexed {
-                            index, steamApp ->
+                        app.steamApp.games?.forEachIndexed { index, steamApp ->
                             detailStr += steamApp.name
                             if (index < app.steamApp.games.lastIndex) {
                                 detailStr += "\n"
@@ -120,12 +120,20 @@ class MainActivity : BaseActivity(), AppRestoreMvpView {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.filter_time -> {
+            R.id.order_time -> {
                 val data = adapter.data.sortedBy { it.steamApp.purchasedDate }
                 adapter.refreshData(data)
             }
-            R.id.filter_name -> {
+            R.id.order_name -> {
                 val data = adapter.data.sortedBy { it.steamApp.name.toUpperCase() }
+                adapter.refreshData(data)
+            }
+            R.id.order_price -> {
+                val data = adapter.data.sortedBy { it.steamApp.purchasedPrice }
+                adapter.refreshData(data)
+            }
+            R.id.order_saved -> {
+                val data = adapter.data.sortedByDescending { it.savedPrice }
                 adapter.refreshData(data)
             }
             R.id.menu_add_trans -> startActivity<OwnedGamesActivity>()

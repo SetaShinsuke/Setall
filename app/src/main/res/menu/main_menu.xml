@@ -4,20 +4,46 @@
       xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/menu_order"
+        android:icon="@mipmap/ic_order"
+        android:title="@string/order"
+        app:showAsAction="ifRoom"
+        >
+        <menu>
+            <item
+                android:id="@+id/order_time"
+                android:title="按时间"
+                />
+            <item
+                android:id="@+id/order_name"
+                android:title="按名称"
+                />
+            <item
+                android:id="@+id/order_price"
+                android:title="按价格"
+                />
+            <item
+                android:id="@+id/order_saved"
+                android:title="按折扣"
+                />
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/menu_filter"
         android:icon="@mipmap/filter"
         android:title="@string/filter"
         app:showAsAction="ifRoom"
         >
         <menu>
-            <item
-                android:id="@+id/filter_time"
-                android:title="按时间"
-                />
-            <item
-                android:id="@+id/filter_name"
-                android:title="按名称"
-                />
+            <!--<item-->
+            <!--android:id="@+id/filter_time"-->
+            <!--android:title="按时间"-->
+            <!--/>-->
+            <!--<item-->
+            <!--android:id="@+id/filter_name"-->
+            <!--android:title="按名称"-->
+            <!--/>-->
             <item
                 android:id="@+id/filter_dlc"
                 android:title="显示/隐藏DLC"

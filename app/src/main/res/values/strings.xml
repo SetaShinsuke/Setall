@@ -11,6 +11,7 @@
     <string name="save">保存</string>
     <string name="go_next">下一步</string>
     <string name="rmb">￥</string>
+    <string name="order">排序</string>
     <string name="filter">筛选</string>
     <string name="more">更多</string>
     <string name="export_db">导出DB</string>
