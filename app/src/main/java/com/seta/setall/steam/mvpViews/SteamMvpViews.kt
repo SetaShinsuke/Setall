@@ -54,6 +54,11 @@ interface TransactionRestoreMvpView : MvpView {
     fun onTranListRestoreFail(t: Throwable)
 }
 
+interface SteamAppEditMvpView : MvpView {
+    fun onAppRemoved()
+    fun onAppRemoveFail(t: Throwable)
+}
+
 interface DataBackupMvpView : MvpView {
     fun onDataBackup(message: String)
     fun onDataBackupFail(t: Throwable)

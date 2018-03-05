@@ -48,7 +48,9 @@ class SteamDbHelper(ctx: Context = BaseApplication.instance) : ManagedSQLiteOpen
         db.createTable(BundleAppRelationTable.TABLE_NAME, true,
                 BundleAppRelationTable.PACK_APP_ID to INTEGER,
                 BundleAppRelationTable.GAME_ID to INTEGER,
+                //级联删除：删除 Bundle 时删除对应的 Bundle-App 关系
                 FOREIGN_KEY(BundleAppRelationTable.PACK_APP_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID),
+//                FOREIGN_KEY(BundleAppRelationTable.PACK_APP_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID),
                 FOREIGN_KEY(BundleAppRelationTable.GAME_ID, SteamAppTable.TABLE_NAME, SteamAppTable.APP_ID)
         )
     }

@@ -58,6 +58,10 @@ fun FOREIGN_KEY_CASCADE(columnName: String, referenceTable: String, referenceCol
     return "" to SqlTypeImpl("FOREIGN KEY($columnName) REFERENCES $referenceTable($referenceColumn) ON DELETE CASCADE ")
 }
 
+fun FOREIGN_KEY_CASCADE_MULTI_LINE(constraintName: String, columnName: String, referenceTable: String, referenceColumn: String): Pair<String, SqlType> {
+    return "" to SqlTypeImpl("CONSTRAINT $constraintName FOREIGN KEY($columnName) REFERENCES $referenceTable($referenceColumn) ON DELETE CASCADE ")
+}
+
 private open class SqlTypeImpl(override val name: String, val modifiers: String? = null) : SqlType {
     override fun render() = if (modifiers == null) name else "$name $modifiers"
 

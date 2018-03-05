@@ -58,6 +58,20 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
         return result
     }
 
+    fun removeApp(appId: Int?, isPack: Boolean): Int? {
+        val result: Int? = dbHelper.use {
+            appId?.let {
+//                if (isPack) {
+//                    execSQL("PRAGMA foreign_keys = ON") //打开外键约束
+//                }
+                delete(SteamAppTable.TABLE_NAME, " ${SteamAppTable.APP_ID} = ? ", arrayOf(appId.toString()))
+            }
+        }
+        LogX.d("Delete steamApp from DB result : $result")
+        EventBus.getDefault().post(TransEditEvent())
+        return result
+    }
+
     fun saveTransactions(allTransactions: List<Transaction>) {
         allTransactions.forEach { saveTransaction(it) }
         EventBus.getDefault().post(TransEditEvent())
@@ -167,11 +181,9 @@ class SteamDb(val dbHelper: SteamDbHelper = SteamDbHelper.instance,
             TransactionDb(HashMap(it.varyByDb()), ArrayList<SteamAppDb>())
         }.map {
             steamDbMapper.convertTransToDomain(it)
-        }.map {
-            transaction ->
+        }.map { transaction ->
             var transResult: Transaction = Transaction()
-            findAppsByTransId(transaction.transId) {
-                apps ->
+            findAppsByTransId(transaction.transId) { apps ->
                 transResult = transaction.copy(steamApps = apps)
             }
             return@map transResult
