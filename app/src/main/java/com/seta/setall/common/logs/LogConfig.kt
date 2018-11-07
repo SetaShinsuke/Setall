@@ -14,7 +14,7 @@ import java.io.File
 object LogConfig{
     fun configLogger(context: Context, logFileName: String) {
         val logConfigurator = LogConfigurator()
-        if (getStorageState()) {
+        if (!getStorageState()) {
             Log.i(Constants.LOG_TAG_S, "Logger init fail : storage state not mounted.")
             return
         }
@@ -32,6 +32,6 @@ object LogConfig{
 
     fun getStorageState(): Boolean {
         val state = Environment.getExternalStorageState()
-        return state == Environment.MEDIA_MOUNTED || state == Environment.MEDIA_MOUNTED_READ_ONLY
+        return state == Environment.MEDIA_MOUNTED
     }
 }
